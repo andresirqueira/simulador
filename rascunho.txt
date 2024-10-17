@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Loop</title>
+</head>
+<body>
+    <img id="image" src="image1.jpg" alt="Image" width="300">
+    <button id="stopButton">Parar Loop</button>
+    <button id="startButton">Reiniciar Loop</button>
+    <script>
+        const images = ["image1.jpg", "image2.jpg", "image3.jpg"];
+        let currentIndex = 0;
+        let intervalId;
+
+        function changeImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            document.getElementById("image").src = images[currentIndex];
+        }
+
+        function startLoop() {
+            intervalId = setInterval(changeImage, 2000); // Change image every 2 seconds
+        }
+
+        document.getElementById("stopButton").addEventListener("click", function() {
+            clearInterval(intervalId);
+        });
+
+        document.getElementById("startButton").addEventListener("click", function() {
+            startLoop();
+        });
+
+        // Start the loop initially
+        startLoop();
+    </script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Loop</title>
+</head>
+<body>
+    <img id="image" src="image1.jpg" alt="Image" width="300">
+    <button id="stopButton">Parar Loop</button>
+    <button id="startButton">Reiniciar Loop</button>
+    <script>
+        const images = ["image1.jpg", "image2.jpg", "image3.jpg"];
+        let currentIndex = 0;
+        let intervalId;
+
+        function changeImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            document.getElementById("image").src = images[currentIndex];
+        }
+
+        function startLoop() {
+            intervalId = setInterval(changeImage, 2000); // Change image every 2 seconds
+        }
+
+        document.getElementById("stopButton").addEventListener("click", function() {
+            clearInterval(intervalId);
+        });
+
+        document.getElementById("startButton").addEventListener("click", function() {
+            startLoop();
+        });
+
+        // Start the loop initially
+        startLoop();
+    </script>
+</body>
+</html>
+
+
+
+<g id="tap-on" style="display:none">
+                    <rect width="190" height="120" x="729" y="577" style="fill:white"></rect>
+
+                    <image x="730" y="575" href="img/logo-meet.png" width="40" height="20" />
+                    <image x="880" y="580" href="img/icone-balao.png" width="20" height="10" style="opacity: 70%;" />
+                    <image x="883" y="580.5" href="img/exclamacao.png" width="14" height="7" style="opacity: 70%;" />
+                    <image x="898" y="579" href="img/icone-config.png" width="20" height="10" style="opacity: 70%;" />
+
+                    <line x1="728" y1="595" x2="919" y2="595" style="stroke:gray;stroke-width:1;opacity:10%" />
+
+                    <text x="740" y="625" id="mini-relogio"></text>
+                    <text x="740" y="635" id="mini-data"></text>
+                    <text x="740" y="650" id="mini-sala">Sala Teste 123 (BRA-SP-WWWW,2)</text>
+                    <image x="735" y="685" href="img/texto-google.png" width="20" height="10" />
+
+                    <rect x="825" y="670" width="90" height="23" rx="5"
+                        style="opacity:10%; fill:none;stroke: gray;stroke-width:1" />
+
+                    <image x="830" y="675" href="img/adicionar.png" width="20" height="10" style="opacity: 50%;" />
+                    <text x="830" y="690" id="mini-menu">Join or start a meeting</text>
+
+                    <image x="860" y="675" href="img/telefone.png" width="20" height="10" style="opacity: 50%;" />
+                    <text x="865" y="690" id="mini-menu">Call a phone</text>
+
+                    <image x="890" y="675" href="img/hdmi.png" width="20" height="10" style="opacity: 50%;" />
+                    <text x="890" y="690" id="mini-menu">Present to room only</text>
+
+                </g>
+
+                <!-- TELA APAGADA -->
+                
+
+                <!-- TELA INICIO DO GOOGLE MEET -->
+                <image x="729" y="577" href="img/iniciar.png" width="190" height="107" style="display: none;"
+                    id="inicial2" />
+
+                <!-- LED TAP -->
+
+
+                <!-- TELA SEM INTERNET -->
+                <image x="729" y="585" href="img/sem-internet.png" width="190" height="107" style="display: none;"
+                    id="sem-internet-tap" />
+
+                <!-- TELA ANTES DE ENTRAR NA MEETING -->
+                <g id="entrar-meeting-tap" style="display: none;">
+                    <image x="729" y="585" href="img/entrar-meeting.png" width="190" height="107" />
+                    <rect width="25" height="12" x="894" y="585" style="fill:rgb(0,112,192)"></rect>
+                    <text x="903" y="593" id="mini-data" style="fill:white">Join</text>
+                </g>
+                <!-- TELA MEETING -->
+                <image x="729" y="585" href="img/meet-para-tap.png" width="190" height="107" style="display: none;"
+                    id="meeting-tap" />
+            </g>
+
+
+
+
+
+
+            function ligarCamera() {
+    const fundoCameraPreview = document.getElementById("circulo-camera");
+    const cameraPreview = document.getElementById("camera-on-off");
+    const cameraSalaOn = document.getElementById("reuniao-solo");
+    const cameraSalaOff = document.getElementById("reuniao-solo-off");
+
+    const camera = document.getElementById("camera-normal")
+
+    if (checkLigarTV() && checkLigarHDMI()) {
+        fundoCameraPreview.style.fill = "none";
+        cameraPreview.setAttribute("href", "img/camera.png");
+        cameraSalaOn.style.display = "block";
+        camera.setAttribute("href", "img/camera-sala-reuniao.png");
+        // cameraSalaOff.style.display = "none";
+    }
+    else {
+        fundoCameraPreview.style.fill = "none";
+        cameraPreview.setAttribute("href", "img/camera.png");
+        cameraSalaOn.style.display = "block";
+        camera.setAttribute("href", "img/camera-sala-reuniao-off.png");
+        // cameraSalaOff.style.display = "none";
+    }
+}
+
+
+function ligaDesligaCamera() {
+    const cameraSalaOn = document.getElementById("reuniao-solo");
+    const camera = document.getElementById("camera-normal")
+    // const cameraSalaOff = document.getElementById("reuniao-solo-off");
+    // const cameraCirculoOff = document.getElementById("circulo-camera");
+    // const cameraIconeOnOff = document.getElementById("camera-on-off");
+
+    if (checkLigarUSBCcamera() && checkCamera()) {
+        if (checkLigarTV() && checkLigarHDMI() && checkLigarChromebox() && checkInternet() && checkMeeting()) {
+            cameraSalaOn.style.display = "block";
+            camera.setAttribute("href", "img/camera-sala-reuniao.png");
+            // cameraSalaOff.style.display = "none";
+        }
+        else {
+            cameraSalaOn.style.display = "none";
+            // cameraSalaOff.style.display = "none";
+
+
+        }
+    }
+    else {
+        if (checkLigarTV() && checkLigarHDMI() && checkLigarChromebox() && checkInternet() && checkMeeting()) {
+            cameraSalaOn.style.display = "block";
+            // cameraSalaOff.style.display = "block";
+            camera.setAttribute("href", "img/camera-sala-reuniao-off.png");
+
+        }
+        else {
+
+            cameraSalaOn.style.display = "none";
+
+            // cameraSalaOff.style.display = "none";
+        }
+    }
+}
+
+
+
+
+                <!-- TELA CAMERA DESLIGADA -->
+                <!-- <g id="reuniao-solo-off" style="display: none;">
+                    <image x="615" y="108" href="img/camera-sala-reuniao-off.png" width="420" height="210" />
+                    <circle cx="1003" cy="135" r="6" style="fill:#1790f3;" id="fundo-microfone-tv-off" />
+                    <text x="999.6" y="135.8" style="fill: white; font-size: xx-small;" id="audio-parado2">...</text>
+                    <text x="965" y="120" style="fill: white; font-size: xx-small;" id="relogio2"></text>
+
+                    <g id='audio-svg2' class="bars-loader" style="display: none;">
+                        <rect class="morphing-bar morphing-bar-left" width="1" height="3" x="1000" y="134" />
+                        <rect class="morphing-bar morphing-bar-center" width="1" height="3" x="1003" y="134" />
+                        <rect class="morphing-bar morphing-bar-right" width="1" height="3" x="1006" y="134" />
+                    </g>
+
+                    <image x="991" y="129" href="img/microfone-off.png" width="24" height="12" id="microfone-off-tv-off"
+                        style="display: none;" />
+
+                </g> -->
+
+
+
+
+
+
+
+
+
+
+                // // TV ON / CHROME ON / HDMI ON / INTERNET ON
+    // if (checkLigarTV() && checkLigarChromebox() && checkLigarHDMI() && checkInternet()) {
+    //     imagemInicial.style.display = "block";
+    //     semSinal.style.display = "none";
+    //     semInternet.style.display = "none";
+    //     imagemApresentacao.style.display = "none";
+
+    // }
+    // // TV ON / CHROME ON / HDMI ON / INTERNET OFF
+    // else if ((checkLigarTV() && checkLigarChromebox() && checkLigarHDMI()) && !checkInternet()) {
+    //     imagemInicial.style.display = "block";
+    //     semSinal.style.display = "none";
+    //     semInternet.style.display = "block";
+    //     desligarApresentacao();
+    //     fecharMeeting();
+    //     removerParticipante();
+    // }
+    // // TV OFF / CHROME ON / HDMI ON / INTERNET ON
+    // else if ((!checkLigarTV() && checkLigarChromebox() && checkLigarHDMI()) && checkInternet()) {
+    //     imagemInicial.style.display = "none";
+    //     semSinal.style.display = "none";
+    //     semInternet.style.display = "none";
+    //     imagemApresentacao.style.display = "none";
+    // }
+    // // TV OFF / CHROME ON / HDMI ON / INTERNET OFF
+    // else if ((!checkLigarTV() && checkLigarChromebox() && checkLigarHDMI()) && !checkInternet()) {
+    //     imagemInicial.style.display = "none";
+    //     semSinal.style.display = "none";
+    //     semInternet.style.display = "none";
+    //     desligarApresentacao();
+    //     fecharMeeting();
+
+    // }
+    // // TV ON / CHROME ON / HDMI OFF / INTERNET ON
+    // else if ((checkLigarTV() && !checkLigarChromebox() || !checkLigarHDMI()) && checkInternet()) {
+    //     imagemInicial.style.display = "none";
+    //     semSinal.style.display = "block";
+    //     semInternet.style.display = "none";
+    //     desligarApresentacao();
+    //     fecharMeeting();
+    // }
+    // // TV ON / CHROME ON / HDMI OFF / INTERNET OFF
+    // else if ((checkLigarTV() && checkLigarChromebox() && !checkLigarHDMI()) && !checkInternet()) {
+    //     imagemInicial.style.display = "none";
+    //     semSinal.style.display = "block";
+    //     semInternet.style.display = "none";
+    //     desligarApresentacao();
+    //     fecharMeeting();
+
+    // }
+    // if (!checkLigarTV() && !checkLigarChromebox() && !checkLigarHDMI() && checkInternet()) {
+    //     imagemInicial.style.display = "none";
+    //     semSinal.style.display = "none";
+    //     semInternet.style.display = "none";
+    //     desligarApresentacao();
+
+    // }
+
+
+    function verificaImagemTAP() {
+    const imagemPreviewTap = document.getElementById("preview-tap-on"); // tela da meet
+    const semInternetPreview = document.getElementById("sem-internet-preview");
+    const entrarPreviewMeeting = document.getElementById("entrar-meeting-preview");
+    const previewMeeting = document.getElementById("meeting");
+
+    if (checkMeetingTV()) {
+        if ((!checkLigarTAP() || !checkLigarUSBCtap()) && checkLigarChromebox() && checkInternet()) {
+            semInternetPreview.style.display = "none";
+            imagemPreviewTap.style.display = "none";
+            previewMeeting.style.display = "none";
+
+        }
+        else if (checkLigarTAP() && checkLigarUSBCtap() && checkLigarChromebox() && checkInternet()) {
+            semInternetPreview.style.display = "none";
+            imagemPreviewTap.style.display = "none";
+            previewMeeting.style.display = "block";
+        }
+    }
+    else {
+        // TAP ON / CHROME ON / USB ON / INTERNET ON
+        if ((checkLigarTAP() && checkLigarChromebox() && checkLigarUSBCtap()) && checkInternet()) {
+            semInternetPreview.style.display = "none";
+            imagemPreviewTap.style.display = "block";
+        }
+        // TAP ON / CHROME ON / USB ON / INTERNET OFF
+        else if ((checkLigarTAP() && checkLigarChromebox() && checkLigarUSBCtap()) && !checkInternet()) {
+            semInternetPreview.style.display = "block";
+            imagemPreviewTap.style.display = "none";
+            entrarPreviewMeeting.style.display = "none";
+            desligarApresentacao();
+            fecharMeeting();
+        }
+        else {
+            imagemPreviewTap.style.display = "none";
+            semInternetPreview.style.display = "none";
+            entrarPreviewMeeting.style.display = "none";
+            previewMeeting.style.display = "none";
+            desligarApresentacao();
+            fecharMeeting();
+        }
+    }
+}
+
