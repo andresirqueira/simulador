@@ -1247,11 +1247,15 @@ function clonarSvg() {
 
 function criarClone() {
     const originalSVG = document.querySelector('#preview-tap');
+    const tap = document.getElementById("tela-tap");
     const cloneSVG = originalSVG.cloneNode(true);
-    cloneSVG.id = "clone-tap";
 
-    const elementoPai = document.getElementById("elemento-pai");
-    // elementoPai.appendChild(cloneSVG);
+    const posicaoX = parseInt(tap.getAttribute("x"))+98;
+    const posicaoY = parseInt(tap.getAttribute("y"))+5;
+    
+    cloneSVG.id = "clone-tap";
+    cloneSVG.style.top = posicaoY;
+    cloneSVG.style.left = posicaoX;
     document.body.appendChild(cloneSVG);
 }
 
