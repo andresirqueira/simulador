@@ -1099,6 +1099,71 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+
+
+function abrirTelaConfigOut() {
+    const telaConfig = document.getElementById("tela-config-out");
+    const telaPreviewOn = document.getElementById("preview-tap-on");
+
+    telaPreviewOn.setAttribute("filter", "url(#blurFilter)");
+    telaConfig.style.display = "block";
+}
+
+function fecharTelaConfigOut() {
+    const telaConfig = document.getElementById("tela-config-out");
+    const telaPreviewOn = document.getElementById("preview-tap-on");
+
+    telaPreviewOn.setAttribute("filter", " ");
+    telaConfig.style.display = "none";
+}
+
+function opcoesConfigOut(opcao) {
+    const audio = document.getElementById("config-out-audio");
+    const video = document.getElementById("config-out-video");
+    const accessibility = document.getElementById("config-out-accessibility");
+    const general = document.getElementById("config-out-general");
+    const display = document.getElementById("config-out-display");
+
+    switch (opcao) {
+        case 'Audio':
+            audio.style.display = "block";
+            video.style.display = "none";
+            accessibility.style.display = "none";
+            general.style.display = "none";
+            display.style.display = "none";
+            break;
+        case 'Video':
+            audio.style.display = "none";
+            video.style.display = "block";
+            accessibility.style.display = "none";
+            general.style.display = "none";
+            display.style.display = "none";
+            break;
+        case 'Accessibility':
+            audio.style.display = "none";
+            video.style.display = "none";
+            accessibility.style.display = "block";
+            general.style.display = "none";
+            display.style.display = "none";
+            break;
+        case 'General':
+            audio.style.display = "none";
+            video.style.display = "none";
+            accessibility.style.display = "none";
+            general.style.display = "block";
+            display.style.display = "none";
+            break;
+        case 'Display':
+            audio.style.display = "none";
+            video.style.display = "none";
+            accessibility.style.display = "none";
+            general.style.display = "none";
+            display.style.display = "block";
+            break;
+    }
+
+}
+
 function abrirTelaEmoji() {
     const telaEmoji = document.getElementById("tela-emoji");
     const iconeEmoji = document.getElementById("icone-emoji");
@@ -1250,9 +1315,9 @@ function criarClone() {
     const tap = document.getElementById("tela-tap");
     const cloneSVG = originalSVG.cloneNode(true);
 
-    const posicaoX = parseInt(tap.getAttribute("x"))+98;
-    const posicaoY = parseInt(tap.getAttribute("y"))+5;
-    
+    const posicaoX = parseInt(tap.getAttribute("x")) + 98;
+    const posicaoY = parseInt(tap.getAttribute("y")) + 5;
+
     cloneSVG.id = "clone-tap";
     cloneSVG.style.top = posicaoY;
     cloneSVG.style.left = posicaoX;
