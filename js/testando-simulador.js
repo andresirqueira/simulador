@@ -1117,6 +1117,7 @@ function fecharTelaConfigOut() {
     telaConfig.style.display = "none";
 }
 
+
 function opcoesConfigOut(opcao) {
     const audio = document.getElementById("config-out-audio");
     const video = document.getElementById("config-out-video");
