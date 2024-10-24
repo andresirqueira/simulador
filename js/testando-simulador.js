@@ -400,44 +400,63 @@ function fecharMeeting() {
     const meetingPreview = document.getElementById("entrar-meeting-preview");
     const meeting = document.getElementById("meeting");
     const cameraSala = document.getElementById("reuniao-solo");
+    const leftMeeting = document.getElementById("left-meeting");
 
-    if (checkLigarTAP()) {
-        meetingPreview.style.display = "none";
-        meeting.style.display = "none"
-        cameraSala.style.display = "none";
-    }
-    else {
-        meetingPreview.style.display = "none";
-        meeting.style.display = "none"
-        cameraSala.style.display = "none";
-    }
-    desmutar();
+    leftMeeting.style.display = "block";
+    cameraSala.style.display = "none";
     removerParticipante();
-    resetCheckboxes();
-    desligarApresentacao()
+
+    setTimeout(() => {
+        leftMeeting.style.display = "none";
+
+        if (checkLigarTAP()) {
+            meetingPreview.style.display = "none";
+            meeting.style.display = "none"
+            cameraSala.style.display = "none";
+        }
+        else {
+            meetingPreview.style.display = "none";
+            meeting.style.display = "none"
+            cameraSala.style.display = "none";
+        }
+        desmutar();
+        removerParticipante();
+        resetCheckboxes();
+        desligarApresentacao();
+    }, 1500);
+
+
 }
 
 function entrarMeeting() {
     const meeting = document.getElementById("meeting");
     const meetingPreview = document.getElementById("entrar-meeting-preview");
-    meeting.style.display = "block";
-    meetingPreview.style.display = "none";
+    const joining = document.getElementById("joining");
 
-    if (checkLigarUSBCcamera()) {
-        ligarCamera();
-        desmutar();
-    }
-    else {
-        desligarCamera();
-        mutar();
-    }
-    desligarApresentacao();
+    joining.style.display = "block";
+
+    setTimeout(() => {
+        joining.style.display = "none";
+        meeting.style.display = "block";
+        meetingPreview.style.display = "none";
+
+        if (checkLigarUSBCcamera()) {
+            ligarCamera();
+            desmutar();
+        }
+        else {
+            desligarCamera();
+            mutar();
+        }
+        desligarApresentacao();
+    }, 1000);
+
+
 
 }
 
 function apresentar() {
     const imgSlideApresentacao = document.getElementById("apresentando");
-
     if (OnOffApresentar()) {
 
         if (checkLigarTV() && checkLigarHDMI()) {
@@ -449,8 +468,8 @@ function apresentar() {
     else {
         desligarApresentacao();
     }
-
 }
+
 
 function ligarApresentacao() {
     const botaoApresentar = document.getElementById("botao-apresentar");
@@ -1099,8 +1118,6 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-
-
 function abrirTelaConfigOut() {
     const telaConfig = document.getElementById("tela-config-out");
     const telaPreviewOn = document.getElementById("preview-tap-on");
@@ -1255,6 +1272,39 @@ function closedCaption() {
 
     }
 }
+
+function apresentarNaMeet() {
+
+    const imgSlideApresentacao = document.getElementById("apresentando");
+    const cameraSala = document.getElementById("reuniao-solo");
+    const iconeApresentar = document.getElementById("icone-apresentar");
+    const txtApresentar = document.getElementById("txt-apresentar");
+    const telaApresentar = document.getElementById("tela-apresentar");
+    const telaPreviewMeeting = document.getElementById("meeting");
+
+    telaPreviewMeeting.setAttribute("filter", "url(#blurFilter)");
+
+    if (checkLigarTV() && checkLigarHDMI()) {
+        if (checkHdmiNotebook() && checkNotebook()) {
+            iconeApresentar.setAttribute("href","img/apresentar-azul.png");
+            txtApresentar.style.fill="#1790f3";
+            telaApresentar.style.display="block"
+        }
+    }
+ }
+
+ function fecharApresentarNaMeet(){
+    const iconeApresentar = document.getElementById("icone-apresentar");
+    const txtApresentar = document.getElementById("txt-apresentar");
+    const telaApresentar = document.getElementById("tela-apresentar");
+    const telaPreviewMeeting = document.getElementById("meeting");
+
+    iconeApresentar.setAttribute("href","img/apresentar.png");
+    txtApresentar.style.fill="black";
+    telaApresentar.style.display="none";
+    telaPreviewMeeting.setAttribute("filter", " ");
+
+ }
 
 function adicionarParticipante() {
     const participantePreview2 = document.getElementById("preview-participante02");

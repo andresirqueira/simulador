@@ -18,9 +18,7 @@
 </head>
 
 <body>
-
     <div id="elemento-pai">
-
         <svg id="area" xmlns="http://www.w3.org/2000/svg">
             <!-- TV -->
             <g id="tela-total-tv">
@@ -53,6 +51,14 @@
 
                 <!-- TELA APAGADA -->
                 <rect width="376" height="215" x="636" y="105" id="tela-tv" style="fill:black;display:none;"></rect>
+
+                <!-- TELA JOINING -->
+                <image x="615" y="108" href="img/joining.png" width="420" height="210" id="joining"
+                    style="display: none; opacity: 80%" />
+
+                <!-- TELA LEFT MEETING -->
+                <image x="615" y="108" href="img/left-meeting.png" width="420" height="210" id="left-meeting"
+                    style="display: none;" />
 
                 <!-- TELA CAMERA LIGADA SALA -->
                 <g id="reuniao-solo" style="display: none;">
@@ -349,8 +355,9 @@
                         class="meet-menu">Chat</text>
 
                     <!-- APRESENTAR VIA HDMI (TAP PREVIEW) -->
-                    <image x="255" y="190" href="img/apresentar.png" width="30" height="15" /><text x="290" y="201"
-                        class="meet-menu">Present to the meeting</text>
+                    <image id="icone-apresentar" x="255" y="190" href="img/apresentar.png" width="30" height="15" />
+                    <text id="txt-apresentar" x="290" y="201" class="meet-menu" onclick="apresentarNaMeet()">Present to
+                        the meeting</text>
 
                     <!-- ADICONAR PARTICIPANTE NA MEET (TAP PREVIEW)     -->
                     <image x="255" y="210" href="img/add.png" width="30" height="15" /><text x="290" y="221"
@@ -457,6 +464,29 @@
                             onclick="fecharTelaEmoji()">Close</text>
                     </g>
 
+                 
+
+                </g>
+                   <!-- TELA DE APRESENTAR (TAP PREVIEW) -->
+                   <g id="tela-apresentar" style="display: none;" onmouseleave="fecharApresentarNaMeet()">
+                    <rect width="253" height="190" x="5" y="35" style="fill:white; stroke:gray;stroke-opacity: 50%; stroke-width: 0.25;"></rect>
+                    <g id="">
+
+                        <text x="8" y="70" style="font-size: x-small; font-weight: bold;" class="meet-sala">Ready to present?</text>
+                        <text x="40" y="100" style="font-size: x-small;" class="meet-sala">HDMI device</text>
+                        <text x="40" y="112" style="font-size: 7px;" class="meet-sala">Your entire screen, including notifications, will be shown to everyone</text>
+                        <image x="3" y="92" href="img/hdmi.png" width="40" height="20" />
+                        <text x="18" y="145" style="font-size: 7px;" class="meet-sala">To present from your device use g.co/present</text>
+                        
+                        <rect width="60" height="20" x="15" y="165" style="fill:#1790f3; stroke:gray;stroke-opacity: 50%; stroke-width: 0.25;"></rect>
+                        <text x="30" y="178" style="font-size: 9px; fill:white" class="meet-sala">Present</text>
+
+                        <line x1="1" y1="198" x2="250" y2="198" style="stroke:gray;stroke-width:1;opacity:10%" />
+
+                        <text x="225" y="215" style="font-size: 9px; fill:#1790f3; cursor:pointer" class="meet-sala" onclick="fecharApresentarNaMeet()">Close</text>
+                                  
+                    </g>
+
                 </g>
 
                 <defs>
@@ -473,77 +503,105 @@
                     <text x="360" y="55" style="font-size: small;" class="meet-menu"
                         onclick="fecharTelaConfigOut()">X</text>
                     <text x="110" y="55" style="font-size: small;" class="meet-menu">Settings</text>
-                    <text x="120" y="75" style="font-size: x-small;" class="meet-menu" onclick="opcoesConfigOut(this.textContent)">Audio</text>
-                    <text x="165" y="75" style="font-size: x-small;" class="meet-menu" onclick="opcoesConfigOut(this.textContent)">Video</text>
-                    <text x="210" y="75" style="font-size: x-small;" class="meet-menu" onclick="opcoesConfigOut(this.textContent)">Accessibility</text>
-                    <text x="280" y="75" style="font-size: x-small;" class="meet-menu" onclick="opcoesConfigOut(this.textContent)">General</text>
-                    <text x="330" y="75" style="font-size: x-small;" class="meet-menu" onclick="opcoesConfigOut(this.textContent)">Display</text>
+                    <text x="120" y="75" style="font-size: x-small;" class="meet-menu"
+                        onclick="opcoesConfigOut(this.textContent)">Audio</text>
+                    <text x="165" y="75" style="font-size: x-small;" class="meet-menu"
+                        onclick="opcoesConfigOut(this.textContent)">Video</text>
+                    <text x="210" y="75" style="font-size: x-small;" class="meet-menu"
+                        onclick="opcoesConfigOut(this.textContent)">Accessibility</text>
+                    <text x="280" y="75" style="font-size: x-small;" class="meet-menu"
+                        onclick="opcoesConfigOut(this.textContent)">General</text>
+                    <text x="330" y="75" style="font-size: x-small;" class="meet-menu"
+                        onclick="opcoesConfigOut(this.textContent)">Display</text>
                     <line x1="106" y1="80" x2="380" y2="80" style="stroke:gray;stroke-width:1;opacity:10%" />
 
-                    
+
                     <g id="config-out-audio" style="display: block;">
                         <text x="120" y="75" style="font-size: x-small; fill:#1790f3;" class="meet-menu">Audio</text>
                         <line x1="120" y1="80" x2="145" y2="80" style="stroke:#1790f3;stroke-width:1;" />
                         <text x="120" y="110" style="font-size: x-small;" class="meet-sala">Microfone</text>
-                        <rect width="200" height="20" x="120" y="120" style="fill:rgb(176, 173, 173); stroke:gray;stroke-opacity: 10%; stroke-width: 0.25; opacity:50%"></rect>
-                        <text x="123" y="133" style="font-size: 8px;" class="meet-menu">Logitech MeetUp Speakerphone: USB Audio:0,0 </text>
+                        <rect width="200" height="20" x="120" y="120"
+                            style="fill:rgb(176, 173, 173); stroke:gray;stroke-opacity: 10%; stroke-width: 0.25; opacity:50%">
+                        </rect>
+                        <text x="123" y="133" style="font-size: 8px;" class="meet-menu">Logitech MeetUp Speakerphone:
+                            USB Audio:0,0 </text>
                         <line x1="106" y1="150" x2="380" y2="150" style="stroke:gray;stroke-width:1;opacity:10%" />
                         <text x="120" y="170" style="font-size: x-small;" class="meet-sala">Speaker</text>
-                        <rect width="200" height="20" x="120" y="180" style="fill:rgb(176, 173, 173); stroke:gray;stroke-opacity: 10%; stroke-width: 0.25; opacity:50%"></rect>
-                        <text x="123" y="193" style="font-size: 8px;" class="meet-menu">Logitech MeetUp Speakerphone: USB Audio:0,0 PCM</text>
-                        <text x="120" y="215" style="font-size: 6.2px;" class="meet-sala">Microphone and speaker changes are temporary and apply to the next meeting only</text>
+                        <rect width="200" height="20" x="120" y="180"
+                            style="fill:rgb(176, 173, 173); stroke:gray;stroke-opacity: 10%; stroke-width: 0.25; opacity:50%">
+                        </rect>
+                        <text x="123" y="193" style="font-size: 8px;" class="meet-menu">Logitech MeetUp Speakerphone:
+                            USB Audio:0,0 PCM</text>
+                        <text x="120" y="215" style="font-size: 6.2px;" class="meet-sala">Microphone and speaker changes
+                            are temporary and apply to the next meeting only</text>
                     </g>
-                    
+
                     <g id="config-out-video" style="display: none;">
                         <text x="165" y="75" style="font-size: x-small;fill:#1790f3;" class="meet-menu">Video</text>
                         <line x1="165" y1="80" x2="190" y2="80" style="stroke:#1790f3;stroke-width:1;" />
-                        <text x="120" y="110" style="font-size: x-small;"  class="meet-sala">Camera</text>
-                        <rect width="200" height="20" x="120" y="120" style="fill:rgb(176, 173, 173); stroke:gray;stroke-opacity: 10%; stroke-width: 0.25; opacity:50%"></rect>
+                        <text x="120" y="110" style="font-size: x-small;" class="meet-sala">Camera</text>
+                        <rect width="200" height="20" x="120" y="120"
+                            style="fill:rgb(176, 173, 173); stroke:gray;stroke-opacity: 10%; stroke-width: 0.25; opacity:50%">
+                        </rect>
                         <text x="123" y="133" style="font-size: 8px;" class="meet-menu">Logitech MeetUp (0f76ea)</text>
                     </g>
 
                     <g id="config-out-accessibility" style="display: none;">
-                        <text x="210" y="75" style="font-size: x-small; fill:#1790f3;" class="meet-menu">Accessibility</text>
+                        <text x="210" y="75" style="font-size: x-small; fill:#1790f3;"
+                            class="meet-menu">Accessibility</text>
                         <line x1="210" y1="80" x2="265" y2="80" style="stroke:#1790f3;stroke-width:1;" />
-                        <text x="120" y="110" style="font-size: x-small;"  class="meet-sala">Spoken feedback</text>
+                        <text x="120" y="110" style="font-size: x-small;" class="meet-sala">Spoken feedback</text>
                         <image x="340" y="100" href="img/desligar.png" width="30" height="15" />
                         <line x1="106" y1="125" x2="380" y2="125" style="stroke:gray;stroke-width:1;opacity:10%" />
-                        <text x="120" y="145" style="font-size: x-small;"  class="meet-sala">Live captions</text>
-                        <text x="120" y="160" style="font-size: x-small; fill:gray"  class="meet-sala">Avaliable only in Google Meet</text>
+                        <text x="120" y="145" style="font-size: x-small;" class="meet-sala">Live captions</text>
+                        <text x="120" y="160" style="font-size: x-small; fill:gray" class="meet-sala">Avaliable only in
+                            Google Meet</text>
                         <image x="340" y="135" href="img/desligar.png" width="30" height="15" />
                     </g>
 
                     <g id="config-out-general" style="display: none;">
                         <text x="280" y="75" style="font-size: x-small; fill:#1790f3;" class="meet-menu">General</text>
                         <line x1="280" y1="80" x2="315" y2="80" style="stroke:#1790f3;stroke-width:1;" />
-                        <text x="120" y="110" style="font-size: x-small; font-weight: bold;"  class="meet-sala">System</text>
+                        <text x="120" y="110" style="font-size: x-small; font-weight: bold;"
+                            class="meet-sala">System</text>
 
-                        <text x="120" y="135" style="font-size: x-small;"  class="meet-sala">Refresh room display</text>
-                        <rect width="70" height="20" x="300" y="120" style="fill:none; stroke:gray;stroke-opacity: 10%; stroke-width: 1;"></rect>
-                        <text x="320" y="133" style="font-size: 8px; fill:#1790f3; font-weight: bold;"class="meet-sala">Refresh</text>
+                        <text x="120" y="135" style="font-size: x-small;" class="meet-sala">Refresh room display</text>
+                        <rect width="70" height="20" x="300" y="120"
+                            style="fill:none; stroke:gray;stroke-opacity: 10%; stroke-width: 1;"></rect>
+                        <text x="320" y="133" style="font-size: 8px; fill:#1790f3; font-weight: bold;"
+                            class="meet-sala">Refresh</text>
 
-                        <text x="120" y="160" style="font-size: x-small;"  class="meet-sala">Restart this device</text>
-                        <rect width="70" height="20" x="300" y="145" style="fill:none; stroke:gray;stroke-opacity: 10%; stroke-width: 1;"></rect>
-                        <text x="320" y="158" style="font-size: 8px; fill:#1790f3; font-weight: bold;cursor:pointer"class="meet-sala" onclick="carregarMeet()">Restart</text>
+                        <text x="120" y="160" style="font-size: x-small;" class="meet-sala">Restart this device</text>
+                        <rect width="70" height="20" x="300" y="145"
+                            style="fill:none; stroke:gray;stroke-opacity: 10%; stroke-width: 1;"></rect>
+                        <text x="320" y="158" style="font-size: 8px; fill:#1790f3; font-weight: bold;cursor:pointer"
+                            class="meet-sala" onclick="carregarMeet()">Restart</text>
 
-                        <text x="120" y="185" style="font-size: x-small;"  class="meet-sala">Open source licenses</text>
-                        <rect width="50" height="20" x="320" y="170" style="fill:none; stroke:gray;stroke-opacity: 10%; stroke-width: 1;"></rect>
-                        <text x="335" y="183" style="font-size: 8px; fill:#1790f3; font-weight: bold;"class="meet-sala">View</text>
-                                      
+                        <text x="120" y="185" style="font-size: x-small;" class="meet-sala">Open source licenses</text>
+                        <rect width="50" height="20" x="320" y="170"
+                            style="fill:none; stroke:gray;stroke-opacity: 10%; stroke-width: 1;"></rect>
+                        <text x="335" y="183" style="font-size: 8px; fill:#1790f3; font-weight: bold;"
+                            class="meet-sala">View</text>
+
                     </g>
 
                     <g id="config-out-display" style="display: none;">
                         <text x="330" y="75" style="font-size: x-small; fill:#1790f3;" class="meet-menu">Display</text>
                         <line x1="330" y1="80" x2="365" y2="80" style="stroke:#1790f3;stroke-width:1;" />
-                        <text x="120" y="110" style="font-size: x-small;font-weight: bold;"  class="meet-sala">Display</text>
+                        <text x="120" y="110" style="font-size: x-small;font-weight: bold;"
+                            class="meet-sala">Display</text>
                         <text x="120" y="125" style="font-size: 9px;" class="meet-sala">LG TV SSCR</text>
                         <line x1="106" y1="135" x2="380" y2="135" style="stroke:gray;stroke-width:1;opacity:10%" />
-                        <text x="120" y="155" style="font-size: x-small;font-weight: bold;"  class="meet-sala">Test energy saving</text>
-                        <text x="120" y="170" style="font-size: 6px;" class="meet-sala">This test turns the display off and then on again. This will take about</text>
+                        <text x="120" y="155" style="font-size: x-small;font-weight: bold;" class="meet-sala">Test
+                            energy saving</text>
+                        <text x="120" y="170" style="font-size: 6px;" class="meet-sala">This test turns the display off
+                            and then on again. This will take about</text>
                         <text x="120" y="178" style="font-size: 6px;" class="meet-sala">10 seconds.</text>
-                        <rect width="50" height="20" x="320" y="165" style="fill:none; stroke:gray;stroke-opacity: 10%; stroke-width: 1;"></rect>
-                        <text x="335" y="178" style="font-size: 8px; fill:#1790f3; font-weight: bold;"class="meet-sala">Test</text>
-                  
+                        <rect width="50" height="20" x="320" y="165"
+                            style="fill:none; stroke:gray;stroke-opacity: 10%; stroke-width: 1;"></rect>
+                        <text x="335" y="178" style="font-size: 8px; fill:#1790f3; font-weight: bold;"
+                            class="meet-sala">Test</text>
+
                     </g>
 
                 </g>
