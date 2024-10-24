@@ -402,12 +402,17 @@ function fecharMeeting() {
     const cameraSala = document.getElementById("reuniao-solo");
     const leftMeeting = document.getElementById("left-meeting");
 
-    leftMeeting.style.display = "block";
+    if(checkMeetingTV()){
+        leftMeeting.style.display = "block";
+    }
+    
     cameraSala.style.display = "none";
     removerParticipante();
 
     setTimeout(() => {
-        leftMeeting.style.display = "none";
+          leftMeeting.style.display = "none";
+        
+
 
         if (checkLigarTAP()) {
             meetingPreview.style.display = "none";
@@ -1286,25 +1291,25 @@ function apresentarNaMeet() {
 
     if (checkLigarTV() && checkLigarHDMI()) {
         if (checkHdmiNotebook() && checkNotebook()) {
-            iconeApresentar.setAttribute("href","img/apresentar-azul.png");
-            txtApresentar.style.fill="#1790f3";
-            telaApresentar.style.display="block"
+            iconeApresentar.setAttribute("href", "img/apresentar-azul.png");
+            txtApresentar.style.fill = "#1790f3";
+            telaApresentar.style.display = "block"
         }
     }
- }
+}
 
- function fecharApresentarNaMeet(){
+function fecharApresentarNaMeet() {
     const iconeApresentar = document.getElementById("icone-apresentar");
     const txtApresentar = document.getElementById("txt-apresentar");
     const telaApresentar = document.getElementById("tela-apresentar");
     const telaPreviewMeeting = document.getElementById("meeting");
 
-    iconeApresentar.setAttribute("href","img/apresentar.png");
-    txtApresentar.style.fill="black";
-    telaApresentar.style.display="none";
+    iconeApresentar.setAttribute("href", "img/apresentar.png");
+    txtApresentar.style.fill = "black";
+    telaApresentar.style.display = "none";
     telaPreviewMeeting.setAttribute("filter", " ");
 
- }
+}
 
 function adicionarParticipante() {
     const participantePreview2 = document.getElementById("preview-participante02");
