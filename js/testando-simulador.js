@@ -405,6 +405,9 @@ function fecharMeeting() {
     if(checkMeetingTV()){
         leftMeeting.style.display = "block";
     }
+    if(!checkInternet()){
+        leftMeeting.style.display = "none";
+    }
     
     cameraSala.style.display = "none";
     removerParticipante();
@@ -428,6 +431,7 @@ function fecharMeeting() {
         removerParticipante();
         resetCheckboxes();
         desligarApresentacao();
+        desligarClosedCaption();
     }, 1500);
 
 
@@ -483,8 +487,6 @@ function entrarMeeting() {
         }
         desligarApresentacao();
     }, 1000);
-
-
 
 }
 
@@ -1304,6 +1306,12 @@ function closedCaption() {
         stopLoop2();
 
     }
+}
+
+function desligarClosedCaption(){
+    const cc = document.getElementById("ligar-cc");
+    cc.setAttribute("href", "img/desligar.png");
+    stopLoop2();
 }
 
 function apresentarNaMeet() {
