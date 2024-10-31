@@ -433,6 +433,34 @@ function fecharMeeting() {
 
 }
 
+function levantarMao() {
+    const imgMao = document.getElementById("img-levantar-mao");
+    const txtMao = document.getElementById("txt-levantar-mao");
+    const fundoLevantarMao = document.getElementById("fundo-levantar-mao");
+    const fundoLevantarMaoTV = document.getElementById("fundo-levantar-mao-tv");
+    const imgMaoTV = document.getElementById("img-mao-tv");
+    const txtMaoTV = document.getElementById("txt-nome-sala");
+
+    if (fundoLevantarMao.style.fill == "none") {
+        fundoLevantarMao.style.fill = "gray";
+        fundoLevantarMaoTV.style.display = "block";
+        imgMaoTV.style.display = "block";
+        imgMao.setAttribute("href", "img/mao-azul.png");
+        txtMao.textContent = "Low Hand";
+        txtMao.style.fill = "#1790f3";
+        txtMaoTV.style.fill = "black";
+    }
+    else if (fundoLevantarMao.style.fill == "gray") {
+        fundoLevantarMao.style.fill = "none";
+        fundoLevantarMaoTV.style.display = "none";
+        imgMaoTV.style.display = "none";
+        imgMao.setAttribute("href", "img/mao.png");
+        txtMao.textContent = "Raise Hand";
+        txtMao.style.fill = "black";
+        txtMaoTV.style.fill = "white";
+    }
+}
+
 function entrarMeeting() {
     const meeting = document.getElementById("meeting");
     const meetingPreview = document.getElementById("entrar-meeting-preview");

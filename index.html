@@ -19,13 +19,11 @@
 
 <body>
     <div id="elemento-pai">
-        <svg id="area" xmlns="http://www.w3.org/2000/svg">
+        <svg id="area" xmlns="http://www.w3.org/2000/svg" width="1100px" height="800px">
             <!-- TV -->
             <g id="tela-total-tv">
 
-                <!-- EQUIPAMENTO TV -->
-                <image x="600" y="100" href="img/tv-lg.png" width="450" height="225" />
-
+                <image x="602" y="104" href="img/sem-imagem.png" alt="sinal-tv" width="442" height="213" id="img-tv-sem-imagem" />
                 <!-- IMAGEM DE TV SEM SINAL -->
                 <g id="sinal-TV" style="display: none;">
                     <image x="615" y="108" href="img/tv-on-sem-sinal.png" width="420" height="210" />
@@ -78,6 +76,12 @@
                             <rect class="morphing-bar morphing-bar-center" width="1" height="3" x="1003" y="134" />
                             <rect class="morphing-bar morphing-bar-right" width="1" height="3" x="1006" y="134" />
                         </g>
+                        <rect id="fundo-levantar-mao-tv" height="16" width="165" x="658" y="295" rx="8"
+                            style="fill:white; display:none" />
+                        <text x="678" y="306" style="fill: white; font: size 7px;" id="txt-nome-sala"
+                            class="meet-menu">Sala Teste 123 (BRA-SP wwww,2)</text>
+                        <image x="652" y="295" href="img/mao.png" width="30" height="15" id="img-mao-tv"
+                            style="display: none;" />
                     </g>
 
                     <text x="965" y="120" style="fill: white; font-size: xx-small;" id="relogio"></text>
@@ -115,6 +119,9 @@
                     <circle cx="825" cy="290" r="5" style="fill:#1790f3;" id="circulo-volume-tv" />
                     <text x="825" y="306" style="fill: gray; font-size: small;" id="volume-na-tv">40</text>
                 </g>
+                <!-- EQUIPAMENTO TV -->
+                <image x="600" y="100" href="img/tv-lg2.png" width="447" height="224" />
+              
 
             </g>
             <g id="tap" x="575" y="550"></g>
@@ -122,9 +129,9 @@
 
             <!-- TAP -->
             <g id="tap">
-                <image x="645" y="538" href="img/tap2.png" width="400" height="225" />
-                <rect width="230" height="135" x="729" y="577" id="tela-tap" style="fill:black;display:block;"></rect>
-                <line x1="834" y1="717" x2="855" y2="717" style="stroke:rgb(21, 21, 21);stroke-width:6; opacity: 90%;"
+                <image x="645" y="538" href="img/tap.png" width="400" height="220" />
+                <rect width="228" height="144" x="729" y="572" id="tela-tap" style="fill:black;display:block;"></rect>
+                <line x1="834" y1="720" x2="855" y2="720" style="stroke:rgb(21, 21, 21);stroke-width:7; opacity: 90%;"
                     id="led-TAP" />
 
                 <!-- CHROMEBOX -->
@@ -355,7 +362,8 @@
                         class="meet-menu">Chat</text>
 
                     <!-- APRESENTAR VIA HDMI (TAP PREVIEW) -->
-                    <image id="icone-apresentar" x="255" y="190" href="img/apresentar.png" width="30" height="15" />
+                    <image id="icone-apresentar" x="255" y="190" href="img/apresentar.png" width="30" height="15"
+                        style="cursor:pointer" onclick="apresentarNaMeet()" />
                     <text id="txt-apresentar" x="290" y="201" class="meet-menu" onclick="apresentarNaMeet()">Present to
                         the meeting</text>
 
@@ -429,10 +437,11 @@
                         onclick="abrirTelaEmoji()" id="icone-emoji" />
 
                     <!-- LEVANTAR A MÃO NA MEETING (TAP PREVIEW)     -->
-                    <image x="165" y="50" href="img/mao.png" width="30" height="15" /> <text x="190" y="62"
-                        class="meet-sala">Raise hand</text>
-                    <rect x="170" y="45" width="80" height="25" rx="15"
-                        style="opacity:10%; fill:none;stroke: gray;stroke-width:1" />
+                    <rect x="170" y="45" width="80" height="25" rx="15" id="fundo-levantar-mao"
+                        style="opacity:10%; fill:none;stroke: gray;stroke-width:1" style="cursor: pointer" />
+                    <image x="165" y="50" href="img/mao.png" width="30" height="15" id="img-levantar-mao"
+                        onclick="levantarMao()" style="cursor: pointer" /> <text x="190" y="62" class="meet-sala"
+                        id="txt-levantar-mao" style="cursor: pointer" onclick="levantarMao()">Raise hand</text>
 
                     <!-- RELÓGIO E CÓDIGO DA REUNIÃO (TAP PREVIEW)     -->
                     <text x="10" y="20" id="mini-relogio2"></text>
@@ -464,27 +473,33 @@
                             onclick="fecharTelaEmoji()">Close</text>
                     </g>
 
-                 
+
 
                 </g>
-                   <!-- TELA DE APRESENTAR (TAP PREVIEW) -->
-                   <g id="tela-apresentar" style="display: none;" onmouseleave="fecharApresentarNaMeet()">
-                    <rect width="253" height="190" x="5" y="35" style="fill:white; stroke:gray;stroke-opacity: 50%; stroke-width: 0.25;"></rect>
+                <!-- TELA DE APRESENTAR (TAP PREVIEW) -->
+                <g id="tela-apresentar" style="display: none;" onmouseleave="fecharApresentarNaMeet()">
+                    <rect width="253" height="190" x="5" y="35"
+                        style="fill:white; stroke:gray;stroke-opacity: 50%; stroke-width: 0.25;"></rect>
                     <g id="">
 
-                        <text x="8" y="70" style="font-size: x-small; font-weight: bold;" class="meet-sala">Ready to present?</text>
+                        <text x="8" y="70" style="font-size: x-small; font-weight: bold;" class="meet-sala">Ready to
+                            present?</text>
                         <text x="40" y="100" style="font-size: x-small;" class="meet-sala">HDMI device</text>
-                        <text x="40" y="112" style="font-size: 7px;" class="meet-sala">Your entire screen, including notifications, will be shown to everyone</text>
+                        <text x="40" y="112" style="font-size: 7px;" class="meet-sala">Your entire screen, including
+                            notifications, will be shown to everyone</text>
                         <image x="3" y="92" href="img/hdmi.png" width="40" height="20" />
-                        <text x="18" y="145" style="font-size: 7px;" class="meet-sala">To present from your device use g.co/present</text>
-                        
-                        <rect width="60" height="20" x="15" y="165" style="fill:#1790f3; stroke:gray;stroke-opacity: 50%; stroke-width: 0.25;"></rect>
+                        <text x="18" y="145" style="font-size: 7px;" class="meet-sala">To present from your device use
+                            g.co/present</text>
+
+                        <rect width="60" height="20" x="15" y="165"
+                            style="fill:#1790f3; stroke:gray;stroke-opacity: 50%; stroke-width: 0.25;"></rect>
                         <text x="30" y="178" style="font-size: 9px; fill:white" class="meet-sala">Present</text>
 
                         <line x1="1" y1="198" x2="250" y2="198" style="stroke:gray;stroke-width:1;opacity:10%" />
 
-                        <text x="225" y="215" style="font-size: 9px; fill:#1790f3; cursor:pointer" class="meet-sala" onclick="fecharApresentarNaMeet()">Close</text>
-                                  
+                        <text x="225" y="215" style="font-size: 9px; fill:#1790f3; cursor:pointer" class="meet-sala"
+                            onclick="fecharApresentarNaMeet()">Close</text>
+
                     </g>
 
                 </g>

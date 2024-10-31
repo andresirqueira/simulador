@@ -26,15 +26,18 @@ div {
 
 #area {
   position: relative;
-  width: 100%;
-  height: 100%;
+
 
 }
 
 #tela-total-tv {
-  position: relative;
+  /* position: relative;
   width: 100%;
-  height: 100%;
+  height: 100%; */
+  position: relative;
+  width: 440px;
+  height: 220px;
+  z-index: 1;
 
 }
 
@@ -331,5 +334,37 @@ div {
 #volume-mais:hover,
 #volume-menos:hover {
   cursor: pointer;
+}
+
+/* #camera-normal{
+  position: absolute;
+  transition: all 0.3s ease;
+  transform-origin:  center center;
+} */
+
+/* #tela-sala{
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+
+} */
+
+.background-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+#svg-tv {
+  position: absolute;
+  width: 440px;
+  height: 220px;
+  z-index: -5;
+}
+
+#overlay-group {
+  overflow: hidden;
+  transition: transform 0.5s ease;
 }
 
