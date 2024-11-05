@@ -402,19 +402,19 @@ function fecharMeeting() {
     const cameraSala = document.getElementById("reuniao-solo");
     const leftMeeting = document.getElementById("left-meeting");
 
-    if(checkMeetingTV()){
+    if (checkMeetingTV()) {
         leftMeeting.style.display = "block";
     }
-    if(!checkInternet()){
+    if (!checkInternet()) {
         leftMeeting.style.display = "none";
     }
-    
+
     cameraSala.style.display = "none";
     removerParticipante();
 
     setTimeout(() => {
-          leftMeeting.style.display = "none";
-        
+        leftMeeting.style.display = "none";
+
 
 
         if (checkLigarTAP()) {
@@ -544,12 +544,14 @@ function OnOffApresentar() {
 
 function ligaDesligaCamera() {
     const cameraSalaOn = document.getElementById("reuniao-solo");
-    const camera = document.getElementById("camera-normal")
+    const camera = document.getElementById("camera-normal");
+    const cameraOff = document.getElementById("camera-off");
 
     if (checkLigarUSBCcamera() && checkCamera()) {
         if (checkLigarTV() && checkLigarHDMI() && checkLigarChromebox() && checkInternet() && checkMeeting()) {
             cameraSalaOn.style.display = "block";
-            camera.setAttribute("href", "img/camera-sala-reuniao.png");
+            camera.style.display = "block";
+            cameraOff.style.display = "none";
         }
         else {
             cameraSalaOn.style.display = "none";
@@ -558,7 +560,8 @@ function ligaDesligaCamera() {
     else {
         if (checkLigarTV() && checkLigarHDMI() && checkLigarChromebox() && checkInternet() && checkMeeting()) {
             cameraSalaOn.style.display = "block";
-            camera.setAttribute("href", "img/camera-sala-reuniao-off.png");
+            camera.style.display = "none";
+            cameraOff.style.display = "block";
         }
         else {
             cameraSalaOn.style.display = "none";
@@ -571,21 +574,22 @@ function desligarCamera() {
     const fundoCameraPreview = document.getElementById("circulo-camera");
     const cameraPreview = document.getElementById("camera-on-off");
     const cameraSalaOn = document.getElementById("reuniao-solo");
-    const cameraSalaOff = document.getElementById("reuniao-solo-off");
-
-    const camera = document.getElementById("camera-normal")
+    const camera = document.getElementById("camera-normal");
+    const cameraOff = document.getElementById("camera-off");
 
     if (checkLigarTV() && checkLigarHDMI()) {
         fundoCameraPreview.style.fill = "rgb(192,0,0)";
         cameraPreview.setAttribute("href", "img/camera-branca.png");
         cameraSalaOn.style.display = "block";
-        camera.setAttribute("href", "img/camera-sala-reuniao-off.png");
+        camera.style.display = "none";
+        cameraOff.style.display = "block";
     }
     else {
         fundoCameraPreview.style.fill = "rgb(192,0,0)";
         cameraPreview.setAttribute("href", "img/camera-branca.png");
         cameraSalaOn.style.display = "block";
-        camera.setAttribute("href", "img/camera-sala-reuniao.png");
+        camera.style.display = "block";
+        cameraOff.style.display = "none";
     }
 
 }
@@ -594,19 +598,22 @@ function ligarCamera() {
     const fundoCameraPreview = document.getElementById("circulo-camera");
     const cameraPreview = document.getElementById("camera-on-off");
     const cameraSalaOn = document.getElementById("reuniao-solo");
-    const camera = document.getElementById("camera-normal")
+    const camera = document.getElementById("camera-normal");
+    const cameraOff = document.getElementById("camera-off");
 
     if (checkLigarTV() && checkLigarHDMI()) {
         fundoCameraPreview.style.fill = "none";
         cameraPreview.setAttribute("href", "img/camera.png");
         cameraSalaOn.style.display = "block";
-        camera.setAttribute("href", "img/camera-sala-reuniao.png");
+        camera.style.display = "block";
+        cameraOff.style.display = "none";
     }
     else {
         fundoCameraPreview.style.fill = "none";
         cameraPreview.setAttribute("href", "img/camera.png");
         cameraSalaOn.style.display = "block";
-        camera.setAttribute("href", "img/camera-sala-reuniao-off.png");
+        camera.style.display = "none";
+        cameraOff.style.display = "block";
     }
 }
 
@@ -1275,17 +1282,7 @@ function criarEmoji(tipoDeEmoji) {
     }
 }
 
-function framePeople() {
 
-    const normal = document.getElementById("camera-normal");
-
-    if (normal.getAttribute("href") == "img/camera-sala-reuniao.png") {
-        normal.setAttribute("href", "img/zoom-frame-people.png")
-    }
-    else if (normal.getAttribute("href") == "img/zoom-frame-people.png") {
-        normal.setAttribute("href", "img/camera-sala-reuniao.png")
-    }
-}
 
 function closedCaption() {
 
@@ -1308,7 +1305,7 @@ function closedCaption() {
     }
 }
 
-function desligarClosedCaption(){
+function desligarClosedCaption() {
     const cc = document.getElementById("ligar-cc");
     cc.setAttribute("href", "img/desligar.png");
     stopLoop2();
@@ -1343,6 +1340,29 @@ function fecharApresentarNaMeet() {
     iconeApresentar.setAttribute("href", "img/apresentar.png");
     txtApresentar.style.fill = "black";
     telaApresentar.style.display = "none";
+    telaPreviewMeeting.setAttribute("filter", " ");
+
+}
+
+function abrirControleCamera() {
+
+    const telaControleCamera = document.getElementById("tela-controle-camera");
+    const telaPreviewMeeting = document.getElementById("meeting");
+
+   
+
+    if (checkLigarTV() && checkLigarHDMI()) {
+        if (checkCamera() ) {
+            telaPreviewMeeting.setAttribute("filter", "url(#blurFilter)");
+            telaControleCamera.style.display = "block";
+        }
+    }
+}
+
+function fecharControleCamera() {
+    const telaControleCamera = document.getElementById("tela-controle-camera");
+    const telaPreviewMeeting = document.getElementById("meeting");
+    telaControleCamera.style.display = "none";
     telaPreviewMeeting.setAttribute("filter", " ");
 
 }
@@ -1475,6 +1495,341 @@ function resetCheckboxFalarRemoto() {
     checkboxFalarRemoto.setAttribute("checked", "unchecked");
     checkboxFalarRemoto.checked = false;
 }
+
+
+
+function moverDireita(escala) {
+    const imgCamera = document.getElementById("camera-normal");
+    let scale = parseFloat(escala);
+    let imgCameraMaxX = 420;
+    let imgCameraX = parseInt(imgCamera.getAttribute("x"));
+
+    switch (scale) {
+        case 1.5:
+            imgCameraMaxX = 390;
+            break;
+        case 1.6:
+            imgCameraMaxX = 340;
+            break;
+        case 1.7:
+            imgCameraMaxX = 345;
+            break;
+        case 1.8:
+            imgCameraMaxX = 325;
+            break;
+        case 1.9:
+            imgCameraMaxX = 310;
+            break;
+
+        default:
+            break;
+    }
+
+    if (imgCameraX < imgCameraMaxX) {
+        imgCameraX += 10;
+        imgCamera.setAttribute("x", imgCameraX);
+    }
+   
+}
+
+function moverEsquerda(escala) {
+    const imgCamera = document.getElementById("camera-normal");
+    let scale = parseFloat(escala);
+    let imgCameraMinX = 360;
+    let imgCameraX = parseInt(imgCamera.getAttribute("x"));
+
+    switch (scale) {
+        case 1.5:
+            imgCameraMinX = 315;
+            break;
+        case 1.6:
+            imgCameraMinX = 280;
+            break;
+        case 1.7:
+            imgCameraMinX = 240;
+            break;
+        case 1.8:
+            imgCameraMinX = 210;
+            break;
+        case 1.9:
+            imgCameraMinX = 185;
+            break;
+
+        default:
+            break;
+    }
+
+    if (imgCameraX > imgCameraMinX) {
+        imgCameraX -= 10;
+        imgCamera.setAttribute("x", imgCameraX);
+    }
+   
+}
+
+function moverCima(escala) {
+    const imgCamera = document.getElementById("camera-normal");
+    let scale = parseFloat(escala);
+    let imgCameraMaxY = 60;
+    let imgCameraY = parseInt(imgCamera.getAttribute("y"));
+
+    switch (scale) {
+        case 1.5:
+            imgCameraMaxY = 55;
+            break;
+        case 1.6:
+            imgCameraMaxY = 50;
+            break;
+        case 1.7:
+            imgCameraMaxY = 45;
+            break;
+        case 1.8:
+            imgCameraMaxY = 40;
+            break;
+        case 1.9:
+            imgCameraMaxY = 35;
+            break;
+        default:
+            break;
+    }
+
+    if (imgCameraY < imgCameraMaxY) {
+        imgCameraY += 5;
+        imgCamera.setAttribute("y", imgCameraY);
+    }
+    
+}
+
+function moverBaixo(escala) {
+    const imgCamera = document.getElementById("camera-normal");
+    let scale = parseFloat(escala);
+    let imgCameraMinY = 25;
+    let imgCameraY = parseInt(imgCamera.getAttribute("y"));
+
+    switch (scale) {
+        case 1.5:
+            imgCameraMinY = 20;
+            break;
+        case 1.6:
+            imgCameraMinY = 15;
+            break;
+        case 1.7:
+            imgCameraMinY = 10;
+            break;
+        case 1.8:
+            imgCameraMinY = 5;
+            break;
+        case 1.9:
+            imgCameraMinY = 0;
+            break;
+
+        default:
+            break;
+    }
+
+    if (imgCameraY > imgCameraMinY) {
+        imgCameraY -= 5;
+        imgCamera.setAttribute("y", imgCameraY);
+    }
+    
+}
+
+function zoomIn() {
+    const imgCamera = document.getElementById("camera-normal");
+    let imgCameraY = parseInt(imgCamera.getAttribute("y"));
+    let imgCameraX = parseInt(imgCamera.getAttribute("x"));
+    let imgScale = parseFloat(imgCamera.style.scale);
+    let imgCameraMinY = 25;
+    let imgCameraMaxY = 60;
+    let imgCameraMinX = 360;
+    let imgCameraMaxX = 420;
+
+    if (imgScale < "1.9") {
+        imgScale += 0.1;
+        imgScale.toFixed(1);
+        imgCamera.style.scale = imgScale;
+        switch (imgScale) {
+            case 1.5:
+                imgCameraMinY = 20;
+                imgCameraMaxY = 55;
+                imgCameraMinX = 315;
+                imgCameraMaxX = 390;
+                break;
+            case 1.6:
+                imgCameraMinY = 15;
+                imgCameraMaxY = 50;
+                imgCameraMinX = 275;
+                imgCameraMaxX = 365;
+                break;
+            case 1.7000000000000002:
+                imgCameraMinY = 10;
+                imgCameraMaxY = 45;
+                imgCameraMinX = 240;
+                imgCameraMaxX = 345;
+                break;
+            case 1.8:
+                imgCameraMinY = 5;
+                imgCameraMaxY = 40;
+                imgCameraMinX = 210;
+                imgCameraMaxX = 325;
+                break;
+            case 1.9000000000000001:
+                imgCameraMinY = 0;
+                imgCameraMaxY = 35;
+                imgCameraMinX = 185;
+                imgCameraMaxX = 310;
+                break;
+
+            default:
+                break;
+        }
+
+        imgCameraY -= 5;
+        imgCameraX -= 40;
+
+        if (imgCameraY > imgCameraMinY && imgCameraY < imgCameraMaxY) {
+            imgCamera.setAttribute("y", imgCameraY);
+        }
+        else if (imgCameraY <= imgCameraMinY) {
+            imgCamera.setAttribute("y", imgCameraMinY);
+        }
+        else if (imgCameraY >= imgCameraMaxY) {
+            imgCamera.setAttribute("y", imgCameraMaxY);
+        }
+
+        if (imgCameraX > imgCameraMinX && imgCameraX < imgCameraMaxX) {
+            imgCamera.setAttribute("x", imgCameraX);
+        }
+        else if (imgCameraX <= imgCameraMinX) {
+            imgCamera.setAttribute("x", imgCameraMinX);
+        }
+        else if (imgCameraX >= imgCameraMaxX) {
+            imgCamera.setAttribute("x", imgCameraMaxX);
+
+        }
+
+
+    }
+
+    
+}
+
+function zoomOut() {
+    const imgCamera = document.getElementById("camera-normal");
+    let imgCameraY = parseInt(imgCamera.getAttribute("y"));
+    let imgCameraX = parseInt(imgCamera.getAttribute("x"));
+    let imgScale = parseFloat(imgCamera.style.scale);
+    let imgCameraMinY = 25;
+    let imgCameraMaxY = 60;
+    let imgCameraMinX = 360;
+    let imgCameraMaxX = 420;
+
+    if (imgScale > "1.4") {
+        imgScale -= 0.1;
+        imgScale.toFixed(1);
+        imgCamera.style.scale = imgScale;
+        switch (imgScale) {
+            case 1.5:
+                imgCameraMinY = 20;
+                imgCameraMaxY = 55;
+                imgCameraMinX = 315;
+                imgCameraMaxX = 390;
+                break;
+            case 1.5999999999999999:
+                imgCameraMinY = 15;
+                imgCameraMaxY = 50;
+                imgCameraMinX = 275;
+                imgCameraMaxX = 365;
+                break;
+            case 1.7:
+                imgCameraMinY = 10;
+                imgCameraMaxY = 45;
+                imgCameraMinX = 240;
+                imgCameraMaxX = 345;
+                break;
+            case 1.7999999999999998:
+                imgCameraMinY = 5;
+                imgCameraMaxY = 40;
+                imgCameraMinX = 210;
+                imgCameraMaxX = 325;
+                break;
+            case 1.9:
+                imgCameraMinY = 0;
+                imgCameraMaxY = 35;
+                imgCameraMinX = 185;
+                imgCameraMaxX = 310;
+                break;
+            case 4:
+                imgCameraMinY = -40;
+                imgCameraMaxY = -40;
+                imgCameraMinX = 25;
+                imgCameraMaxX = 25;
+                break;
+
+
+            default:
+                break;
+        }
+        imgCameraY += 5;
+        imgCameraX += 40;
+
+        if (imgCameraY > imgCameraMinY && imgCameraY < imgCameraMaxY) {
+            imgCamera.setAttribute("y", imgCameraY);
+        }
+        else if (imgCameraY <= imgCameraMinY) {
+            imgCamera.setAttribute("y", imgCameraMinY);
+        }
+        else if (imgCameraY >= imgCameraMaxY) {
+            imgCamera.setAttribute("y", imgCameraMaxY);
+        }
+
+        if (imgCameraX > imgCameraMinX && imgCameraX < imgCameraMaxX) {
+            imgCamera.setAttribute("x", imgCameraX);
+        }
+        else if (imgCameraX <= imgCameraMinX) {
+            imgCamera.setAttribute("x", imgCameraMinX);
+        }
+        else if (imgCameraX >= imgCameraMaxX) {
+            imgCamera.setAttribute("x", imgCameraMaxX);
+
+        }
+    }
+}
+
+function resetCamera() {
+    const imgCamera = document.getElementById("camera-normal");
+    imgCamera.style.scale = "1.4";
+    imgCamera.setAttribute("x", 390);
+    imgCamera.setAttribute("y", 40);
+}
+
+function framePeople() {
+
+    const imgCamera = document.getElementById("camera-normal");
+    if (checkCamera()) {
+        if (imgCamera.getAttribute("x") != "25") {
+            imgCamera.style.scale = "4.0";
+            imgCamera.setAttribute("x", 25);
+            imgCamera.setAttribute("y", -40);
+        }
+        else if (imgCamera.getAttribute("x") == "25") {
+            resetCamera();
+        }
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
