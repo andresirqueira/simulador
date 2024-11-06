@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -69,9 +69,9 @@
                             <g id="zoom-container">
                                 <g id="zoom-group">
                                     <image x="390" y="40" href="img/camera-sala-reuniao.png" width="105%" height="100%"
-                                        id="camera-normal" style="scale: 1.4;" style="display: none;"/>
-                                    <image x="580" y="80" href="img/camera-sala-reuniao-off.png" width="125%" height="120%"
-                                        id="camera-off"  style="display: none;"/>
+                                        id="camera-normal" style="scale: 1.4;" style="display: none;" />
+                                    <image x="580" y="80" href="img/camera-sala-reuniao-off.png" width="125%"
+                                        height="120%" id="camera-off" style="display: none;" />
                                 </g>
                             </g>
                         </svg>
@@ -95,9 +95,8 @@
                         <image x="652" y="295" href="img/mao.png" width="30" height="15" id="img-mao-tv"
                             style="display: none;" />
                     </g>
-                    <rect  height="16" width="47" x="962" y="109" rx="8" style="fill:gray; opacity:40%" />
+                    <rect height="16" width="47" x="962" y="109" rx="8" style="fill:gray; opacity:40%" />
                     <text x="965" y="120" style="fill: white; font-size: xx-small;" id="relogio"></text>
-                    
 
                 </g>
                 <!-- TELA CAMERA LIGADA REMOTO -->
@@ -108,6 +107,7 @@
                     <circle cx="1003" cy="135" r="6" style="fill:#1790f3;" id="fundo-microfone-remoto" />
                     <text x="999.6" y="135.8" style="fill: white; font-size: xx-small; display:block;"
                         id="audio-parado-remoto">...</text>
+                    <rect height="16" width="47" x="962" y="109" rx="8" style="fill:gray; opacity:40%" />
                     <text x="965" y="120" style="fill: white; font-size: xx-small;" id="relogio-remoto"></text>
 
                     <g id='audio-remoto' class="bars-loader" style="display: none;">
@@ -135,7 +135,6 @@
                 <!-- EQUIPAMENTO TV -->
                 <image x="600" y="100" href="img/tv-lg2.png" width="447" height="224" />
 
-
             </g>
             <g id="tap" x="575" y="550"></g>
             <text x="810" y="295" style="fill:white; background-color: gray; display:none" id="texto-cc"></text>
@@ -157,9 +156,9 @@
                 <!-- CAMERA MEETUP -->
                 <g>
                     <image x="675" y="325" href="img/meetUp.png" width="300" height="150" />
-                    <image x="710" y="385" href="img/som-normal.png" width="60" height="30" id="som-esquerda"
+                    <image x="710" y="380" href="img/som-normal.png" width="60" height="30" id="som-esquerda"
                         style="display: none;" />
-                    <image x="885" y="385" href="img/som-normal.png" width="60" height="30" id="som-direita"
+                    <image x="885" y="380" href="img/som-normal.png" width="60" height="30" id="som-direita"
                         style="display: none;" />
                 </g>
 
@@ -326,7 +325,6 @@
                 </g>
                 <!-- TELA NA MEET (TAP PREVIEW) -->
                 <g id="meeting" style="display:none">
-
                     <rect width="450" height="253" x="0" y="0" style="fill:white;"></rect>
                     <image x="300" y="8" href="img/icone-balao.png" width="40" height="20" style="opacity: 70%;" />
                     <image x="306" y="9" href="img/exclamacao.png" width="28" height="14" style="opacity: 70%;" />
@@ -400,7 +398,8 @@
 
                     <!-- PARTICIPANTE DA MEETING 01 SALA (TAP PREVIEW)     -->
                     <g>
-                        <circle cx="20" cy="100" r="15" style="fill:rgb(0,32,96);" />
+                        <circle cx="20" cy="100" r="15" style="fill:rgb(0,32,96);" stroke="rgb(0,32,96);"
+                            stroke-width="0.5" />
                         <image x="0" y="91" href="img/porta.png" width="40" height="20" />
                         <text x="40" y="102" class="meet-menu">Sala Teste 123 (BRA-SP-WWWW,2)</text>
                         <g>
@@ -421,8 +420,14 @@
 
                     <!-- PARTICIPANTE DA MEETING 02 REMOTO (TAP PREVIEW)     -->
                     <g id="preview-participante02" style="display: none;">
-                        <circle cx="20" cy="140" r="15" style="fill:gray; opacity:70%" />
-                        <image x="0" y="131" href="img/tela.png" width="40" height="20" />
+                        <defs>
+                            <pattern id="imgPattern" patternUnits="userSpaceOnUse" width="200" height="200">
+                                <image href="img/foto-remoto.png" x="-10" y="125" width="60" height="30" />
+                            </pattern>
+                        </defs>
+
+                        <circle cx="20" cy="140" r="15" fill="url(#imgPattern)" stroke="black" stroke-width="0.5" />
+                        <!-- <image x="0" y="131" href="img/tela.png" /> -->
                         <text x="40" y="142" class="meet-menu">PARTICIPANTE 02</text>
                         <g>
                             <!-- AUDIO DO PARICIPANTE DA MEETING 02 (TAP PREVIEW)-->
@@ -442,7 +447,6 @@
                         </g>
                     </g>
 
-
                     <!-- NÚMERO DE PARTICIPANTES NA MEETING (TAP PREVIEW) -->
                     <text x="10" y="60" class="meet-sala" id="numero-participantes-preview"> 1 participant</text>
 
@@ -460,7 +464,7 @@
 
                     <!-- RELÓGIO E CÓDIGO DA REUNIÃO (TAP PREVIEW)     -->
                     <text x="10" y="20" id="mini-relogio2"></text>
-                    <text x="65" y="20" id="codigo01">aaa-aaaa-aaa</text>
+                    <text x="65" y="20" id="codigo-reuniao-tap">aaa-aaaa-aaa</text>
 
                     <!-- TELA DOS EMOJIS (TAP PREVIEW) -->
                     <g id="tela-emoji" style="display: none;" onmouseleave="fecharTelaEmoji()">
@@ -487,16 +491,12 @@
                         <text x="210" y="175" style="fill:#1790f3" id="fechar-emoji"
                             onclick="fecharTelaEmoji()">Close</text>
                     </g>
-
-
-
                 </g>
                 <!-- TELA DE APRESENTAR (TAP PREVIEW) -->
                 <g id="tela-apresentar" style="display: none;" onmouseleave="fecharApresentarNaMeet()">
                     <rect width="253" height="190" x="5" y="35"
                         style="fill:white; stroke:gray;stroke-opacity: 50%; stroke-width: 0.25;"></rect>
                     <g id="">
-
                         <text x="8" y="70" style="font-size: x-small; font-weight: bold;" class="meet-sala">Ready to
                             present?</text>
                         <text x="40" y="100" style="font-size: x-small;" class="meet-sala">HDMI device</text>
@@ -514,7 +514,6 @@
 
                         <text x="225" y="215" style="font-size: 9px; fill:#1790f3; cursor:pointer" class="meet-sala"
                             onclick="fecharApresentarNaMeet()">Close</text>
-
                     </g>
                 </g>
                 <!-- TELA DE Controle Camera (TAP PREVIEW) -->
@@ -541,7 +540,6 @@
                         <image x="125" y="130" href="img/zoom-out.png" width="30" height="15" style="cursor: pointer;"
                             onclick="zoomOut()" />
 
-
                         <text x="45" y="125" style="font-size: 7px;fill:#1790f3; cursor:pointer" class="meet-sala"
                             style="cursor: pointer;" onclick="resetCamera()">Reset to
                             default</text>
@@ -566,7 +564,6 @@
 
                         <text x="220" y="185" style="font-size: 9px; fill:#1790f3; cursor:pointer" class="meet-sala"
                             style="cursor: pointer;" onclick="fecharControleCamera()">Close</text>
-
                     </g>
                 </g>
 
@@ -596,7 +593,6 @@
                         onclick="opcoesConfigOut(this.textContent)">Display</text>
                     <line x1="106" y1="80" x2="380" y2="80" style="stroke:gray;stroke-width:1;opacity:10%" />
 
-
                     <g id="config-out-audio" style="display: block;">
                         <text x="120" y="75" style="font-size: x-small; fill:#1790f3;" class="meet-menu">Audio</text>
                         <line x1="120" y1="80" x2="145" y2="80" style="stroke:#1790f3;stroke-width:1;" />
@@ -604,15 +600,15 @@
                         <rect width="200" height="20" x="120" y="120"
                             style="fill:rgb(176, 173, 173); stroke:gray;stroke-opacity: 10%; stroke-width: 0.25; opacity:50%">
                         </rect>
-                        <text x="123" y="133" style="font-size: 8px;" class="meet-menu">Logitech MeetUp Speakerphone:
-                            USB Audio:0,0 </text>
+                        <text x="123" y="133" style="font-size: 8px;" class="meet-menu"
+                            id="txt-config-microfone">Logitech MeetUp Speakerphone: USB Audio:0,0 </text>
                         <line x1="106" y1="150" x2="380" y2="150" style="stroke:gray;stroke-width:1;opacity:10%" />
                         <text x="120" y="170" style="font-size: x-small;" class="meet-sala">Speaker</text>
                         <rect width="200" height="20" x="120" y="180"
                             style="fill:rgb(176, 173, 173); stroke:gray;stroke-opacity: 10%; stroke-width: 0.25; opacity:50%">
                         </rect>
-                        <text x="123" y="193" style="font-size: 8px;" class="meet-menu">Logitech MeetUp Speakerphone:
-                            USB Audio:0,0 PCM</text>
+                        <text x="123" y="193" style="font-size: 8px;" class="meet-menu" id="txt-config-speaker">Logitech
+                            MeetUp Speakerphone: USB Audio:0,0 PCM</text>
                         <text x="120" y="215" style="font-size: 6.2px;" class="meet-sala">Microphone and speaker changes
                             are temporary and apply to the next meeting only</text>
                     </g>
@@ -624,7 +620,8 @@
                         <rect width="200" height="20" x="120" y="120"
                             style="fill:rgb(176, 173, 173); stroke:gray;stroke-opacity: 10%; stroke-width: 0.25; opacity:50%">
                         </rect>
-                        <text x="123" y="133" style="font-size: 8px;" class="meet-menu">Logitech MeetUp (0f76ea)</text>
+                        <text x="123" y="133" style="font-size: 8px;" class="meet-menu" id="txt-config-camera">Logitech
+                            MeetUp (0f76ea)</text>
                     </g>
 
                     <g id="config-out-accessibility" style="display: none;">
@@ -682,9 +679,7 @@
                             style="fill:none; stroke:gray;stroke-opacity: 10%; stroke-width: 1;"></rect>
                         <text x="335" y="178" style="font-size: 8px; fill:#1790f3; font-weight: bold;"
                             class="meet-sala">Test</text>
-
                     </g>
-
                 </g>
 
                 <image x="0" y="0" href="img/iniciar.png" width="450" height="253" style="display: none;"
@@ -694,19 +689,14 @@
 
                 <g id="entrar-meeting-preview" style="display: none;">
                     <image x="0" y="0" href="img/entrar-meeting.png" width="450" height="253" />
-
                     <image x="0" y="0" href="img/voltar.png" width="24" height="24" onclick="fecharMeeting()"
                         style="cursor: pointer;" />
                     <image x="401" y="0" href="img/botao-join.png" width="50" height="28" onclick="entrarMeeting()"
                         style="cursor: pointer;" />
                 </g>
-
             </svg>
         </div>
-
     </div>
-
-
 </body>
 
 </html>

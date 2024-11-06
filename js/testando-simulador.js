@@ -163,6 +163,9 @@ function verificaImagemTV() {
     const imagemInicial = document.getElementById("imagem-inicial");
     const semSinal = document.getElementById("sinal-TV");
     const semInternet = document.getElementById("tela-tv");
+    const imagemRemoto = document.getElementById("reuniao-remoto");
+    const imagemSala = document.getElementById("clone-camera-on");
+    const imagemApresentando = document.getElementById("apresentando");
 
     if (checkLigarTV()) {
         console.log("TV On ");
@@ -171,6 +174,13 @@ function verificaImagemTV() {
             imagemInicial.style.display = "none";
             semSinal.style.display = "block";
             semInternet.style.display = "none";
+            imagemApresentando.style.display = "none";
+
+            if (checkParticipante()) {
+                imagemRemoto.style.display = "none";
+                imagemSala.style.display = "none";
+            }
+
             if (!checkLigarChromebox() && checkParticipante()) {
                 fecharMeeting();
             }
@@ -182,11 +192,25 @@ function verificaImagemTV() {
             semInternet.style.display = "block";
             fecharMeeting()
         }
-        else if (checkLigarHDMI() && checkLigarChromebox() && checkInternet()) {
+        else if (checkLigarHDMI() && checkLigarChromebox() && checkInternet() && !checkParticipante()) {
             console.log("TV COM SINAL INICIO MEET");
-            imagemInicial.style.display = "block";
+            if (!OnOffApresentar()) {
+                imagemApresentando.style.display = "block";
+            }
+            else {
+                imagemInicial.style.display = "block";
+                semSinal.style.display = "none";
+                semInternet.style.display = "none";
+                imagemApresentando.style.display = "none";
+            }
+        }
+        else if (checkLigarHDMI() && checkLigarChromebox() && checkInternet() && checkParticipante()) {
+            console.log("TV COM SINAL INICIO MEET COM REMOTO");
+            imagemInicial.style.display = "none";
             semSinal.style.display = "none";
             semInternet.style.display = "none";
+            imagemRemoto.style.display = "block";
+            imagemSala.style.display = "block";
         }
     }
     else {
@@ -194,6 +218,13 @@ function verificaImagemTV() {
         imagemInicial.style.display = "none";
         semSinal.style.display = "none";
         semInternet.style.display = "none";
+        imagemApresentando.style.display = "none";
+        
+        if (checkParticipante()) {
+            imagemRemoto.style.display = "none";
+            imagemSala.style.display = "none";
+        }
+
     }
 }
 
@@ -367,6 +398,7 @@ function checkLigarFalarParticipante() {
     else return false;
 }
 
+
 function checkParticipante() {
     const checkParticipante = document.getElementById("add-participante");
     if (checkParticipante.getAttribute("checked") == "checked") {
@@ -378,6 +410,7 @@ function checkParticipante() {
 function abrirMeeting() {
     const meetingPreview = document.getElementById("entrar-meeting-preview");
     meetingPreview.style.display = "block";
+    gerarCodigoReuniao();
 }
 
 function fecharTudoTap() {
@@ -432,6 +465,7 @@ function fecharMeeting() {
         resetCheckboxes();
         desligarApresentacao();
         desligarClosedCaption();
+        verificaImagemTV();
     }, 1500);
 
 
@@ -496,12 +530,13 @@ function apresentar() {
 
         if (checkLigarTV() && checkLigarHDMI()) {
             if (checkHdmiNotebook() && checkNotebook()) {
-                ligarApresentacao()
+                ligarApresentacao();
             }
         }
     }
     else {
         desligarApresentacao();
+        verificaImagemTV();
     }
 }
 
@@ -1166,6 +1201,8 @@ function abrirTelaConfigOut() {
 
     telaPreviewOn.setAttribute("filter", "url(#blurFilter)");
     telaConfig.style.display = "block";
+
+    opcoesConfigOut("Audio");
 }
 
 function fecharTelaConfigOut() {
@@ -1183,6 +1220,21 @@ function opcoesConfigOut(opcao) {
     const accessibility = document.getElementById("config-out-accessibility");
     const general = document.getElementById("config-out-general");
     const display = document.getElementById("config-out-display");
+    const microfone = document.getElementById("txt-config-microfone");
+    const speaker = document.getElementById("txt-config-speaker");
+    const camera = document.getElementById("txt-config-camera");
+
+    if (checkLigarUSBCcamera()) {
+        microfone.style.display = "block";
+        speaker.style.display = "block";
+        camera.style.display = "block";
+    }
+    else {
+        microfone.style.display = "none";
+        speaker.style.display = "none";
+        camera.style.display = "none";
+    }
+
 
     switch (opcao) {
         case 'Audio':
@@ -1282,8 +1334,6 @@ function criarEmoji(tipoDeEmoji) {
     }
 }
 
-
-
 function closedCaption() {
 
     const cc = document.getElementById("ligar-cc");
@@ -1349,10 +1399,10 @@ function abrirControleCamera() {
     const telaControleCamera = document.getElementById("tela-controle-camera");
     const telaPreviewMeeting = document.getElementById("meeting");
 
-   
+
 
     if (checkLigarTV() && checkLigarHDMI()) {
-        if (checkCamera() ) {
+        if (checkCamera()) {
             telaPreviewMeeting.setAttribute("filter", "url(#blurFilter)");
             telaControleCamera.style.display = "block";
         }
@@ -1453,7 +1503,7 @@ function criarCloneReuniao() {
 
     const elementoPai = document.getElementById("tela-total-tv");
     elementoPai.appendChild(cloneGroup);
-    // document.body.appendChild(cloneGroup);
+
 }
 
 function apagarCloneReuniao() {
@@ -1529,7 +1579,7 @@ function moverDireita(escala) {
         imgCameraX += 10;
         imgCamera.setAttribute("x", imgCameraX);
     }
-   
+
 }
 
 function moverEsquerda(escala) {
@@ -1563,7 +1613,7 @@ function moverEsquerda(escala) {
         imgCameraX -= 10;
         imgCamera.setAttribute("x", imgCameraX);
     }
-   
+
 }
 
 function moverCima(escala) {
@@ -1596,7 +1646,7 @@ function moverCima(escala) {
         imgCameraY += 5;
         imgCamera.setAttribute("y", imgCameraY);
     }
-    
+
 }
 
 function moverBaixo(escala) {
@@ -1630,7 +1680,7 @@ function moverBaixo(escala) {
         imgCameraY -= 5;
         imgCamera.setAttribute("y", imgCameraY);
     }
-    
+
 }
 
 function zoomIn() {
@@ -1710,7 +1760,7 @@ function zoomIn() {
 
     }
 
-    
+
 }
 
 function zoomOut() {
@@ -1803,7 +1853,6 @@ function resetCamera() {
 }
 
 function framePeople() {
-
     const imgCamera = document.getElementById("camera-normal");
     if (checkCamera()) {
         if (imgCamera.getAttribute("x") != "25") {
@@ -1818,6 +1867,20 @@ function framePeople() {
     }
 
 }
+
+function gerarCodigoReuniao() {
+    const letras = 'abcdefghijklmnopqrstuvwxyz';
+    const telaCodigo = document.getElementById("codigo-reuniao-tap");
+    let codigo = '';
+    for (let i = 0; i < 10; i++) {
+        const indiceAleatorio = Math.floor(Math.random() * letras.length);
+        codigo += letras[indiceAleatorio];
+    }
+    telaCodigo.textContent = codigo.slice(0, 3) + '-' + codigo.slice(3, 7) + '-' + codigo.slice(7);
+}
+
+
+
 
 
 
