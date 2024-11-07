@@ -219,7 +219,7 @@ function verificaImagemTV() {
         semSinal.style.display = "none";
         semInternet.style.display = "none";
         imagemApresentando.style.display = "none";
-        
+
         if (checkParticipante()) {
             imagemRemoto.style.display = "none";
             imagemSala.style.display = "none";
@@ -1213,6 +1213,49 @@ function fecharTelaConfigOut() {
     telaConfig.style.display = "none";
 }
 
+function abrirOpcaoParticipante(participante) {
+
+    if (participante == 1) {
+
+        if (document.getElementById("fundo-opcao-participante01").style.fill == "gray") {
+            document.getElementById("tela-opcao-participante01").style.display = "none";
+            document.getElementById("fundo-opcao-participante01").style.fill = "none";
+        }
+        else {
+            document.getElementById("tela-opcao-participante01").style.display = "block";
+            document.getElementById("fundo-opcao-participante01").style.fill = "gray";
+
+        }
+    }
+    if (participante == 2) {
+        if (document.getElementById("fundo-opcao-participante02").style.fill == "gray") {
+            document.getElementById("tela-opcao-participante02").style.display = "none";
+            document.getElementById("fundo-opcao-participante02").style.fill = "none";
+        }
+        else {
+            document.getElementById("tela-opcao-participante02").style.display = "block";
+            document.getElementById("fundo-opcao-participante02").style.fill = "gray";
+        }
+    }
+
+}
+
+function fecharOpcaoParticipante(participante) {
+
+    switch (participante) {
+        case 1:
+            document.getElementById("tela-opcao-participante01").style.display = "none";
+            document.getElementById("fundo-opcao-participante01").style.fill = "none";
+            break;
+
+        case 2:
+            document.getElementById("tela-opcao-participante02").style.display = "none";
+            document.getElementById("fundo-opcao-participante02").style.fill = "none";
+            break;
+    }
+
+}
+
 
 function opcoesConfigOut(opcao) {
     const audio = document.getElementById("config-out-audio");
@@ -1234,7 +1277,6 @@ function opcoesConfigOut(opcao) {
         speaker.style.display = "none";
         camera.style.display = "none";
     }
-
 
     switch (opcao) {
         case 'Audio':
@@ -1273,7 +1315,56 @@ function opcoesConfigOut(opcao) {
             display.style.display = "block";
             break;
     }
+}
 
+function abrirFeedback() {
+    const telaFeedback = document.getElementById("tela-feedback");
+    const telaPreviewOn = document.getElementById("preview-tap-on");
+    const telaMeeting = document.getElementById("meeting");
+
+    telaMeeting.setAttribute("filter", "url(#blurFilter)");
+    telaPreviewOn.setAttribute("filter", "url(#blurFilter)");
+    telaFeedback.style.display = "block";
+}
+
+function fecharFeedback() {
+    const telaFeedback = document.getElementById("tela-feedback");
+    const telaPreviewOn = document.getElementById("preview-tap-on");
+    const telaMeeting = document.getElementById("meeting");
+    const opcoes = ["video-x", "audio-x", "connectivity-x", "other-x"];
+
+    for (i = 0; i < opcoes.length; i++) {
+        document.getElementById(opcoes[i]).style.display="none";
+    }
+
+    telaMeeting.setAttribute("filter", " ");
+    telaPreviewOn.setAttribute("filter", " ");
+    telaFeedback.style.display = "none";
+}
+
+function abrirInfo(){
+    const info = document.getElementById("tela-info");
+    const infoCode = (document.getElementById("info-code").textContent).slice(0,24);
+    const code = document.getElementById("codigo-reuniao-tap").textContent;
+    console.log(infoCode)
+
+    document.getElementById("info-code").textContent = infoCode + code;
+    info.style.display="block";
+}
+
+function fecharInfo(){
+    const info = document.getElementById("tela-info");
+     info.style.display="none";
+}
+
+function marcarBox(elemento) {
+    const elementoX = elemento + "-x";
+    document.getElementById(elementoX).style.display = "block";
+}
+function desmarcarBox(elementoX) {
+    const elemento = elementoX.replace("-x", "");
+    document.getElementById(elementoX).style.display = "none";
+    document.getElementById(elemento).style.display = "block";
 }
 
 function abrirTelaEmoji() {
