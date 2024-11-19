@@ -386,7 +386,7 @@ function selecionarImagemTV(opcao) {
             break;
         case 'inicio load':
             document.getElementById("inicial-chromeos").style.display = "block";
-            console.log("INICIO: " +  document.getElementById("inicial-chromeos"))
+ 
             setTimeout(() => {
                 document.getElementById("inicial-chromeos").style.display = "none";
                 document.getElementById("inicial").style.display = "block";
