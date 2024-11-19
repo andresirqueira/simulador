@@ -164,7 +164,8 @@ div {
 
 /* Customize the label (the container) */
 .container {
-  display: block;
+  display: flex;
+  align-items: center;
   position: relative;
   padding-left: 35px;
   margin-bottom: 12px;
@@ -176,59 +177,20 @@ div {
   user-select: none;
   font-family: "Roboto Mono", monospace;
 }
-
-/* Hide the browser's default checkbox */
-.container input {
-  position: absolute;
-  opacity: 0;
+.checkmark{
+  padding-left: 20px;
+}
+/* Estiliza o label */
+label {
+  font-size: 16px;
   cursor: pointer;
-  height: 0;
-  width: 0;
 }
 
-/* Create a custom checkbox */
-.checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 20px;
+/* Estiliza o checkbox */
+.container input[type="checkbox"] {
   width: 20px;
-  background-color: #eee;
-}
-
-/* On mouse-over, add a grey background color */
-.container:hover input~.checkmark {
-  background-color: #ccc;
-}
-
-/* When the checkbox is checked, add a blue background */
-.container input:checked~.checkmark {
-  background-color: #2196F3;
-}
-
-/* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-/* Show the checkmark when checked */
-.container input:checked~.checkmark:after {
-  display: block;
-}
-
-/* Style the checkmark/indicator */
-.container .checkmark:after {
-  left: 9px;
-  top: 2px;
-  width: 2px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
+  height: 20px;
+  cursor: pointer;
 }
 
 .roboto-mono-titulo {
@@ -341,13 +303,6 @@ div {
   transition: all 0.5s ease;
  
 }
-
-/* #tela-sala{
-  width: 300px;
-  height: 300px;
-  overflow: hidden;
-
-} */
 
 .background-image {
   position: absolute;

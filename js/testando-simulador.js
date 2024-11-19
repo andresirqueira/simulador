@@ -1,661 +1,361 @@
-function conectarUSBCtap() {
-    const checkUsbc = document.getElementById("usbc-tap");
-    const caboUsbc = document.getElementById("cabo-usbc-tap");
-
-    if (checkUsbc.getAttribute("checked") == "checked") {
-        caboUsbc.style.display = "none";
-        checkUsbc.setAttribute("checked", "unchecked");
-    }
-    else {
-        caboUsbc.style.display = "block";
-        checkUsbc.setAttribute("checked", "checked");
-    }
-    verificaImagemTAP();
-}
-
-function conectarUSBCcamera() {
-    const checkUsbc = document.getElementById("usbc-camera");
-    const caboUsbc = document.getElementById("cabo-usbc-camera");
-
-    if (checkUsbc.getAttribute("checked") == "checked") {
-        caboUsbc.style.display = "none";
-        checkUsbc.setAttribute("checked", "unchecked");
-    }
-    else {
-        caboUsbc.style.display = "block";
-        checkUsbc.setAttribute("checked", "checked");
-    }
-    if (checkMeetingTV()) {
-        OnOffCamera();
-        mutar();
-        desligarCamera()
-    }
-}
-
-function conectarHDMI() {
-    const checkHdmi = document.getElementById("hdmi");
-    const caboHdmi = document.getElementById("cabo-hdmi");
-
-    if (checkHdmi.getAttribute("checked") == "checked") {
-        caboHdmi.style.display = "none";
-        checkHdmi.setAttribute("checked", "unchecked");
-    }
-    else {
-        caboHdmi.style.display = "block";
-        checkHdmi.setAttribute("checked", "checked");
-    }
-    verificaImagemTV();
-    ligaDesligaCamera();
-}
-
-function conectarHDMINotebook() {
-    const checkHdmi = document.getElementById("hdmi-notebook");
-    const caboHdmi = document.getElementById("cabo-hdmi-apresentacao");
-
-    if (checkHdmi.getAttribute("checked") == "checked") {
-        caboHdmi.style.display = "none";
-        checkHdmi.setAttribute("checked", "unchecked");
-    }
-    else {
-        caboHdmi.style.display = "block";
-        checkHdmi.setAttribute("checked", "checked");
-    }
-    desligarApresentacao();
-}
-
-function conectarRJ45() {
-    const checkRJ = document.getElementById("rj45-chrome");
-    const caboRJ45 = document.getElementById("cabo-rj45");
-
-    if (checkRJ.getAttribute("checked") == "checked") {
-        caboRJ45.style.display = "none";
-        checkRJ.setAttribute("checked", "unchecked");
-    }
-    else {
-        caboRJ45.style.display = "block";
-        checkRJ.setAttribute("checked", "checked");
-    }
-    verificaImagemTAP();
-    verificaImagemTV();
-    carregarMeet();
-    // fecharMeeting();
-}
-
-function ligarChrome() {
-    const checkChrome = document.getElementById("ligar-chrome");
-    const ledChrome = document.getElementById("led-chrome");
-
-    if (checkChrome.getAttribute("checked") == "checked") {
-        ledChrome.style.stroke = "rgb(69, 69, 69)";
-        checkChrome.setAttribute("checked", "unchecked");
-    }
-    else {
-        ledChrome.style.stroke = "Lightgreen";
-        checkChrome.setAttribute("checked", "checked");
-        carregarMeet();
-    }
-    verificaImagemTAP();
-    verificaImagemTV();
-}
-
-function ligarTV() {
-    const checkTV = document.getElementById("ligar-TV");
-    const ledTV = document.getElementById("led-TV");
-
-    if (checkTV.getAttribute("checked") == "checked") {
-        ledTV.style.display = "none";
-        checkTV.setAttribute("checked", "unchecked");
-    }
-    else {
-        ledTV.style.display = "block";
-        checkTV.setAttribute("checked", "checked");
-    }
-    verificaImagemTV();
-    ligaDesligaCamera();
-}
-
-function ligarTAP() {
-    const checkTAP = document.getElementById("ligar-TAP");
-    const ledTAP = document.getElementById("led-TAP");
-
-    if (checkTAP.getAttribute("checked") == "checked") {
-        ledTAP.style.display = "block";
-        checkTAP.setAttribute("checked", "unchecked");
-    }
-    else {
-        ledTAP.style.display = "none";
-        checkTAP.setAttribute("checked", "checked");
-    }
-    verificaImagemTAP();
-}
-
-function ligarNotebook() {
-    const checkNotebook = document.getElementById("ligar-notebook");
-    const notebook = document.getElementById("notebook");
-
-    if (checkNotebook.getAttribute("checked") == "checked") {
-        notebook.style.display = "none";
-
-        checkNotebook.setAttribute("checked", "unchecked");
-    }
-    else {
-        notebook.style.display = "block";
-        checkNotebook.setAttribute("checked", "checked");
-    }
-    desligarApresentacao();
-}
-
-function verificaImagemCamera() {
-    const cameraSalaOn = document.getElementById("reuniao-solo");
-    const cameraSalaOff = document.getElementById("reuniao-solo-off");
-
-    if (checkLigarChromebox() && checkLigarTV() && checkLigarHDMI() && checkMeeting()) {
-        cameraSalaOn.style.display = "block";
-        cameraSalaOff.style.display = "none";
-    }
-    else {
-        cameraSalaOn.style.display = "none";
-        cameraSalaOff.style.display = "block";
-    }
-}
-
-function verificaImagemTV() {
-    const imagemInicial = document.getElementById("imagem-inicial");
-    const semSinal = document.getElementById("sinal-TV");
-    const semInternet = document.getElementById("tela-tv");
-    const imagemRemoto = document.getElementById("reuniao-remoto");
-    const imagemSala = document.getElementById("clone-camera-on");
-    const imagemApresentando = document.getElementById("apresentando");
-
-    if (checkLigarTV()) {
-        console.log("TV On ");
-        if (!checkLigarChromebox() || !checkLigarHDMI()) {
-            console.log("TV SEM SINAL");
-            imagemInicial.style.display = "none";
-            semSinal.style.display = "block";
-            semInternet.style.display = "none";
-            imagemApresentando.style.display = "none";
-
-            if (checkParticipante()) {
-                imagemRemoto.style.display = "none";
-                imagemSala.style.display = "none";
+function verificaTudo() {
+    if (checkChromebox()) {
+        console.log("> CHROMEBOX ON");//CHROMEBOX LIGADO
+        if (checkInternet()) {
+            console.log(">> REDE ON");//REDE LIAGADA
+            if (checkTV()) {
+                console.log(">>> TV ON");//TV LIGADA
+                if (checkHdmiTv()) {// HDMI LIGADO
+                    console.log(">>>> HDMI ON - TV ON - TELA INICIAL");
+                    selecionarImagemTV('inicio');
+                    switch (sessionStorage.getItem('ultimo-tv')) {
+                        case 'inicio':
+                            selecionarImagemTV('inicio');
+                            break;
+                        case 'meeting solo':
+                            selecionarImagemTV('meeting solo');
+                            if (checkUsbCamera() && checkEstadoCamera()) {
+                                camera('ligar');
+                                desmutar();
+                            }
+                            else {
+                                camera('desligar');
+                                if (!checkUsbCamera()) mutar();
+                            }
+                            if (checkParticipante()) {
+                                document.getElementById("reuniao-remoto").style.display = "block";
+                                stopLoop3();
+                            }
+                            break;
+                        case 'meeting remoto':
+                            selecionarImagemTV('meeting remoto');
+                            if (checkParticipante()) {
+                                apagarCloneReuniao();
+                            }
+                            break;
+                        case 'sem-sinal':
+                            selecionarImagemTV('sem sinal');
+                            break;
+                        case 'apresentacao sala':
+                            selecionarImagemTV('apresentacao sala');
+                            break;
+                        default:
+                            selecionarImagemTV('inicio');
+                            break;
+                    }
+                }
+                else {
+                    console.log(">>>> HDMI OFF - TV ON - SEM SINAL");//HDMI DESLIGADO
+                    selecionarImagemTV('sem sinal');
+                    if(checkParticipante()){
+                        apagarCloneReuniao();
+                    }
+                }
+            } else {
+                console.log(">>> TV OFF");//TV DESLIGADA
+                selecionarImagemTV('apagada');
+                if(checkParticipante()){
+                    apagarCloneReuniao();
+                }
             }
-
-            if (!checkLigarChromebox() && checkParticipante()) {
-                fecharMeeting();
-            }
-        }
-        else if (checkLigarHDMI() && checkLigarChromebox() && !checkInternet()) {
-            console.log("TV COM SEM SINAL INTERNET");
-            imagemInicial.style.display = "none";
-            semSinal.style.display = "none";
-            semInternet.style.display = "block";
-            fecharMeeting()
-        }
-        else if (checkLigarHDMI() && checkLigarChromebox() && checkInternet() && !checkParticipante()) {
-            console.log("TV COM SINAL INICIO MEET");
-            if (!OnOffApresentar()) {
-                imagemApresentando.style.display = "block";
+            if (checkTAP()) {
+                console.log(">>> TAP ON");//TAP LIGADO
+                if (checkUsbTap()) {//USB TAP LIGADO
+                    console.log(">>>> USB TAP ON - TELA INICIAL");
+                    switch (sessionStorage.getItem('ultimo')) {
+                        case 'pre Meeting':
+                            selecionarImagemTAP('pre Meeting');
+                            break;
+                        case 'inicio':
+                            selecionarImagemTAP('inicio');
+                            break;
+                        case 'meeting':
+                            selecionarImagemTAP('meeting');
+                            break;
+                        default:
+                            selecionarImagemTAP('inicio');
+                            break;
+                    }
+                }
+                else {
+                    console.log(">>>> USB TAP OFF - TELA APAGADA");//USB TAP DESLIGADO
+                    selecionarImagemTAP('apagada');
+                }
             }
             else {
-                imagemInicial.style.display = "block";
-                semSinal.style.display = "none";
-                semInternet.style.display = "none";
-                imagemApresentando.style.display = "none";
+                console.log(">>> TAP OFF - TELA APAGADA");//TAP DESLIGADO
+                selecionarImagemTAP('apagada');
             }
         }
-        else if (checkLigarHDMI() && checkLigarChromebox() && checkInternet() && checkParticipante()) {
-            console.log("TV COM SINAL INICIO MEET COM REMOTO");
-            imagemInicial.style.display = "none";
-            semSinal.style.display = "none";
-            semInternet.style.display = "none";
-            imagemRemoto.style.display = "block";
-            imagemSala.style.display = "block";
+        else {
+            console.log(">> REDE OFF");
+            if (checkTV()) {
+                console.log(">>> TV ON");
+                if (checkHdmiTv()) {
+                    console.log(">>>> HDMI ON - TV ON - TELA APAGADA");
+                    selecionarImagemTV('apagada');
+                }
+                else {
+                    console.log(">>>> HDMI OFF - TV ON - SEM SINAL");
+                    selecionarImagemTV('sem sinal');
+                }
+            } else {
+                console.log(">>> TV OFF");
+                selecionarImagemTV('apagada');
+            }
+            if (checkTAP()) {
+                console.log(">>> TAP ON");
+                if (checkUsbTap()) {
+                    console.log(">>>> USB TAP ON");
+                    selecionarImagemTAP('sem internet');
+                }
+                else {
+                    console.log(">>>> USB TAP OFF");
+                    selecionarImagemTAP('apagada');
+                }
+            }
+            else {
+                console.log(">>> TAP OFF");
+                selecionarImagemTAP('apagada');
+            }
         }
     }
     else {
-        console.log("TV Off");
-        imagemInicial.style.display = "none";
-        semSinal.style.display = "none";
-        semInternet.style.display = "none";
-        imagemApresentando.style.display = "none";
-
-        if (checkParticipante()) {
-            imagemRemoto.style.display = "none";
-            imagemSala.style.display = "none";
-        }
-
-    }
-}
-
-function verificaImagemTAP() {
-    const telaDesligada = document.getElementById("tela-preview-tap-off");
-    const telaInicial = document.getElementById("preview-tap-on");
-    const semInternet = document.getElementById("sem-internet-preview");
-
-    if (checkLigarTAP()) {
-        console.log("TAP On");
-        if (checkLigarChromebox() && checkLigarUSBCtap() && checkInternet()) {
-            console.log("Chrome On - USB on - Internet ON");
-            telaInicial.style.display = "block";
-            semInternet.style.display = "none";
-            telaDesligada.style.display = "none";
-        }
-        else if (checkLigarChromebox() && checkLigarUSBCtap() && !checkInternet()) {
-            console.log("Chrome On - USB on - Internet Off");
-            telaInicial.style.display = "none";
-            semInternet.style.display = "block";
-            telaDesligada.style.display = "none";
+        console.log("> CHROMEBOX OFF"); //CHROMEBOX DESLIGADO
+        if (checkInternet()) {
+            console.log(">> REDE ON");//REDE CONECTADA
+            if (checkTV()) {
+                console.log(">>> TV ON");//TV LIGADA
+                selecionarImagemTV('sem sinal');
+            } else {
+                console.log(">>> TV OFF");//TV DESLIGADA
+                selecionarImagemTV('apagada');
+            }
+            if (checkTAP()) {
+                console.log(">>> TAP ON");//TAP LIGADO
+                if (checkUsbTap()) {
+                    console.log(">>>> USB TAP ON");// CABO USB TAP LIGADO
+                    selecionarImagemTAP('apagada');
+                }
+                else {
+                    console.log(">>>> USB TAP OFF");//CABO USB TAP DESLIGADO
+                    selecionarImagemTAP('apagada');
+                }
+            }
+            else {
+                console.log(">>> TAP OFF");//TAP DESLIGADO
+                selecionarImagemTAP('apagada');
+            }
         }
         else {
-            telaDesligada.style.display = "block";
-            fecharTudoTap();
-            fecharTudoTV();
+            console.log(">> REDE OFF");
+            if (checkTV()) {
+                console.log(">>> TV ON");
+                selecionarImagemTV('sem sinal');
 
-        }
-    }
-    else {
-        console.log("TAP Off");
-        telaDesligada.style.display = "block";
-        fecharTudoTap();
-        fecharTudoTV();
-    }
-}
+            } else {
+                console.log(">>> TV OFF");
+                selecionarImagemTV('apagada');
+            }
+            if (checkTAP()) {
+                console.log(">>> TAP ON");
+                if (checkUsbTap()) {
+                    console.log(">>>> USB TAP ON");
+                    selecionarImagemTAP('apagada');
 
-function carregarMeet() {
-    const inicioTV = document.getElementById("inicial");
-    const inicio3Preview = document.getElementById("inicial3");
-
-    if (checkLigarChromebox()) {
-        if (checkLigarHDMI() && checkLigarTV()) {
-            inicioTV.style.display = "block";
-            setTimeout(() => {
-                inicioTV.style.display = "none";
-            }, 2000);
-        }
-        if (checkLigarTAP() && checkLigarUSBCtap()) {
-            inicio3Preview.style.display = "block";
-            setTimeout(() => {
-                inicio3Preview.style.display = "none";
-            }, 2000);
+                }
+                else {
+                    console.log(">>>> USB TAP OFF");
+                    selecionarImagemTAP('apagada');
+                }
+            }
+            else {
+                console.log(">>> TAP OFF");
+                selecionarImagemTAP('apagada');
+            }
         }
     }
 }
 
-function checkMeeting() {
-    const checkMeeting = document.getElementById("meeting");
-    const computedStyle = window.getComputedStyle(checkMeeting);
-    const displayValue = computedStyle.display;
-
-    if (displayValue == "block") {
-        return true;
+// LIGAR OU DESLIGAR CHROMEBOX
+function ligarDesligarChromebox() {
+    const ledChrome = document.getElementById("led-chrome");
+    if (checkChromebox()) {
+        console.log("Acende LED Chromebox");
+        ledChrome.style.stroke = "Lightgreen";
+        if (checkHdmiTv() && checkTV() && checkInternet()) {
+            selecionarImagemTV('inicio load');
+        }
+        if (checkTAP() && checkUsbTap()) {
+            selecionarImagemTAP('inicio load');
+        }
     }
     else {
-
-        return false;
+        console.log("Apaga LED Chromebox");
+        ledChrome.style.stroke = "rgb(69, 69, 69)";
+        sessionStorage.clear();
+        if (checkMeeting()) {
+            sairMeeting();
+        }
     }
+    verificaTudo();
+}
+//CONECTAR OU DESCONECTAR REDE
+function conectarDesconectarRJ45() {
+    const caboRJ45 = document.getElementById("cabo-rj45");
+    if (checkInternet()) {
+        console.log("RJ 45 ON");
+        caboRJ45.style.display = "block";
+        if (!OnOffApresentar()) desligarApresentacao();
+    }
+    else {
+        console.log("RJ 45 OFF");
+        caboRJ45.style.display = "none";
+        sessionStorage.clear();
+        if (checkMeeting()) {
+            sairMeeting();
+        }
+    }
+    verificaTudo();
+}
+//LIGAR OU DESLIGAR TV
+function ligarDesligarTV() {
+    const ledTV = document.getElementById("led-TV");
+    if (checkTV()) {
+        console.log("TV LED ON");
+        ledTV.style.display = "block";
+    }
+    else {
+        console.log("TV LED OFF");
+        ledTV.style.display = "none";
+    }
+    verificaTudo();
+}
+//CONECTAR OU DESCONECTAR HDMI TV
+function conectarDesconectarHDMI() {
+    const caboHdmi = document.getElementById("cabo-hdmi");
+
+    if (checkHdmiTv()) {
+        console.log("HDMI TV ON");
+        caboHdmi.style.display = "block";
+    }
+    else {
+        console.log("HDMI TV OFF");
+        caboHdmi.style.display = "none";
+    }
+    verificaTudo();
+}
+//LIGAR OU DESLIGAR O TAP
+function ligarDesligarTAP() {
+    const ledTAP = document.getElementById("led-TAP");
+    if (checkTAP()) {
+        console.log("TAP LED ON");
+        ledTAP.style.display = "none";
+    }
+    else {
+        console.log("TAP LED OFF");
+        ledTAP.style.display = "block";
+    }
+    verificaTudo();
+}
+//CONECTAR OU DESCONECTAR CABO USB TAP
+function conectarDesconectarUsbTAP() {
+    const caboUsbTap = document.getElementById("cabo-usbc-tap");
+    if (checkUsbTap()) {
+        caboUsbTap.style.display = "block";
+    }
+    else {
+        caboUsbTap.style.display = "none";
+    }
+    verificaTudo();
+}
+//CONECTAR OU DESCONECTAR CABO USB CÂMERA
+function conectarDesconectarUsbCamera() {
+    const caboUsbCamera = document.getElementById("cabo-usbc-camera");
+    if (checkUsbCamera()) {
+        caboUsbCamera.style.display = "block";
+    }
+    else {
+        caboUsbCamera.style.display = "none";
+    }
+    verificaTudo();
+}
+//CONECTAR OU DESCONECTAR CABO HDMI NOTEBOOK
+function conectarDesconectarHdmiNotebook() {
+    const caboHdmiNotebook = document.getElementById("cabo-hdmi-apresentacao");
+    if (checkHdmiNotebook()) {
+        caboHdmiNotebook.style.display = "block";
+    }
+    else {
+        caboHdmiNotebook.style.display = "none";
+    }
+    desligarApresentacao();
+    verificaTudo();
+}
+//LIGAR OU DESLIGAR NOTEBOOK
+function ligarDesligarNotebook() {
+    const notebook = document.getElementById("notebook");
+    if (checkNotebook()) {
+        notebook.style.display = "block";
+    }
+    else {
+        notebook.style.display = "none";
+    }
+    desligarApresentacao();
+    verificaTudo();
+}
+function checkChromebox() {
+    const checkLigarChomebox = document.getElementById("ligar-chrome");
+    return checkLigarChomebox.checked;
 }
 
-function checkMeetingTV() {
-    const checkMeetingTVon = document.getElementById("reuniao-solo");
-    const computedStyleOn = window.getComputedStyle(checkMeetingTVon);
-    const displayValueOn = computedStyleOn.display;
+function checkInternet() {
+    const checkInternet = document.getElementById("rj45-chrome");
+    return checkInternet.checked;
+}
 
-    if (displayValueOn == "block") {
-        return true;
-    }
-    else {
-        return false;
-    }
+function checkTV() {
+    const checkLigarTV = document.getElementById("ligar-TV");
+    return checkLigarTV.checked;
+}
+
+function checkHdmiTv() {
+    const checkHdmiTv = document.getElementById("hdmi");
+    return checkHdmiTv.checked;
+}
+
+function checkTAP() {
+    const checkTap = document.getElementById("ligar-TAP");
+    return checkTap.checked;
+}
+
+function checkUsbTap() {
+    const checkUsbTap = document.getElementById("usbc-tap");
+    return checkUsbTap.checked;
+}
+
+function checkUsbCamera() {
+    const checkUsbCamera = document.getElementById("usbc-camera");
+    return checkUsbCamera.checked;
 }
 
 function checkHdmiNotebook() {
     const checkHdmiNotebook = document.getElementById("hdmi-notebook");
-    if (checkHdmiNotebook.getAttribute("checked") == "checked") {
-        return true;
-    }
-    else return false;
+    return checkHdmiNotebook.checked;
 }
 
 function checkNotebook() {
     const checkNotebook = document.getElementById("ligar-notebook");
-    if (checkNotebook.getAttribute("checked") == "checked") {
-        return true;
-    }
-    else return false;
-}
-
-function checkInternet() {
-    const checkRJ45 = document.getElementById("rj45-chrome");
-    if (checkRJ45.getAttribute("checked") == "checked") {
-        return true;
-    }
-    else return false;
-}
-
-function checkLigarTV() {
-    const checkLigarTV = document.getElementById("ligar-TV");
-    if (checkLigarTV.getAttribute("checked") == "checked") {
-        return true;
-    }
-    else return false;
-}
-
-function checkLigarChromebox() {
-    const checkLigarChomebox = document.getElementById("ligar-chrome");
-    if (checkLigarChomebox.getAttribute("checked") == "checked") {
-        return true;
-    }
-    else return false;
-}
-
-function checkLigarHDMI() {
-    const checkLigarHDMI = document.getElementById("hdmi");
-    if (checkLigarHDMI.getAttribute("checked") == "checked") {
-        return true;
-    }
-    else return false;
-}
-
-function checkLigarUSBCtap() {
-    const checkLigarUSBCtap = document.getElementById("usbc-tap");
-    if (checkLigarUSBCtap.getAttribute("checked") == "checked") {
-        return true;
-    }
-    else return false;
-}
-
-function checkLigarUSBCcamera() {
-    const checkLigarUSBCcamera = document.getElementById("usbc-camera");
-
-    if (checkLigarUSBCcamera.getAttribute("checked") == "checked") {
-        return true;
-    }
-    else return false;
-}
-
-function checkLigarTAP() {
-    const checkLigarTAP = document.getElementById("ligar-TAP");
-    if (checkLigarTAP.getAttribute("checked") == "checked") {
-        return true;
-    }
-    else return false;
+    return checkNotebook.checked;
 }
 
 function checkLigarFalar() {
     const checkLigarFalar = document.getElementById("sala-falar");
-    if (checkLigarFalar.getAttribute("checked") == "checked") {
-        return true;
-    }
-    else return false;
+    return checkLigarFalar.checked;
 }
 
-function checkLigarFalarParticipante() {
-    const checkLigarFalar = document.getElementById("participante-falar");
-    if (checkLigarFalar.getAttribute("checked") == "checked") {
-        return true;
-    }
-    else return false;
-}
-
-
-function checkParticipante() {
-    const checkParticipante = document.getElementById("add-participante");
-    if (checkParticipante.getAttribute("checked") == "checked") {
-        return true;
-    }
-    else return false;
-}
-
-function abrirMeeting() {
-    const meetingPreview = document.getElementById("entrar-meeting-preview");
-    meetingPreview.style.display = "block";
-    gerarCodigoReuniao();
-}
-
-function fecharTudoTap() {
-    const meetingPreview = document.getElementById("entrar-meeting-preview");
-    const meeting = document.getElementById("meeting");
-    const telaInicialTap = document.getElementById("preview-tap-on");
-    const telaOff = document.getElementById("tela-preview-tap-off");
-    telaInicialTap.style.display = "none";
-    meeting.style.display = "none";
-    meetingPreview.style.display = "none";
-    telaOff.style.display = "block";
-}
-
-function fecharTudoTV() {
-    const cameraSala = document.getElementById("reuniao-solo");
-    cameraSala.style.display = "none";
-}
-
-function fecharMeeting() {
-    const meetingPreview = document.getElementById("entrar-meeting-preview");
-    const meeting = document.getElementById("meeting");
-    const cameraSala = document.getElementById("reuniao-solo");
-    const leftMeeting = document.getElementById("left-meeting");
-
-    if (checkMeetingTV()) {
-        leftMeeting.style.display = "block";
-    }
-    if (!checkInternet()) {
-        leftMeeting.style.display = "none";
-    }
-
-    cameraSala.style.display = "none";
-    removerParticipante();
-
-    setTimeout(() => {
-        leftMeeting.style.display = "none";
-
-
-
-        if (checkLigarTAP()) {
-            meetingPreview.style.display = "none";
-            meeting.style.display = "none"
-            cameraSala.style.display = "none";
-        }
-        else {
-            meetingPreview.style.display = "none";
-            meeting.style.display = "none"
-            cameraSala.style.display = "none";
-        }
-        desmutar();
-        removerParticipante();
-        resetCheckboxes();
-        desligarApresentacao();
-        desligarClosedCaption();
-        verificaImagemTV();
-    }, 1500);
-
-
-}
-
-function levantarMao() {
-    const imgMao = document.getElementById("img-levantar-mao");
-    const txtMao = document.getElementById("txt-levantar-mao");
-    const fundoLevantarMao = document.getElementById("fundo-levantar-mao");
-    const fundoLevantarMaoTV = document.getElementById("fundo-levantar-mao-tv");
-    const imgMaoTV = document.getElementById("img-mao-tv");
-    const txtMaoTV = document.getElementById("txt-nome-sala");
-
-    if (fundoLevantarMao.style.fill == "none") {
-        fundoLevantarMao.style.fill = "gray";
-        fundoLevantarMaoTV.style.display = "block";
-        imgMaoTV.style.display = "block";
-        imgMao.setAttribute("href", "img/mao-azul.png");
-        txtMao.textContent = "Low Hand";
-        txtMao.style.fill = "#1790f3";
-        txtMaoTV.style.fill = "black";
-    }
-    else if (fundoLevantarMao.style.fill == "gray") {
-        fundoLevantarMao.style.fill = "none";
-        fundoLevantarMaoTV.style.display = "none";
-        imgMaoTV.style.display = "none";
-        imgMao.setAttribute("href", "img/mao.png");
-        txtMao.textContent = "Raise Hand";
-        txtMao.style.fill = "black";
-        txtMaoTV.style.fill = "white";
-    }
-}
-
-function entrarMeeting() {
-    const meeting = document.getElementById("meeting");
-    const meetingPreview = document.getElementById("entrar-meeting-preview");
-    const joining = document.getElementById("joining");
-
-    joining.style.display = "block";
-
-    setTimeout(() => {
-        joining.style.display = "none";
-        meeting.style.display = "block";
-        meetingPreview.style.display = "none";
-
-        if (checkLigarUSBCcamera()) {
-            ligarCamera();
-            desmutar();
-        }
-        else {
-            desligarCamera();
-            mutar();
-        }
-        desligarApresentacao();
-    }, 1000);
-
-}
-
-function apresentar() {
-    const imgSlideApresentacao = document.getElementById("apresentando");
-    if (OnOffApresentar()) {
-
-        if (checkLigarTV() && checkLigarHDMI()) {
-            if (checkHdmiNotebook() && checkNotebook()) {
-                ligarApresentacao();
-            }
-        }
-    }
-    else {
-        desligarApresentacao();
-        verificaImagemTV();
-    }
-}
-
-
-function ligarApresentacao() {
-    const botaoApresentar = document.getElementById("botao-apresentar");
-    const imgApresentar = document.getElementById("apresentar");
-    const txtApresentar = document.getElementById("menu-apresentar");
-    const imgSlideApresentacao = document.getElementById("apresentando");
-    botaoApresentar.style.display = "block";
-    imgApresentar.setAttribute("href", "img/hdmi-branco.png");
-    txtApresentar.style.fill = "white";
-    imgSlideApresentacao.style.display = "block";
-}
-
-function desligarApresentacao() {
-    const botaoApresentar = document.getElementById("botao-apresentar");
-    const imgApresentar = document.getElementById("apresentar");
-    const txtApresentar = document.getElementById("menu-apresentar");
-    const imgSlideApresentacao = document.getElementById("apresentando");
-    botaoApresentar.style.display = "none";
-    imgApresentar.setAttribute("href", "img/hdmi.png");
-    txtApresentar.style.fill = "gray";
-    imgSlideApresentacao.style.display = "none";
-}
-
-function OnOffApresentar() {
-    const botaoApresentar = document.getElementById("botao-apresentar");
-
-    if (botaoApresentar.style.display == "none") {
-
-        return true;
-    }
-    else if (botaoApresentar.style.display == "block") {
-
-        return false;
-    }
-
-}
-
-function ligaDesligaCamera() {
-    const cameraSalaOn = document.getElementById("reuniao-solo");
-    const camera = document.getElementById("camera-normal");
-    const cameraOff = document.getElementById("camera-off");
-
-    if (checkLigarUSBCcamera() && checkCamera()) {
-        if (checkLigarTV() && checkLigarHDMI() && checkLigarChromebox() && checkInternet() && checkMeeting()) {
-            cameraSalaOn.style.display = "block";
-            camera.style.display = "block";
-            cameraOff.style.display = "none";
-        }
-        else {
-            cameraSalaOn.style.display = "none";
-        }
-    }
-    else {
-        if (checkLigarTV() && checkLigarHDMI() && checkLigarChromebox() && checkInternet() && checkMeeting()) {
-            cameraSalaOn.style.display = "block";
-            camera.style.display = "none";
-            cameraOff.style.display = "block";
-        }
-        else {
-            cameraSalaOn.style.display = "none";
-        }
-    }
-}
-
-function desligarCamera() {
-
-    const fundoCameraPreview = document.getElementById("circulo-camera");
-    const cameraPreview = document.getElementById("camera-on-off");
-    const cameraSalaOn = document.getElementById("reuniao-solo");
-    const camera = document.getElementById("camera-normal");
-    const cameraOff = document.getElementById("camera-off");
-
-    if (checkLigarTV() && checkLigarHDMI()) {
-        fundoCameraPreview.style.fill = "rgb(192,0,0)";
-        cameraPreview.setAttribute("href", "img/camera-branca.png");
-        cameraSalaOn.style.display = "block";
-        camera.style.display = "none";
-        cameraOff.style.display = "block";
-    }
-    else {
-        fundoCameraPreview.style.fill = "rgb(192,0,0)";
-        cameraPreview.setAttribute("href", "img/camera-branca.png");
-        cameraSalaOn.style.display = "block";
-        camera.style.display = "block";
-        cameraOff.style.display = "none";
-    }
-
-}
-
-function ligarCamera() {
-    const fundoCameraPreview = document.getElementById("circulo-camera");
-    const cameraPreview = document.getElementById("camera-on-off");
-    const cameraSalaOn = document.getElementById("reuniao-solo");
-    const camera = document.getElementById("camera-normal");
-    const cameraOff = document.getElementById("camera-off");
-
-    if (checkLigarTV() && checkLigarHDMI()) {
-        fundoCameraPreview.style.fill = "none";
-        cameraPreview.setAttribute("href", "img/camera.png");
-        cameraSalaOn.style.display = "block";
-        camera.style.display = "block";
-        cameraOff.style.display = "none";
-    }
-    else {
-        fundoCameraPreview.style.fill = "none";
-        cameraPreview.setAttribute("href", "img/camera.png");
-        cameraSalaOn.style.display = "block";
-        camera.style.display = "none";
-        cameraOff.style.display = "block";
-    }
-}
-
-function checkCamera() {
-
-    const fundoCameraPreview = document.getElementById("circulo-camera");
-    if (fundoCameraPreview.style.fill == "none") {
+function checkEstadoCamera() {
+    if (document.getElementById("circulo-camera").style.fill == "none") {
         return true;
     }
     else {
@@ -663,7 +363,7 @@ function checkCamera() {
     }
 }
 
-function checkMicrofone() {
+function checkEstadoMicrofone() {
 
     const fundoMicrofonePreview = document.getElementById("fundo-microfone-preview");
     if (fundoMicrofonePreview.style.fill == "none") {
@@ -674,15 +374,309 @@ function checkMicrofone() {
     }
 }
 
-function checkCC() {
-    const cc = document.getElementById("ligar-cc");
-    if (cc.getAttribute("href") == "img/ligar-azul.png") {
-        return true;
-    }
-    else {
-        return false;
+function selecionarImagemTV(opcao) {
+    switch (opcao) {
+        case 'inicio':
+            document.getElementById("imagem-inicial").style.display = "block";
+            document.getElementById("sinal-TV").style.display = "none";
+            document.getElementById("img-tv-sem-imagem").style.display = "none";
+            document.getElementById("reuniao-solo").style.display = "none";
+            document.getElementById("apresentando").style.display = "none";
+            document.getElementById("left-meeting").style.display = "none";
+            break;
+        case 'inicio load':
+            document.getElementById("inicial-chromeos").style.display = "block";
+            setTimeout(() => {
+                document.getElementById("inicial-chromeos").style.display = "none";
+                document.getElementById("inicial").style.display = "block";
+                setTimeout(() => {
+                    document.getElementById("inicial").style.display = "none";
+                    selecionarImagemTV('apagada');
+                    setTimeout(() => {
+                        document.getElementById("inicial").style.display = "none";
+                        selecionarImagemTV('inicio');
+                    }, 500);
+
+                }, 1000);
+
+            }, 1000);
+            sairMeeting();
+            document.getElementById("preview-tap-on").style.display = "block";
+            document.getElementById("sem-internet-preview").style.display = "none";
+            document.getElementById("entrar-meeting-preview").style.display = "none";
+            document.getElementById("meeting").style.display = "none";
+            break;
+        case 'sem sinal':
+            document.getElementById("imagem-inicial").style.display = "none";
+            document.getElementById("sinal-TV").style.display = "block";
+            document.getElementById("img-tv-sem-imagem").style.display = "none";
+            document.getElementById("reuniao-solo").style.display = "none";
+            document.getElementById("apresentando").style.display = "none";
+            document.getElementById("reuniao-remoto").style.display = "none";
+            break;
+        case 'apagada':
+            document.getElementById("imagem-inicial").style.display = "none";
+            document.getElementById("sinal-TV").style.display = "none";
+            document.getElementById("img-tv-sem-imagem").style.display = "block";
+            document.getElementById("reuniao-solo").style.display = "none";
+            document.getElementById("apresentando").style.display = "none";
+            document.getElementById("reuniao-remoto").style.display = "none";
+            break;
+        case 'meeting solo':
+            document.getElementById("imagem-inicial").style.display = "none";
+            document.getElementById("sinal-TV").style.display = "none";
+            document.getElementById("img-tv-sem-imagem").style.display = "none";
+            document.getElementById("reuniao-solo").style.display = "block";
+            document.getElementById("apresentando").style.display = "none";
+            document.getElementById("reuniao-remoto").style.display = "none";
+            break;
+        case 'meeting remoto':
+            document.getElementById("imagem-inicial").style.display = "none";
+            document.getElementById("sinal-TV").style.display = "none";
+            document.getElementById("img-tv-sem-imagem").style.display = "none";
+            document.getElementById("reuniao-solo").style.display = "none";
+            document.getElementById("apresentando").style.display = "none";
+            document.getElementById("reuniao-remoto").style.display = "block";
+            break;
+        case 'apresentacao sala':
+            document.getElementById("imagem-inicial").style.display = "none";
+            document.getElementById("sinal-TV").style.display = "none";
+            document.getElementById("img-tv-sem-imagem").style.display = "none";
+            document.getElementById("reuniao-solo").style.display = "none";
+            document.getElementById("apresentando").style.display = "block";
+            document.getElementById("reuniao-remoto").style.display = "none";
+            break;
+        default:
+            break;
     }
 }
+
+function selecionarImagemTAP(opcao) {
+    switch (opcao) {
+        case 'inicio':
+            document.getElementById("preview-tap-on").style.display = "block";
+            document.getElementById("sem-internet-preview").style.display = "none";
+            document.getElementById("entrar-meeting-preview").style.display = "none";
+            document.getElementById("meeting").style.display = "none";
+            break;
+        case 'inicio load':
+            selecionarImagemTAP('apagada');
+            document.getElementById("inicial3").style.display = "block";
+            setTimeout(() => {
+                document.getElementById("inicial3").style.display = "none";
+                selecionarImagemTAP('inicio');
+            }, 2500);
+            break;
+        case 'sem internet':
+            document.getElementById("preview-tap-on").style.display = "none";
+            document.getElementById("sem-internet-preview").style.display = "block";
+            document.getElementById("entrar-meeting-preview").style.display = "none";
+            document.getElementById("meeting").style.display = "none";
+            sessionStorage.setItem('ultimo-tv', 'inicio');
+            break;
+        case 'apagada':
+            document.getElementById("preview-tap-on").style.display = "none";
+            document.getElementById("sem-internet-preview").style.display = "none";
+            document.getElementById("entrar-meeting-preview").style.display = "none";
+            document.getElementById("meeting").style.display = "none";
+            break;
+        case 'pre Meeting':
+            document.getElementById("preview-tap-on").style.display = "none";
+            document.getElementById("sem-internet-preview").style.display = "none";
+            document.getElementById("entrar-meeting-preview").style.display = "block";
+            document.getElementById("meeting").style.display = "none";
+            break;
+        case 'meeting':
+            document.getElementById("preview-tap-on").style.display = "none";
+            document.getElementById("sem-internet-preview").style.display = "none";
+            document.getElementById("entrar-meeting-preview").style.display = "none";
+            document.getElementById("meeting").style.display = "block";
+            break;
+        default:
+            break;
+    }
+}
+
+function abrirMeeting() {
+    selecionarImagemTAP('pre Meeting');
+    sessionStorage.setItem('ultimo', 'pre Meeting');
+    desligarApresentacao();
+}
+
+function fecharMeeting() {
+    selecionarImagemTAP('inicio');
+    sessionStorage.setItem('ultimo', 'inicio');
+}
+
+function entrarMeeting() {
+    const meeting = document.getElementById("meeting");
+    const meetingPreview = document.getElementById("entrar-meeting-preview");
+    const joining = document.getElementById("joining");
+    sessionStorage.setItem('ultimo', 'meeting');
+    sessionStorage.setItem('ultimo-tv', 'meeting solo');
+    gerarCodigoReuniao();
+    joining.style.display = "block";
+    setTimeout(() => {
+        joining.style.display = "none";
+        meeting.style.display = "block";
+        meetingPreview.style.display = "none";
+        if (checkUsbCamera()) {
+            camera('ligar');
+            desmutar();
+        }
+        else {
+            camera('desligar');
+            mutar();
+        }
+    }, 1000);
+    habilitarCheckBox("sala-falar");
+    habilitarCheckBox("add-participante");
+}
+
+function sairMeeting() {
+    const meetingPreview = document.getElementById("entrar-meeting-preview");
+    const meeting = document.getElementById("meeting");
+    const cameraSala = document.getElementById("reuniao-solo");
+    const leftMeeting = document.getElementById("left-meeting");
+    sessionStorage.setItem('ultimo', 'inicio');
+    sessionStorage.setItem('ultimo-tv', 'inicio');
+    cameraSala.style.display = "none";
+    leftMeeting.style.display = "block";
+
+    if (checkChromebox()) {
+        setTimeout(() => {
+            leftMeeting.style.display = "none";
+            meetingPreview.style.display = "none";
+            meeting.style.display = "none"
+            cameraSala.style.display = "none";
+            desmutar();
+            verificaTudo();
+        }, 1500);
+
+    } else {
+        leftMeeting.style.display = "none";
+        meetingPreview.style.display = "none";
+        meeting.style.display = "none"
+        cameraSala.style.display = "none";
+        desmutar();
+        verificaTudo();
+    }
+    if (checkParticipante()) {
+        apagarCloneReuniao();
+        removerParticipante();
+        resetCheckboxes();
+    }
+
+    desabilitarCheckBox("sala-falar");
+    desabilitarCheckBox("add-participante");
+    desabilitarCheckBox("participante-falar");
+    naoFalando();
+    pararAnimarFala();
+    document.getElementById("sala-falar").setAttribute("checked", "unchecked");
+    stopLoop2();
+    naoFalandoRemoto();
+    document.getElementById("participante-falar").setAttribute("checked", "unchecked");
+    resetCamera();
+}
+
+function habilitarCheckBox(id) {
+    const checkbox = document.getElementById(id);
+    checkbox.disabled = false;
+}
+function desabilitarCheckBox(id) {
+    const checkbox = document.getElementById(id);
+    checkbox.checked = false;
+    checkbox.disabled = true;
+}
+
+function gerarCodigoReuniao() {
+    const letras = 'abcdefghijklmnopqrstuvwxyz';
+    const telaCodigo = document.getElementById("codigo-reuniao-tap");
+    let codigo = '';
+    for (let i = 0; i < 10; i++) {
+        const indiceAleatorio = Math.floor(Math.random() * letras.length);
+        codigo += letras[indiceAleatorio];
+    }
+    telaCodigo.textContent = codigo.slice(0, 3) + '-' + codigo.slice(3, 7) + '-' + codigo.slice(7);
+}
+
+function camera(opcao) {
+    selecionarImagemTV('nenhum');
+    switch (opcao) {
+        case 'desligar':
+            if (checkTV() && checkHdmiTv()) {
+                document.getElementById("circulo-camera").style.fill = "rgb(192,0,0)";
+                document.getElementById("camera-on-off").setAttribute("href", "img/camera-branca.png");
+                document.getElementById("reuniao-solo").style.display = "block";
+                document.getElementById("camera-normal").style.display = "none";
+                document.getElementById("camera-off").style.display = "block";
+            }
+            else {
+                document.getElementById("circulo-camera").style.fill = "rgb(192,0,0)";
+                document.getElementById("camera-on-off").setAttribute("href", "img/camera-branca.png");
+                document.getElementById("reuniao-solo").style.display = "block";
+                document.getElementById("camera-normal").style.display = "none";
+                document.getElementById("camera-off").style.display = "block";
+            }
+            break;
+        case 'ligar':
+            if (checkTV() && checkHdmiTv()) {
+                document.getElementById("circulo-camera").style.fill = "none";
+                document.getElementById("camera-on-off").setAttribute("href", "img/camera.png");
+                document.getElementById("reuniao-solo").style.display = "block";
+                document.getElementById("camera-normal").style.display = "block";
+                document.getElementById("camera-off").style.display = "none";
+            }
+            else {
+                document.getElementById("circulo-camera").style.fill = "none";
+                document.getElementById("camera-on-off").setAttribute("href", "img/camera.png");
+                document.getElementById("reuniao-solo").style.display = "block";
+                document.getElementById("camera-normal").style.display = "none";
+                document.getElementById("camera-off").style.display = "block";
+            }
+            break;
+    }
+}
+
+function mutar() {
+    document.getElementById("fundo-microfone-preview").style.fill = "rgb(192,0,0)";
+    document.getElementById("microfone-preview").setAttribute("href", "img/microfone-off.png");
+    document.getElementById("fundo-microfone-tv-on").style.display = "none";
+    document.getElementById("audio-parado1").style.display = "none";
+    document.getElementById("audio-parado3").style.display = "block";
+    document.getElementById("audio-svg1").style.display = "none";
+    document.getElementById("audio-svg3").style.display = "none";
+    document.getElementById("microfone-off-tv-on").style.display = "block";
+    document.getElementById("microfone-off-preview").style.display = "block";
+    document.getElementById("fundo-audio-preview").style.display = "none";
+}
+
+function desmutar() {
+    document.getElementById("fundo-microfone-preview").style.fill = "none";
+    document.getElementById("microfone-preview").setAttribute("href", "img/microfone.png");
+    document.getElementById("fundo-microfone-tv-on").style.display = "block";
+    document.getElementById("microfone-off-tv-on").style.display = "none";
+    document.getElementById("microfone-off-preview").style.display = "none";
+    document.getElementById("fundo-audio-preview").style.display = "block";
+}
+
+function OnOffCamera() {
+    if (!checkUsbCamera()) {
+        camera('desligar');
+    }
+    else {
+        if (checkEstadoCamera()) {
+            camera('desligar');
+        }
+        else {
+            camera('ligar');
+        }
+    }
+}
+
+window.addEventListener('beforeunload', function () {
+    sessionStorage.clear();
+});
 
 function dataEhora() {
     // Função para formatar 1 em 01
@@ -696,12 +690,10 @@ function dataEhora() {
         const semana = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sábado"];
         const mes = [" " + "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
         var newformat = now.getHours() >= 12 ? 'PM' : 'AM';
-
         // Formata a data conforme dd/mm/aaaa hh:ii:ss
         const dataHora = zeroFill(now.getHours()) + ':' + zeroFill(now.getMinutes()) + ' ' + newformat;
         const dataSemana = semana[now.getDay()] + ', ' + now.getUTCDate() + ' de ' + mes[(now.getUTCMonth())];
         const horaDataSemana = dataHora + ' - ' + dataSemana;
-
         // Exibe na tela usando a div#data-hora
         document.getElementById('relogio').innerHTML = dataHora;
         document.getElementById('relogio-remoto').innerHTML = dataHora;
@@ -710,216 +702,37 @@ function dataEhora() {
         document.getElementById('relogio3').innerHTML = dataHora;
         document.getElementById("data-e-hora").innerHTML = horaDataSemana;
         clonarSvg();
-        if (checkMeetingTV() && checkParticipante()) {
+        if (checkParticipante() && checkTV() && checkHdmiTv()) {
             clonarReuniao();
-
         }
 
     }, 1000);
-
 }
 
-function mutar() {
-    const fundoMicrofonePreview = document.getElementById("fundo-microfone-preview");
-    const microfonePreview = document.getElementById("microfone-preview");
-    const audioAtivo = document.getElementById("audio-svg1");
-    const audioAtivo2 = document.getElementById("audio-svg2");
-    const audioAtivo3 = document.getElementById("audio-svg3");
-    const audioParado = document.getElementById("audio-parado1");
-    const audioParado2 = document.getElementById("audio-parado2");
-    const audioParado3 = document.getElementById("audio-parado3");
-    const fundoMicrofoneTvOn = document.getElementById("fundo-microfone-tv-on");
-    const fundoMicrofoneTvOff = document.getElementById("fundo-microfone-tv-off");
-    const microfoneOffTvOn = document.getElementById("microfone-off-tv-on");
-    const microfoneOffTvOff = document.getElementById("microfone-off-tv-off");
-    const fundoAudioPreview = document.getElementById("fundo-audio-preview");
-    const audioPreviewOff = document.getElementById("microfone-off-preview");
-
-    fundoMicrofonePreview.style.fill = "rgb(192,0,0)";
-    microfonePreview.setAttribute("href", "img/microfone-off.png");
-    // fundoMicrofoneTvOff.style.display = "none";
-    fundoMicrofoneTvOn.style.display = "none";
-    audioParado.style.display = "none";
-    // audioParado2.style.display = "none";
-    audioParado3.style.display = "block";
-    audioAtivo.style.display = "none";
-    // audioAtivo2.style.display = "none";
-    audioAtivo3.style.display = "none";
-    microfoneOffTvOn.style.display = "block";
-    // microfoneOffTvOff.style.display = "block";
-    audioPreviewOff.style.display = "block";
-    fundoAudioPreview.style.display = "none";
-
-}
-
-function desmutar() {
-
-    const fundoMicrofonePreview = document.getElementById("fundo-microfone-preview");
-    const microfonePreview = document.getElementById("microfone-preview");
-    const fundoMicrofoneTvOn = document.getElementById("fundo-microfone-tv-on");
-    const microfoneOffTvOn = document.getElementById("microfone-off-tv-on");
-    const fundoAudioPreview = document.getElementById("fundo-audio-preview");
-    const audioPreviewOff = document.getElementById("microfone-off-preview");
-
-    fundoMicrofonePreview.style.fill = "none";
-    microfonePreview.setAttribute("href", "img/microfone.png");
-    fundoMicrofoneTvOn.style.display = "block";
-    microfoneOffTvOn.style.display = "none";
-    audioPreviewOff.style.display = "none";
-    fundoAudioPreview.style.display = "block";
-
-}
-
-function mutarMicrofone() {
-
-    const fundoMicrofonePreview = document.getElementById("fundo-microfone-preview");
-
-    if (!checkLigarUSBCcamera()) {
-        mutar();
-    }
-
-    else {
-
-        if (checkMicrofone()) {
-            mutar();
-        }
-        else if (checkLigarFalar()) {
-            desmutar();
-            falando();
-
-        }
-        else if (!checkLigarFalar()) {
-            desmutar();
-            naoFalando();
-        }
-    }
-
-}
-
-function OnOffCamera() {
-
-    const fundoCameraPreview = document.getElementById("circulo-camera");
-
-    if (!checkLigarUSBCcamera()) {
-        desligarCamera();
-    }
-
-    else {
-
-        if (checkCamera()) {
-            desligarCamera();
-        }
-        else {
-            ligarCamera();
-        }
-    }
-
-}
-
-function falandoRemoto() {
-    const audioAtivo = document.getElementById("audio-remoto");
-    const audioParado = document.getElementById("audio-parado-remoto");
-    const audioAtivo3 = document.getElementById("audio-animado-participante-02");
-    const audioParado3 = document.getElementById("audio-parado-participante-02");
-
-    audioAtivo.style.display = "block";
-    audioParado.style.display = "none";
-    audioAtivo3.style.display = "block";
-    audioParado3.style.display = "none";
-
-    startLoop3();
-
-}
-function naoFalandoRemoto() {
-    const audioAtivo = document.getElementById("audio-remoto");
-    const audioParado = document.getElementById("audio-parado-remoto");
-    const audioAtivo3 = document.getElementById("audio-animado-participante-02");
-    const audioParado3 = document.getElementById("audio-parado-participante-02");
-
-    audioAtivo.style.display = "none";
-    audioParado.style.display = "block";
-    audioAtivo3.style.display = "none";
-    audioParado3.style.display = "block";
-    stopLoop3();
-
-}
-
-
-function falando() {
-    const audioAtivo = document.getElementById("audio-svg1");
-    const audioParado = document.getElementById("audio-parado1");
-    const audioAtivo3 = document.getElementById("audio-svg3");
-    const audioParado3 = document.getElementById("audio-parado3");
-
-    audioAtivo.style.display = "block";
-    audioParado.style.display = "none";
-    audioAtivo3.style.display = "block";
-    audioParado3.style.display = "none";
-}
-
-function naoFalando() {
-    const audioAtivo = document.getElementById("audio-svg1");
-    const audioParado = document.getElementById("audio-parado1");
-    const audioAtivo3 = document.getElementById("audio-svg3");
-    const audioParado3 = document.getElementById("audio-parado3");
-
-    audioAtivo.style.display = "none";
-    audioParado.style.display = "block";
-    audioAtivo3.style.display = "none";
-    audioParado3.style.display = "block";
-}
-
-function ligarFalar() {
-    const chkFalar = document.getElementById("sala-falar");
-    if (checkMicrofone()) { // se microfone aberto
-        if (chkFalar.getAttribute("checked") == "checked") {
-
-            naoFalando();
-            pararAnimarFala();
-            chkFalar.setAttribute("checked", "unchecked");
-        }
-        else {
-            falando();
-            animarFala();
-            chkFalar.setAttribute("checked", "checked");
-        }
-    }
-
-    else {
-        if (chkFalar.getAttribute("checked") == "checked") {
-            naoFalando();
-            pararAnimarFala();
-            mutar();
-            chkFalar.setAttribute("checked", "unchecked");
-        }
-        else {
-            falando();
-            animarFala();
-            mutar();
-            chkFalar.setAttribute("checked", "checked");
-        }
+function clonarSvg() {
+    if (document.querySelector("#clone-tap")) {
+        apagarClone();
+        criarClone();
+    } else {
+        criarClone();
     }
 }
 
-function ligarFalarParticipante() {
-    const chkFalar = document.getElementById("participante-falar");
-    const cc = document.getElementById("ligar-cc");
+function criarClone() {
+    const originalSVG = document.querySelector('#preview-tap');
+    const tap = document.getElementById("tela-tap");
+    const cloneSVG = originalSVG.cloneNode(true);
+    const posicaoX = parseInt(tap.getAttribute("x")) + 98;
+    const posicaoY = parseInt(tap.getAttribute("y")) + 5;
+    cloneSVG.id = "clone-tap";
+    cloneSVG.style.top = posicaoY;
+    cloneSVG.style.left = posicaoX;
+    document.body.appendChild(cloneSVG);
+}
 
-    if (checkParticipante()) {
-
-        if (chkFalar.getAttribute("checked") == "checked") {
-            stopLoop2();
-            naoFalandoRemoto();
-            chkFalar.setAttribute("checked", "unchecked");
-        }
-        else {
-            if (cc.getAttribute("href") == "img/ligar-azul.png") {
-                startLoop2();
-            }
-            falandoRemoto();
-            chkFalar.setAttribute("checked", "checked");
-        }
-    }
+function apagarClone() {
+    const clone = document.getElementById("clone-tap");
+    clone.remove();
 }
 
 function volumeAtual() {
@@ -930,33 +743,24 @@ function volumeAtual() {
     return volume;
 }
 
-
 function aumentarVolume() {
     const linhaVolumeAzul = document.getElementById("linha-volume-azul");
     const circuloVolumeAzul = document.getElementById("circulo-volume-azul");
-
     const linhaVolumeTv = document.getElementById("linha-volume-tv");
     const circuloVolumeTv = document.getElementById("circulo-volume-tv");
-
     const volumeNaTela = document.getElementById("volume-na-tela");
-
     const MAX = 415;
     const MAXTV = 855;
     const MIN = 365;
-
     let posicaoLinhaAtual = +linhaVolumeAzul.getAttribute("x2");
     let posicaoCirculoAtual = +circuloVolumeAzul.getAttribute("cx");
-
     let posicaoLinhaAtualTv = +linhaVolumeTv.getAttribute("x2");
     let posicaoCirculoAtualTv = +circuloVolumeTv.getAttribute("cx");
-
     let volumeNaTv = document.getElementById("volume-na-tv");
 
     if (posicaoCirculoAtual < MAX) {
-
         posicaoCirculoAtual = posicaoCirculoAtual + 5;
         posicaoLinhaAtual = posicaoLinhaAtual + 5;
-
         posicaoCirculoAtualTv = posicaoCirculoAtualTv + 5;
         posicaoLinhaAtualTv = posicaoLinhaAtualTv + 5;
     }
@@ -966,51 +770,41 @@ function aumentarVolume() {
         posicaoCirculoAtualTv = MAXTV;
         posicaoLinhaAtualTv = MAXTV;
     }
-
     circuloVolumeAzul.setAttribute("cx", posicaoCirculoAtual);
     linhaVolumeAzul.setAttribute("x2", posicaoLinhaAtual);
-
     circuloVolumeTv.setAttribute("cx", posicaoCirculoAtualTv);
     linhaVolumeTv.setAttribute("x2", posicaoLinhaAtualTv);
-
     let volume = (posicaoCirculoAtual - MIN) * 2;
-
     volumeNaTv.textContent = volume;
 
     volumeSpeaker(volume);
 
-    volumeNaTela.style.display = "block";
+    if (checkTV() && checkHdmiTv()) {
+        volumeNaTela.style.display = "block";
+        const interval = setTimeout(() => {
+            volumeNaTela.style.display = "none";
 
-    const interval = setTimeout(() => {
-        volumeNaTela.style.display = "none";
-
-    }, 3000);
+        }, 3000);
+    }
 }
 
 function diminuirVolume() {
     const linhaVolumeAzul = document.getElementById("linha-volume-azul");
     const circuloVolumeAzul = document.getElementById("circulo-volume-azul");
-
     const volumeNaTela = document.getElementById("volume-na-tela");
-
     const linhaVolumeTv = document.getElementById("linha-volume-tv");
     const circuloVolumeTv = document.getElementById("circulo-volume-tv");
     const MIN = 365;
     const MINTV = 805;
-
     let posicaoLinhaAtual = +linhaVolumeAzul.getAttribute("x2");
     let posicaoCirculoAtual = +circuloVolumeAzul.getAttribute("cx");
-
     let posicaoLinhaAtualTv = +linhaVolumeTv.getAttribute("x2");
     let posicaoCirculoAtualTv = +circuloVolumeTv.getAttribute("cx");
-
     let volumeNaTv = document.getElementById("volume-na-tv");
 
     if (posicaoCirculoAtual > MIN) {
-
         posicaoCirculoAtual = posicaoCirculoAtual - 5;
         posicaoLinhaAtual = posicaoLinhaAtual - 5;
-
         posicaoCirculoAtualTv = posicaoCirculoAtualTv - 5;
         posicaoLinhaAtualTv = posicaoLinhaAtualTv - 5;
     }
@@ -1027,25 +821,22 @@ function diminuirVolume() {
     linhaVolumeTv.setAttribute("x2", posicaoLinhaAtualTv);
 
     let volume = (posicaoCirculoAtual - MIN) * 2;
-
     volumeNaTv.textContent = volume;
-
     volumeSpeaker(volume);
 
-    volumeNaTela.style.display = "block";
-
-    const interval = setTimeout(() => {
-        volumeNaTela.style.display = "none";
-
-    }, 3000);
-
+    if (checkTV() && checkHdmiTv()) {
+        volumeNaTela.style.display = "block";
+        const interval = setTimeout(() => {
+            volumeNaTela.style.display = "none";
+        }, 3000);
+    }
 }
 
 function volumeSpeaker(volume) {
     let somEsquerda = document.getElementById("som-esquerda");
     let somDireita = document.getElementById("som-direita");
 
-    if (checkLigarUSBCcamera()) {
+    if (checkUsbCamera()) {
         if (volume <= 50 && volume > 0) {
             somEsquerda.setAttribute("href", "img/som-normal.png");
             somDireita.setAttribute("href", "img/som-normal.png");
@@ -1076,7 +867,83 @@ function volumeSpeaker(volume) {
         somEsquerda.style.display = "none";
         somDireita.style.display = "none";
     }
+}
 
+function mutarMicrofone() {
+    const fundoMicrofonePreview = document.getElementById("fundo-microfone-preview");
+    if (!checkUsbCamera()) {
+        mutar();
+    }
+    else {
+        if (checkEstadoMicrofone()) {
+            mutar();
+        }
+        else if (checkLigarFalar()) {
+            desmutar();
+            falando();
+
+        }
+        else if (!checkLigarFalar()) {
+            desmutar();
+            naoFalando();
+        }
+    }
+}
+
+function falando() {
+    const audioAtivo = document.getElementById("audio-svg1");
+    const audioParado = document.getElementById("audio-parado1");
+    const audioAtivo3 = document.getElementById("audio-svg3");
+    const audioParado3 = document.getElementById("audio-parado3");
+
+    audioAtivo.style.display = "block";
+    audioParado.style.display = "none";
+    audioAtivo3.style.display = "block";
+    audioParado3.style.display = "none";
+}
+
+function naoFalando() {
+    const audioAtivo = document.getElementById("audio-svg1");
+    const audioParado = document.getElementById("audio-parado1");
+    const audioAtivo3 = document.getElementById("audio-svg3");
+    const audioParado3 = document.getElementById("audio-parado3");
+
+    audioAtivo.style.display = "none";
+    audioParado.style.display = "block";
+    audioAtivo3.style.display = "none";
+    audioParado3.style.display = "block";
+}
+
+function ligarFalar() {
+    const chkFalar = document.getElementById("sala-falar");
+    if (checkEstadoMicrofone()) { // se microfone aberto
+        if (chkFalar.getAttribute("checked") == "checked") {
+
+            naoFalando();
+            pararAnimarFala();
+            chkFalar.setAttribute("checked", "unchecked");
+        }
+        else {
+            falando();
+            animarFala();
+            chkFalar.setAttribute("checked", "checked");
+        }
+    }
+
+    else {
+        if (chkFalar.getAttribute("checked") == "checked") {
+            naoFalando();
+            pararAnimarFala();
+            mutar();
+            chkFalar.setAttribute("checked", "unchecked");
+        }
+        else {
+            falando();
+            animarFala();
+            mutar();
+            chkFalar.setAttribute("checked", "checked");
+        }
+    }
 }
 
 let intervalId;
@@ -1104,36 +971,6 @@ function mudarImagemRemoto() {
     indice = getRandomInt(0, 8);
     indice = (indice + 1) % imagens.length;
     img.setAttribute("href", imagens[indice]);
-}
-
-function animarSpeakers() {
-    const volume = volumeAtual();
-    const somEsquerda = document.getElementById("som-esquerda");
-    const somDireita = document.getElementById("som-direita");
-    if (volume <= 50 && volume > 0) {
-        somEsquerda.setAttribute("href", "img/som-normal.png");
-        somDireita.setAttribute("href", "img/som-normal.png");
-        somEsquerda.style.display = "block";
-        somDireita.style.display = "block";
-    }
-    else if (volume > 50 && volume <= 80) {
-        somEsquerda.setAttribute("href", "img/som-alerta.png");
-        somDireita.setAttribute("href", "img/som-alerta.png");
-        somEsquerda.style.display = "block";
-        somDireita.style.display = "block";
-    }
-    else if (volume > 80) {
-        somEsquerda.setAttribute("href", "img/som-alto.png");
-        somDireita.setAttribute("href", "img/som-alto.png");
-        somEsquerda.style.display = "block";
-        somDireita.style.display = "block";
-    }
-
-    setTimeout(() => {
-        somEsquerda.style.display = "none";
-        somDireita.style.display = "none";
-
-    }, 1000);
 }
 
 function mudarPalavras() {
@@ -1195,67 +1032,68 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function abrirFeedback() {
+    const telaFeedback = document.getElementById("tela-feedback");
+    const telaPreviewOn = document.getElementById("preview-tap-on");
+    const telaMeeting = document.getElementById("meeting");
+
+    telaMeeting.setAttribute("filter", "url(#blurFilter)");
+    telaPreviewOn.setAttribute("filter", "url(#blurFilter)");
+    telaFeedback.style.display = "block";
+}
+
+function fecharFeedback() {
+    const telaFeedback = document.getElementById("tela-feedback");
+    const telaPreviewOn = document.getElementById("preview-tap-on");
+    const telaMeeting = document.getElementById("meeting");
+    const opcoes = ["video-x", "audio-x", "connectivity-x", "other-x"];
+    for (i = 0; i < opcoes.length; i++) {
+        document.getElementById(opcoes[i]).style.display = "none";
+    }
+    telaMeeting.setAttribute("filter", " ");
+    telaPreviewOn.setAttribute("filter", " ");
+    telaFeedback.style.display = "none";
+}
+
+function abrirInfo() {
+    const info = document.getElementById("tela-info");
+    const infoCode = (document.getElementById("info-code").textContent).slice(0, 24);
+    const code = document.getElementById("codigo-reuniao-tap").textContent;
+    console.log(infoCode)
+    document.getElementById("info-code").textContent = infoCode + code;
+    info.style.display = "block";
+}
+
+function fecharInfo() {
+    const info = document.getElementById("tela-info");
+    info.style.display = "none";
+}
+
+function marcarBox(elemento) {
+    const elementoX = elemento + "-x";
+    document.getElementById(elementoX).style.display = "block";
+}
+function desmarcarBox(elementoX) {
+    const elemento = elementoX.replace("-x", "");
+    document.getElementById(elementoX).style.display = "none";
+    document.getElementById(elemento).style.display = "block";
+}
+
+// TELA BOTÃO CONFIGURAÇÃO (ENGRENAGEM) TELA INICIAL NO TAP
 function abrirTelaConfigOut() {
     const telaConfig = document.getElementById("tela-config-out");
     const telaPreviewOn = document.getElementById("preview-tap-on");
-
     telaPreviewOn.setAttribute("filter", "url(#blurFilter)");
     telaConfig.style.display = "block";
-
     opcoesConfigOut("Audio");
 }
 
 function fecharTelaConfigOut() {
     const telaConfig = document.getElementById("tela-config-out");
     const telaPreviewOn = document.getElementById("preview-tap-on");
-
     telaPreviewOn.setAttribute("filter", " ");
     telaConfig.style.display = "none";
 }
-
-function abrirOpcaoParticipante(participante) {
-
-    if (participante == 1) {
-
-        if (document.getElementById("fundo-opcao-participante01").style.fill == "gray") {
-            document.getElementById("tela-opcao-participante01").style.display = "none";
-            document.getElementById("fundo-opcao-participante01").style.fill = "none";
-        }
-        else {
-            document.getElementById("tela-opcao-participante01").style.display = "block";
-            document.getElementById("fundo-opcao-participante01").style.fill = "gray";
-
-        }
-    }
-    if (participante == 2) {
-        if (document.getElementById("fundo-opcao-participante02").style.fill == "gray") {
-            document.getElementById("tela-opcao-participante02").style.display = "none";
-            document.getElementById("fundo-opcao-participante02").style.fill = "none";
-        }
-        else {
-            document.getElementById("tela-opcao-participante02").style.display = "block";
-            document.getElementById("fundo-opcao-participante02").style.fill = "gray";
-        }
-    }
-
-}
-
-function fecharOpcaoParticipante(participante) {
-
-    switch (participante) {
-        case 1:
-            document.getElementById("tela-opcao-participante01").style.display = "none";
-            document.getElementById("fundo-opcao-participante01").style.fill = "none";
-            break;
-
-        case 2:
-            document.getElementById("tela-opcao-participante02").style.display = "none";
-            document.getElementById("fundo-opcao-participante02").style.fill = "none";
-            break;
-    }
-
-}
-
 
 function opcoesConfigOut(opcao) {
     const audio = document.getElementById("config-out-audio");
@@ -1267,7 +1105,7 @@ function opcoesConfigOut(opcao) {
     const speaker = document.getElementById("txt-config-speaker");
     const camera = document.getElementById("txt-config-camera");
 
-    if (checkLigarUSBCcamera()) {
+    if (checkUsbCamera()) {
         microfone.style.display = "block";
         speaker.style.display = "block";
         camera.style.display = "block";
@@ -1317,56 +1155,82 @@ function opcoesConfigOut(opcao) {
     }
 }
 
-function abrirFeedback() {
-    const telaFeedback = document.getElementById("tela-feedback");
-    const telaPreviewOn = document.getElementById("preview-tap-on");
-    const telaMeeting = document.getElementById("meeting");
+// APRESENTAR VIA HDMI FORA DA REUNIÃO
+function apresentar() {
+    const imgSlideApresentacao = document.getElementById("apresentando");
+    if (OnOffApresentar()) {
 
-    telaMeeting.setAttribute("filter", "url(#blurFilter)");
-    telaPreviewOn.setAttribute("filter", "url(#blurFilter)");
-    telaFeedback.style.display = "block";
+        if (checkTV() && checkHdmiTv()) {
+            if (checkHdmiNotebook() && checkNotebook()) {
+                ligarApresentacao();
+            }
+        }
+    }
+    else {
+        desligarApresentacao();
+    }
 }
 
-function fecharFeedback() {
-    const telaFeedback = document.getElementById("tela-feedback");
-    const telaPreviewOn = document.getElementById("preview-tap-on");
-    const telaMeeting = document.getElementById("meeting");
-    const opcoes = ["video-x", "audio-x", "connectivity-x", "other-x"];
+function ligarApresentacao() {
+    document.getElementById("botao-apresentar").style.display = "block";
+    document.getElementById("apresentar").setAttribute("href", "img/hdmi-branco.png");
+    document.getElementById("menu-apresentar").style.fill = "white";
+    selecionarImagemTV('apresentacao sala');
+    sessionStorage.setItem('ultimo-tv', 'apresentacao sala');
+}
 
-    for (i = 0; i < opcoes.length; i++) {
-        document.getElementById(opcoes[i]).style.display="none";
+function desligarApresentacao() {
+    document.getElementById("botao-apresentar").style.display = "none";
+    document.getElementById("apresentar").setAttribute("href", "img/hdmi.png");
+    document.getElementById("menu-apresentar").style.fill = "gray";
+    if (!checkMeeting()) {
+        sessionStorage.setItem('ultimo-tv', 'inicio');
+        selecionarImagemTV('inicio');
+    }
+}
+
+function OnOffApresentar() {
+    const botaoApresentar = document.getElementById("botao-apresentar");
+    if (botaoApresentar.style.display == "none") {
+
+        return true;
+    }
+    else if (botaoApresentar.style.display == "block") {
+
+        return false;
     }
 
-    telaMeeting.setAttribute("filter", " ");
-    telaPreviewOn.setAttribute("filter", " ");
-    telaFeedback.style.display = "none";
+}
+// LEVANTAR A MÃO NA REUNIÃO
+function levantarMao() {
+    const imgMao = document.getElementById("img-levantar-mao");
+    const txtMao = document.getElementById("txt-levantar-mao");
+    const fundoLevantarMao = document.getElementById("fundo-levantar-mao");
+    const fundoLevantarMaoTV = document.getElementById("fundo-levantar-mao-tv");
+    const imgMaoTV = document.getElementById("img-mao-tv");
+    const txtMaoTV = document.getElementById("txt-nome-sala");
+
+    if (fundoLevantarMao.style.fill == "none") {
+        fundoLevantarMao.style.fill = "gray";
+        fundoLevantarMaoTV.style.display = "block";
+        imgMaoTV.style.display = "block";
+        imgMao.setAttribute("href", "img/mao-azul.png");
+        txtMao.textContent = "Low Hand";
+        txtMao.style.fill = "#1790f3";
+        txtMaoTV.style.fill = "black";
+    }
+    else if (fundoLevantarMao.style.fill == "gray") {
+        fundoLevantarMao.style.fill = "none";
+        fundoLevantarMaoTV.style.display = "none";
+        imgMaoTV.style.display = "none";
+        imgMao.setAttribute("href", "img/mao.png");
+        txtMao.textContent = "Raise Hand";
+        txtMao.style.fill = "black";
+        txtMaoTV.style.fill = "white";
+    }
 }
 
-function abrirInfo(){
-    const info = document.getElementById("tela-info");
-    const infoCode = (document.getElementById("info-code").textContent).slice(0,24);
-    const code = document.getElementById("codigo-reuniao-tap").textContent;
-    console.log(infoCode)
-
-    document.getElementById("info-code").textContent = infoCode + code;
-    info.style.display="block";
-}
-
-function fecharInfo(){
-    const info = document.getElementById("tela-info");
-     info.style.display="none";
-}
-
-function marcarBox(elemento) {
-    const elementoX = elemento + "-x";
-    document.getElementById(elementoX).style.display = "block";
-}
-function desmarcarBox(elementoX) {
-    const elemento = elementoX.replace("-x", "");
-    document.getElementById(elementoX).style.display = "none";
-    document.getElementById(elemento).style.display = "block";
-}
-
+//TELA EMOJI
 function abrirTelaEmoji() {
     const telaEmoji = document.getElementById("tela-emoji");
     const iconeEmoji = document.getElementById("icone-emoji");
@@ -1394,7 +1258,7 @@ function animateImage(elemento) {
 }
 
 function criarEmoji(tipoDeEmoji) {
-    if (checkLigarTV() && checkLigarHDMI()) {
+    if (checkTV() && checkHdmiTv()) {
 
         const svgNS = "http://www.w3.org/2000/svg";
         const newElement = document.createElementNS(svgNS, 'text');
@@ -1425,10 +1289,10 @@ function criarEmoji(tipoDeEmoji) {
     }
 }
 
+// CLOSED CAPTION
+
 function closedCaption() {
-
     const cc = document.getElementById("ligar-cc");
-
     if (cc.getAttribute("href") == "img/desligar.png") {
         cc.setAttribute("href", "img/ligar-azul.png");
 
@@ -1442,7 +1306,6 @@ function closedCaption() {
     else if (cc.getAttribute("href") == "img/ligar-azul.png") {
         cc.setAttribute("href", "img/desligar.png");
         stopLoop2();
-
     }
 }
 
@@ -1452,99 +1315,47 @@ function desligarClosedCaption() {
     stopLoop2();
 }
 
-function apresentarNaMeet() {
-
-    const imgSlideApresentacao = document.getElementById("apresentando");
-    const cameraSala = document.getElementById("reuniao-solo");
-    const iconeApresentar = document.getElementById("icone-apresentar");
-    const txtApresentar = document.getElementById("txt-apresentar");
-    const telaApresentar = document.getElementById("tela-apresentar");
-    const telaPreviewMeeting = document.getElementById("meeting");
-
-    telaPreviewMeeting.setAttribute("filter", "url(#blurFilter)");
-
-    if (checkLigarTV() && checkLigarHDMI()) {
-        if (checkHdmiNotebook() && checkNotebook()) {
-            iconeApresentar.setAttribute("href", "img/apresentar-azul.png");
-            txtApresentar.style.fill = "#1790f3";
-            telaApresentar.style.display = "block"
-        }
-    }
-}
-
-function fecharApresentarNaMeet() {
-    const iconeApresentar = document.getElementById("icone-apresentar");
-    const txtApresentar = document.getElementById("txt-apresentar");
-    const telaApresentar = document.getElementById("tela-apresentar");
-    const telaPreviewMeeting = document.getElementById("meeting");
-
-    iconeApresentar.setAttribute("href", "img/apresentar.png");
-    txtApresentar.style.fill = "black";
-    telaApresentar.style.display = "none";
-    telaPreviewMeeting.setAttribute("filter", " ");
-
-}
-
-function abrirControleCamera() {
-
-    const telaControleCamera = document.getElementById("tela-controle-camera");
-    const telaPreviewMeeting = document.getElementById("meeting");
-
-
-
-    if (checkLigarTV() && checkLigarHDMI()) {
-        if (checkCamera()) {
-            telaPreviewMeeting.setAttribute("filter", "url(#blurFilter)");
-            telaControleCamera.style.display = "block";
-        }
-    }
-}
-
-function fecharControleCamera() {
-    const telaControleCamera = document.getElementById("tela-controle-camera");
-    const telaPreviewMeeting = document.getElementById("meeting");
-    telaControleCamera.style.display = "none";
-    telaPreviewMeeting.setAttribute("filter", " ");
-
-}
-
+// ADICIONAR PARTICIPANTE REMOTO
 function adicionarParticipante() {
     const participantePreview2 = document.getElementById("preview-participante02");
     const nPrticipantePreview = document.getElementById("numero-participantes-preview");
-    const reuniaoRemoto = document.getElementById("reuniao-remoto");
-
+    selecionarImagemTV('meeting remoto');
     nPrticipantePreview.textContent = "2 participants";
     participantePreview2.style.display = "block";
-    reuniaoRemoto.style.display = "block";
     criarCloneReuniao();
 }
 
 function removerParticipante() {
     const participantePreview2 = document.getElementById("preview-participante02");
     const nPrticipantePreview = document.getElementById("numero-participantes-preview");
-    const reuniaoRemoto = document.getElementById("reuniao-remoto");
-
+    selecionarImagemTV('meeting solo');
     nPrticipantePreview.textContent = "1 participant";
     participantePreview2.style.display = "none";
-    reuniaoRemoto.style.display = "none";
+    // reuniaoRemoto.style.display = "none";
     apagarCloneReuniao();
-    resetCheckboxFalarRemoto();
     stopLoop3();
-
 }
 
 function ligarParticipante() {
     const check = document.getElementById("add-participante");
-    if (checkLigarTV() && checkLigarHDMI() && checkMeeting() && checkMeetingTV()) {
-        if (checkParticipante()) {
+    if (checkTV() && checkHdmiTv()) {
+        if (!checkParticipante()) {
             check.setAttribute("checked", "unchecked");
             removerParticipante();
+            resetCheckboxes();
+            desabilitarCheckBox("participante-falar");
         }
         else {
             check.setAttribute("checked", "checked");
             adicionarParticipante();
+            habilitarCheckBox("participante-falar");
         }
     }
+}
+
+function checkParticipante() {
+    const checkParticipante = document.getElementById("add-participante");
+    return checkParticipante.checked;
 }
 
 function bringToFront(groupId) {
@@ -1552,36 +1363,6 @@ function bringToFront(groupId) {
     const group = document.getElementById(groupId);
     svg.appendChild(group);
 }
-
-function clonarSvg() {
-    if (document.querySelector("#clone-tap")) {
-        apagarClone();
-        criarClone();
-
-    } else {
-        criarClone();
-    }
-}
-
-function criarClone() {
-    const originalSVG = document.querySelector('#preview-tap');
-    const tap = document.getElementById("tela-tap");
-    const cloneSVG = originalSVG.cloneNode(true);
-
-    const posicaoX = parseInt(tap.getAttribute("x")) + 98;
-    const posicaoY = parseInt(tap.getAttribute("y")) + 5;
-
-    cloneSVG.id = "clone-tap";
-    cloneSVG.style.top = posicaoY;
-    cloneSVG.style.left = posicaoX;
-    document.body.appendChild(cloneSVG);
-}
-
-function apagarClone() {
-    const clone = document.getElementById("clone-tap");
-    clone.remove();
-}
-
 
 function criarCloneReuniao() {
 
@@ -1594,7 +1375,6 @@ function criarCloneReuniao() {
 
     const elementoPai = document.getElementById("tela-total-tv");
     elementoPai.appendChild(cloneGroup);
-
 }
 
 function apagarCloneReuniao() {
@@ -1602,7 +1382,6 @@ function apagarCloneReuniao() {
     if (cloneGroup) {
         cloneGroup.remove();
     }
-
 }
 
 function clonarReuniao() {
@@ -1622,22 +1401,199 @@ function resetTransform(group) {
     group.setAttribute('transform', ' ');
 }
 
-
 function resetCheckboxes() {
     const checkbox = document.querySelector('#add-participante');
-    checkbox.setAttribute("checked", "unchecked");
+    const checkbox2 = document.querySelector('#participante-falar');
     checkbox.checked = false;
-    resetCheckboxFalarRemoto();
-
+    checkbox2.checked = false;
 }
 
-function resetCheckboxFalarRemoto() {
-    const checkboxFalarRemoto = document.querySelector('#participante-falar');
-    checkboxFalarRemoto.setAttribute("checked", "unchecked");
-    checkboxFalarRemoto.checked = false;
+function checkMeeting() {
+    const checkMeeting = document.getElementById("meeting");
+    const computedStyle = window.getComputedStyle(checkMeeting);
+    const displayValue = computedStyle.display;
+
+    if (displayValue == "block") {
+        return true;
+    }
+    else {
+
+        return false;
+    }
 }
 
+function checkLigarFalarParticipante() {
+    const checkLigarFalar = document.getElementById("participante-falar");
+    return checkLigarFalar.check;
+}
+function falandoRemoto() {
+    const audioAtivo = document.getElementById("audio-remoto");
+    const audioParado = document.getElementById("audio-parado-remoto");
+    const audioAtivo3 = document.getElementById("audio-animado-participante-02");
+    const audioParado3 = document.getElementById("audio-parado-participante-02");
 
+    audioAtivo.style.display = "block";
+    audioParado.style.display = "none";
+    audioAtivo3.style.display = "block";
+    audioParado3.style.display = "none";
+    startLoop3();
+
+}
+function naoFalandoRemoto() {
+    const audioAtivo = document.getElementById("audio-remoto");
+    const audioParado = document.getElementById("audio-parado-remoto");
+    const audioAtivo3 = document.getElementById("audio-animado-participante-02");
+    const audioParado3 = document.getElementById("audio-parado-participante-02");
+
+    audioAtivo.style.display = "none";
+    audioParado.style.display = "block";
+    audioAtivo3.style.display = "none";
+    audioParado3.style.display = "block";
+    stopLoop3();
+}
+
+function ligarFalarParticipante() {
+    const chkFalar = document.getElementById("participante-falar");
+    const cc = document.getElementById("ligar-cc");
+
+    if (checkParticipante()) {
+
+        if (chkFalar.getAttribute("checked") == "checked") {
+            stopLoop2();
+            naoFalandoRemoto();
+            chkFalar.setAttribute("checked", "unchecked");
+        }
+        else {
+            if (cc.getAttribute("href") == "img/ligar-azul.png") {
+                startLoop2();
+            }
+            falandoRemoto();
+            chkFalar.setAttribute("checked", "checked");
+        }
+    }
+}
+
+function animarSpeakers() {
+    const volume = volumeAtual();
+    const somEsquerda = document.getElementById("som-esquerda");
+    const somDireita = document.getElementById("som-direita");
+    if (volume <= 50 && volume > 0) {
+        somEsquerda.setAttribute("href", "img/som-normal.png");
+        somDireita.setAttribute("href", "img/som-normal.png");
+        somEsquerda.style.display = "block";
+        somDireita.style.display = "block";
+    }
+    else if (volume > 50 && volume <= 80) {
+        somEsquerda.setAttribute("href", "img/som-alerta.png");
+        somDireita.setAttribute("href", "img/som-alerta.png");
+        somEsquerda.style.display = "block";
+        somDireita.style.display = "block";
+    }
+    else if (volume > 80) {
+        somEsquerda.setAttribute("href", "img/som-alto.png");
+        somDireita.setAttribute("href", "img/som-alto.png");
+        somEsquerda.style.display = "block";
+        somDireita.style.display = "block";
+    }
+
+    setTimeout(() => {
+        somEsquerda.style.display = "none";
+        somDireita.style.display = "none";
+
+    }, 1000);
+}
+
+function abrirOpcaoParticipante(participante) {
+
+    if (participante == 1) {
+
+        if (document.getElementById("fundo-opcao-participante01").style.fill == "gray") {
+            document.getElementById("tela-opcao-participante01").style.display = "none";
+            document.getElementById("fundo-opcao-participante01").style.fill = "none";
+        }
+        else {
+            document.getElementById("tela-opcao-participante01").style.display = "block";
+            document.getElementById("fundo-opcao-participante01").style.fill = "gray";
+
+        }
+    }
+    if (participante == 2) {
+        if (document.getElementById("fundo-opcao-participante02").style.fill == "gray") {
+            document.getElementById("tela-opcao-participante02").style.display = "none";
+            document.getElementById("fundo-opcao-participante02").style.fill = "none";
+        }
+        else {
+            document.getElementById("tela-opcao-participante02").style.display = "block";
+            document.getElementById("fundo-opcao-participante02").style.fill = "gray";
+        }
+    }
+}
+
+function fecharOpcaoParticipante(participante) {
+
+    switch (participante) {
+        case 1:
+            document.getElementById("tela-opcao-participante01").style.display = "none";
+            document.getElementById("fundo-opcao-participante01").style.fill = "none";
+            break;
+
+        case 2:
+            document.getElementById("tela-opcao-participante02").style.display = "none";
+            document.getElementById("fundo-opcao-participante02").style.fill = "none";
+            break;
+    }
+}
+
+function apresentarNaMeet() {
+    const iconeApresentar = document.getElementById("icone-apresentar");
+    const txtApresentar = document.getElementById("txt-apresentar");
+    const telaApresentar = document.getElementById("tela-apresentar");
+    const telaPreviewMeeting = document.getElementById("meeting");
+
+    telaPreviewMeeting.setAttribute("filter", "url(#blurFilter)");
+
+    if (checkTV() && checkHdmiTv()) {
+        if (checkHdmiNotebook() && checkNotebook()) {
+            iconeApresentar.setAttribute("href", "img/apresentar-azul.png");
+            txtApresentar.style.fill = "#1790f3";
+            telaApresentar.style.display = "block"
+        }
+    }
+}
+
+function fecharApresentarNaMeet() {
+    document.getElementById("icone-apresentar").setAttribute("href", "img/apresentar.png");
+    document.getElementById("txt-apresentar").style.fill = "black";
+    document.getElementById("tela-apresentar").style.display = "none";
+    document.getElementById("meeting").setAttribute("filter", " ");
+}
+
+function abrirControleCamera() {
+
+    const telaControleCamera = document.getElementById("tela-controle-camera");
+    const telaPreviewMeeting = document.getElementById("meeting");
+
+    if (checkTV() && checkHdmiTv()) {
+        if (checkCamera()) {
+            telaPreviewMeeting.setAttribute("filter", "url(#blurFilter)");
+            telaControleCamera.style.display = "block";
+        }
+    }
+}
+
+function fecharControleCamera() {
+    document.getElementById("tela-controle-camera").style.display = "none";
+    document.getElementById("meeting").setAttribute("filter", " ");
+}
+function checkCamera() {
+    const fundoCameraPreview = document.getElementById("circulo-camera");
+    if (fundoCameraPreview.style.fill == "none") {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
 function moverDireita(escala) {
     const imgCamera = document.getElementById("camera-normal");
@@ -1670,7 +1626,6 @@ function moverDireita(escala) {
         imgCameraX += 10;
         imgCamera.setAttribute("x", imgCameraX);
     }
-
 }
 
 function moverEsquerda(escala) {
@@ -1704,7 +1659,6 @@ function moverEsquerda(escala) {
         imgCameraX -= 10;
         imgCamera.setAttribute("x", imgCameraX);
     }
-
 }
 
 function moverCima(escala) {
@@ -1737,7 +1691,6 @@ function moverCima(escala) {
         imgCameraY += 5;
         imgCamera.setAttribute("y", imgCameraY);
     }
-
 }
 
 function moverBaixo(escala) {
@@ -1771,7 +1724,6 @@ function moverBaixo(escala) {
         imgCameraY -= 5;
         imgCamera.setAttribute("y", imgCameraY);
     }
-
 }
 
 function zoomIn() {
@@ -1845,13 +1797,8 @@ function zoomIn() {
         }
         else if (imgCameraX >= imgCameraMaxX) {
             imgCamera.setAttribute("x", imgCameraMaxX);
-
         }
-
-
     }
-
-
 }
 
 function zoomOut() {
@@ -1905,8 +1852,6 @@ function zoomOut() {
                 imgCameraMinX = 25;
                 imgCameraMaxX = 25;
                 break;
-
-
             default:
                 break;
         }
@@ -1931,7 +1876,6 @@ function zoomOut() {
         }
         else if (imgCameraX >= imgCameraMaxX) {
             imgCamera.setAttribute("x", imgCameraMaxX);
-
         }
     }
 }
@@ -1954,38 +1898,8 @@ function framePeople() {
         else if (imgCamera.getAttribute("x") == "25") {
             resetCamera();
         }
-
     }
-
 }
-
-function gerarCodigoReuniao() {
-    const letras = 'abcdefghijklmnopqrstuvwxyz';
-    const telaCodigo = document.getElementById("codigo-reuniao-tap");
-    let codigo = '';
-    for (let i = 0; i < 10; i++) {
-        const indiceAleatorio = Math.floor(Math.random() * letras.length);
-        codigo += letras[indiceAleatorio];
-    }
-    telaCodigo.textContent = codigo.slice(0, 3) + '-' + codigo.slice(3, 7) + '-' + codigo.slice(7);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
