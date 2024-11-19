@@ -11,6 +11,9 @@ function verificaTudo() {
                     switch (sessionStorage.getItem('ultimo-tv')) {
                         case 'inicio':
                             selecionarImagemTV('inicio');
+                            if(checkApresentando()){
+                                desligarApresentacao()
+                            }
                             break;
                         case 'meeting solo':
                             selecionarImagemTV('meeting solo');
@@ -1169,6 +1172,15 @@ function apresentar() {
     }
     else {
         desligarApresentacao();
+    }
+}
+
+function checkApresentando(){
+    if(document.getElementById("botao-apresentar").style.display == "block"){
+        return true;
+    }
+    else{
+        return false;
     }
 }
 
