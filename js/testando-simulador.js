@@ -2081,6 +2081,89 @@ function framePeople() {
     }
 }
 
+let restartChromeboxTimers = [];
+let restartChromeboxMessageTimeout;
+let restartChromeboxInProgress = false;
+
+function reiniciarChromebox() {
+    const chromeCheckbox = document.getElementById("ligar-chrome");
+    const statusRestart = document.getElementById("status-restart-device");
+    const restartButton = document.getElementById("btn-restart-device");
+
+    if (!chromeCheckbox) {
+        return;
+    }
+
+    if (!chromeCheckbox.checked) {
+        if (statusRestart) {
+            clearTimeout(restartChromeboxMessageTimeout);
+            statusRestart.textContent = "Ligue o Chromebox para reiniciar.";
+            statusRestart.style.fill = "#ff9f1a";
+            statusRestart.style.display = "block";
+            restartChromeboxMessageTimeout = setTimeout(() => {
+                statusRestart.style.display = "none";
+                statusRestart.style.fill = "#1790f3";
+            }, 3000);
+        }
+        return;
+    }
+
+    if (restartChromeboxInProgress) {
+        return;
+    }
+
+    restartChromeboxInProgress = true;
+
+    restartChromeboxTimers.forEach(clearTimeout);
+    restartChromeboxTimers = [];
+    clearTimeout(restartChromeboxMessageTimeout);
+
+    if (restartButton) {
+        restartButton.style.fill = "gray";
+        restartButton.style.cursor = "default";
+        restartButton.style.opacity = "0.6";
+        restartButton.style.pointerEvents = "none";
+    }
+
+    if (statusRestart) {
+        statusRestart.style.display = "block";
+        statusRestart.style.fill = "#1790f3";
+        statusRestart.textContent = "Reiniciando Chromebox...";
+    }
+
+    chromeCheckbox.checked = false;
+    ligarDesligarChromebox();
+
+    const ligarTimeout = setTimeout(() => {
+        chromeCheckbox.checked = true;
+        ligarDesligarChromebox();
+
+        const finalizarTimeout = setTimeout(() => {
+            if (statusRestart) {
+                statusRestart.textContent = "Chromebox reiniciado.";
+                statusRestart.style.fill = "#1790f3";
+                statusRestart.style.display = "block";
+                restartChromeboxMessageTimeout = setTimeout(() => {
+                    statusRestart.style.display = "none";
+                }, 2500);
+            }
+
+            if (restartButton) {
+                restartButton.style.fill = "#1790f3";
+                restartButton.style.cursor = "pointer";
+                restartButton.style.opacity = "1";
+                restartButton.style.pointerEvents = "auto";
+            }
+
+            restartChromeboxInProgress = false;
+        }, 2000);
+
+        restartChromeboxTimers.push(finalizarTimeout);
+    }, 2500);
+
+    restartChromeboxTimers.push(ligarTimeout);
+}
+
 
 
 
