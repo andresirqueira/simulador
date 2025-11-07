@@ -277,8 +277,59 @@ div {
   font-family: "Roboto Mono", monospace;
   color: rgba(255, 255, 255, 0.88);
 }
+
+.container input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.container.controle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 18px;
+  padding: 14px 18px 14px 54px;
+  margin-bottom: 12px;
+  transition: background .22s ease, border .22s ease, transform .22s ease;
+}
+
+.container.controle-btn::before {
+  content: attr(data-icon);
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  opacity: 0.65;
+  transition: transform .22s ease, opacity .22s ease;
+}
+
+.container.controle-btn:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.container.controle-btn:hover::before {
+  opacity: 0.85;
+}
+
+.container.controle-btn.ativo {
+  background: rgba(23, 147, 243, 0.18);
+  border-color: rgba(23, 147, 243, 0.45);
+  color: #ffffff;
+}
+
+.container.controle-btn.ativo::before {
+  opacity: 1;
+}
+
+.container.controle-btn.desabilitado {
+  opacity: 0.45;
+  border-style: dashed;
+  cursor: default;
+}
 .checkmark{
-  padding-left: 20px;
+  padding-left: 0;
+  line-height: 1.3;
 }
 /* Estiliza o label */
 label {

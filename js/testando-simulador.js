@@ -182,6 +182,7 @@ function verificaTudo() {
             }
         }
     }
+    atualizarEstadoBotoesControle();
 }
 
 // LIGAR OU DESLIGAR CHROMEBOX
@@ -2302,6 +2303,24 @@ function refreshRoomDisplay() {
     refreshDisplayTimeouts.push(turnOnTimeout);
 }
 
+function atualizarEstadoBotoesControle() {
+    const botoes = document.querySelectorAll('.controle-btn');
+    botoes.forEach(label => {
+        const input = label.querySelector('input[type="checkbox"]');
+        if (!input) {
+            return;
+        }
+        label.classList.toggle('ativo', input.checked);
+        label.classList.toggle('desabilitado', input.disabled);
+    });
+}
+
+document.addEventListener('change', (event) => {
+    if (event.target.matches('.controle-btn input[type="checkbox"]')) {
+        atualizarEstadoBotoesControle();
+    }
+});
+
 
 function inicializarControleRemoto() {
     const controle = document.getElementById("controle-remoto");
@@ -2393,6 +2412,7 @@ function limitarControleDentroDaTela(controle) {
 }
 
 window.addEventListener('load', inicializarControleRemoto);
+window.addEventListener('load', atualizarEstadoBotoesControle);
 window.addEventListener('resize', () => {
     const controle = document.getElementById("controle-remoto");
     if (!controle) {
