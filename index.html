@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <script src="js/jquery.min.js"></script>
+    
     <script src="js/testando-simulador.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/svg-pan-zoom/3.6.1/svg-pan-zoom.min.js"></script>
     <script>dataEhora();</script>
@@ -18,6 +18,11 @@
     
     <div id="elemento-pai">
         <svg id="area" xmlns="http://www.w3.org/2000/svg" width="1100px" height="800px">
+            <defs>
+                <g id="icone-raio">
+                    <polygon points="12,0 0,24 9,24 0,48 26,16 15,16" fill="#ffd200" stroke="#ff9f1a" stroke-width="3" stroke-linejoin="round" />
+                </g>
+            </defs>
             <!-- TV -->
             <g id="tela-total-tv">
                 <image x="602" y="104" href="img/sem-imagem.png" alt="sinal-tv" width="442" height="213"
@@ -136,23 +141,27 @@
                 </g>
                 <!-- EQUIPAMENTO TV -->
                 <image x="600" y="100" href="img/tv-lg2.png" width="447" height="224" />
+                <use href="#icone-raio" id="energia-tv" transform="translate(1035 120) scale(0.85)" style="display:none;" />
 
             </g>
-            <g id="tap" x="575" y="550"></g>
-            <text x="810" y="295" style="fill:white; background-color: gray; display:none" id="texto-cc"></text>
+            
+            <rect x="735" y="282" width="180" height="20" rx="6" style="fill: rgba(0,0,0,0.35); display:none" id="cc-bg" />
+            <text x="825" y="280" style="fill:white; display:none; text-anchor: middle;" id="texto-cc"></text>
 
             <!-- TAP -->
             <g id="tap">
-                <image x="645" y="538" href="img/tap.png" width="400" height="220" />
-                <rect width="228" height="144" x="729" y="572" id="tela-tap" style="fill:black;display:block;"></rect>
+                <image x="640" y="538" href="img/tap.png" width="400" height="220" />
+                <rect width="228" height="144" x="725" y="572" id="tela-tap" style="fill:black;display:block;"></rect>
                 <line x1="834" y1="720" x2="855" y2="720" style="stroke:rgb(21, 21, 21);stroke-width:7; opacity: 90%;"
                     id="led-TAP" />
+                <use href="#icone-raio" id="energia-tap" transform="translate(970 545) scale(0.85)" style="display:none;" />
 
                 <!-- CHROMEBOX -->
                 <g id="chome-box">
                     <image x="300" y="350" href="img/chrome-box.png" width="200" height="100" />
                     <line x1="385" y1="413" x2="416" y2="413" style="stroke:rgb(69, 69, 69);stroke-width:2"
                         id="led-chrome" />
+                    <use href="#icone-raio" id="energia-chromebox" transform="translate(500 350) scale(0.8)" style="display:none;" />
                 </g>
 
                 <!-- CAMERA MEETUP -->
@@ -162,6 +171,7 @@
                         style="display: none;" />
                     <image x="885" y="380" href="img/som-normal.png" width="60" height="30" id="som-direita"
                         style="display: none;" />
+                    <use href="#icone-raio" id="energia-camera" transform="translate(975 340) scale(0.8)" style="display:none;" />
                 </g>
 
                 <!-- INTERNET -->
@@ -197,22 +207,23 @@
 
                 <!-- CABO RJ45 -->
                 <g id="cabo-rj45" style="display:none;">
-                    <image x="305" y="170" href="img/rj45-cima.png" width="80" height="40" id="conector-rj45-chrome" />
+                    <image x="305" y="170" href="img/rj45-cima.png" width="80" height="40" id="conector-rj45-chrome-top" />
                     <polyline points="343,210 343,320" style="fill:none;stroke:rgb(34, 34, 189);stroke-width:8" />
-                    <image x="308" y="320" href="img/rj45-baixo.png" width="70" height="35" id="conector-rj45-chrome" />
+                    <image x="308" y="320" href="img/rj45-baixo.png" width="70" height="35" id="conector-rj45-chrome-bottom" />
                     <text x="323" y="160" class="roboto-mono-normal" style="fill: green;">Online</text>
                 </g>
                 <!-- CABO HDMI Apresentação-->
                 <g id="cabo-hdmi-apresentacao" style="display: none;">
-                    <image x="650" y="645" href="img/hdmi-direita.png" width="55" height="110" id="conector-hdmi-tv" />
+                    <image x="650" y="645" href="img/hdmi-direita.png" width="55" height="110" id="conector-hdmi-tv-2" />
                     <image x="350" y="645" href="img/hdmi-esquerda.png" width="55" height="110"
-                        id="conector-hdmi-chrome" />
+                        id="conector-hdmi-chrome-2" />
                     <polyline points="404,700 652,700" style="fill:none;stroke:black;stroke-width:6" />
                 </g>
 
                 <!-- NOTEBOOK APRESENTAÇÃO USUÁRIO -->
                 <g id="notebook" style="display: none;">
                     <image x="120" y="550" href="img/notebook.png" width="206" height="180" />
+                    <use href="#icone-raio" id="energia-notebook" transform="translate(310 555) scale(0.85)" style="display:none;" />
                 </g>
         </svg>
 
@@ -233,7 +244,7 @@
 
             <label class="container">
                 <input type="checkbox" id="usbc-camera" onclick="conectarDesconectarUsbCamera()">
-                <span class="checkmark">Cabo USB A - USB C - CAMERA</span>
+                <span class="checkmark">Cabo USB A - USB C - Meetup</span>
             </label>
 
             <label class="container">
@@ -261,6 +272,11 @@
             <label class="container">
                 <input type="checkbox" id="ligar-TAP" onclick="ligarDesligarTAP()">
                 <span class="checkmark">Ligar TAP</span>
+            </label>
+
+            <label class="container">
+                <input type="checkbox" id="ligar-meetup" onclick="ligarDesligarMeetup()">
+                <span class="checkmark">Ligar Meetup</span>
             </label>
 
             <label class="container">

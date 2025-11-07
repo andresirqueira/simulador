@@ -11,19 +11,19 @@ function verificaTudo() {
                     switch (sessionStorage.getItem('ultimo-tv')) {
                         case 'inicio':
                             selecionarImagemTV('inicio');
-                            if(checkApresentando()){
-                                desligarApresentacao()
+                            if (checkApresentando()) {
+                                desligarApresentacao();
                             }
                             break;
                         case 'meeting solo':
                             selecionarImagemTV('meeting solo');
-                            if (checkUsbCamera() && checkEstadoCamera()) {
+                            if (checkUsbCamera() && checkMeetupLigada() && checkEstadoCamera()) {
                                 camera('ligar');
                                 desmutar();
                             }
                             else {
                                 camera('desligar');
-                                if (!checkUsbCamera()) mutar();
+                                if (!checkUsbCamera() || !checkMeetupLigada()) mutar();
                             }
                             if (checkParticipante()) {
                                 document.getElementById("reuniao-remoto").style.display = "block";
@@ -50,14 +50,14 @@ function verificaTudo() {
                 else {
                     console.log(">>>> HDMI OFF - TV ON - SEM SINAL");//HDMI DESLIGADO
                     selecionarImagemTV('sem sinal');
-                    if(checkParticipante()){
+                    if (checkParticipante()) {
                         apagarCloneReuniao();
                     }
                 }
             } else {
                 console.log(">>> TV OFF");//TV DESLIGADA
                 selecionarImagemTV('apagada');
-                if(checkParticipante()){
+                if (checkParticipante()) {
                     apagarCloneReuniao();
                 }
             }
@@ -71,6 +71,7 @@ function verificaTudo() {
                             break;
                         case 'inicio':
                             selecionarImagemTAP('inicio');
+
                             break;
                         case 'meeting':
                             selecionarImagemTAP('meeting');
@@ -88,6 +89,9 @@ function verificaTudo() {
             else {
                 console.log(">>> TAP OFF - TELA APAGADA");//TAP DESLIGADO
                 selecionarImagemTAP('apagada');
+                if (checkApresentando()) {
+                    desligarApresentacao();
+                }
             }
         }
         else {
@@ -183,9 +187,11 @@ function verificaTudo() {
 // LIGAR OU DESLIGAR CHROMEBOX
 function ligarDesligarChromebox() {
     const ledChrome = document.getElementById("led-chrome");
+    const iconChromebox = document.getElementById("energia-chromebox");
     if (checkChromebox()) {
         console.log("Acende LED Chromebox");
         ledChrome.style.stroke = "Lightgreen";
+        iconChromebox.style.display = "block";
         if (checkHdmiTv() && checkTV() && checkInternet()) {
             selecionarImagemTV('inicio load');
         }
@@ -196,6 +202,7 @@ function ligarDesligarChromebox() {
     else {
         console.log("Apaga LED Chromebox");
         ledChrome.style.stroke = "rgb(69, 69, 69)";
+        iconChromebox.style.display = "none";
         sessionStorage.clear();
         if (checkMeeting()) {
             sairMeeting();
@@ -224,13 +231,16 @@ function conectarDesconectarRJ45() {
 //LIGAR OU DESLIGAR TV
 function ligarDesligarTV() {
     const ledTV = document.getElementById("led-TV");
+    const iconTV = document.getElementById("energia-tv");
     if (checkTV()) {
         console.log("TV LED ON");
         ledTV.style.display = "block";
+        iconTV.style.display = "block";
     }
     else {
         console.log("TV LED OFF");
         ledTV.style.display = "none";
+        iconTV.style.display = "none";
     }
     verificaTudo();
 }
@@ -251,13 +261,63 @@ function conectarDesconectarHDMI() {
 //LIGAR OU DESLIGAR O TAP
 function ligarDesligarTAP() {
     const ledTAP = document.getElementById("led-TAP");
+    const iconTap = document.getElementById("energia-tap");
     if (checkTAP()) {
         console.log("TAP LED ON");
         ledTAP.style.display = "none";
+        iconTap.style.display = "block";
     }
     else {
         console.log("TAP LED OFF");
         ledTAP.style.display = "block";
+        iconTap.style.display = "none";
+    }
+    verificaTudo();
+}
+//LIGAR OU DESLIGAR MEETUP (CÂMERA + MICROFONE + ÁUDIO)
+function ligarDesligarMeetup() {
+    const iconCamera = document.getElementById("energia-camera");
+    const cameraButton = document.getElementById("camera-on-off");
+    const circuloCamera = document.getElementById("circulo-camera");
+    const somEsquerda = document.getElementById("som-esquerda");
+    const somDireita = document.getElementById("som-direita");
+    if (checkMeetupLigada()) {
+        iconCamera.style.display = "block";
+        if (checkUsbCamera()) {
+            cameraButton.style.pointerEvents = "auto";
+            cameraButton.style.opacity = "1";
+            cameraButton.style.cursor = "pointer";
+            if (checkMeeting()) {
+                camera('ligar');
+            }
+        }
+        else {
+            cameraButton.style.pointerEvents = "none";
+            cameraButton.style.opacity = "0.5";
+            cameraButton.style.cursor = "default";
+            camera('desligar');
+        }
+        if (checkMeeting()) {
+            habilitarCheckBox("sala-falar");
+        }
+    }
+    else {
+        iconCamera.style.display = "none";
+        cameraButton.style.pointerEvents = "none";
+        cameraButton.style.opacity = "0.5";
+        cameraButton.style.cursor = "default";
+        circuloCamera.style.fill = "rgb(192,0,0)";
+        cameraButton.setAttribute("href", "img/camera-branca.png");
+        somEsquerda.style.display = "none";
+        somDireita.style.display = "none";
+        camera('desligar');
+        mutar();
+        naoFalando();
+        pararAnimarFala();
+        stopLoop2();
+        document.getElementById("sala-falar").checked = false;
+        desabilitarCheckBox("sala-falar");
+        fecharControleCamera();
     }
     verificaTudo();
 }
@@ -298,11 +358,14 @@ function conectarDesconectarHdmiNotebook() {
 //LIGAR OU DESLIGAR NOTEBOOK
 function ligarDesligarNotebook() {
     const notebook = document.getElementById("notebook");
+    const iconNotebook = document.getElementById("energia-notebook");
     if (checkNotebook()) {
         notebook.style.display = "block";
+        iconNotebook.style.display = "block";
     }
     else {
         notebook.style.display = "none";
+        iconNotebook.style.display = "none";
     }
     desligarApresentacao();
     verificaTudo();
@@ -340,6 +403,11 @@ function checkUsbTap() {
 function checkUsbCamera() {
     const checkUsbCamera = document.getElementById("usbc-camera");
     return checkUsbCamera.checked;
+}
+
+function checkMeetupLigada() {
+    const checkMeetupFisico = document.getElementById("ligar-meetup");
+    return checkMeetupFisico.checked;
 }
 
 function checkHdmiNotebook() {
@@ -389,7 +457,7 @@ function selecionarImagemTV(opcao) {
             break;
         case 'inicio load':
             document.getElementById("inicial-chromeos").style.display = "block";
- 
+
             setTimeout(() => {
                 document.getElementById("inicial-chromeos").style.display = "none";
                 document.getElementById("inicial").style.display = "block";
@@ -504,7 +572,10 @@ function selecionarImagemTAP(opcao) {
 function abrirMeeting() {
     selecionarImagemTAP('pre Meeting');
     sessionStorage.setItem('ultimo', 'pre Meeting');
-    desligarApresentacao();
+    if (checkApresentando()) {
+        desligarApresentacao();
+    }
+
 }
 
 function fecharMeeting() {
@@ -519,20 +590,26 @@ function entrarMeeting() {
     sessionStorage.setItem('ultimo', 'meeting');
     sessionStorage.setItem('ultimo-tv', 'meeting solo');
     gerarCodigoReuniao();
-    joining.style.display = "block";
-    setTimeout(() => {
-        joining.style.display = "none";
+    if (checkHdmiTv() && checkTV()) {
+        joining.style.display = "block";
+        setTimeout(() => {
+            joining.style.display = "none";
+            meeting.style.display = "block";
+            meetingPreview.style.display = "none";
+            if (checkUsbCamera() && checkMeetupLigada()) {
+                camera('ligar');
+                desmutar();
+            }
+            else {
+                camera('desligar');
+                if (!checkUsbCamera() || !checkMeetupLigada()) mutar();
+            }
+        }, 1000);
+    } else {
         meeting.style.display = "block";
         meetingPreview.style.display = "none";
-        if (checkUsbCamera()) {
-            camera('ligar');
-            desmutar();
-        }
-        else {
-            camera('desligar');
-            mutar();
-        }
-    }, 1000);
+    }
+
     habilitarCheckBox("sala-falar");
     habilitarCheckBox("add-participante");
 }
@@ -547,39 +624,55 @@ function sairMeeting() {
     cameraSala.style.display = "none";
     leftMeeting.style.display = "block";
 
-    if (checkChromebox()) {
-        setTimeout(() => {
+    if (checkHdmiTv() && checkTV()) {
+        if (checkChromebox()) {
+            setTimeout(() => {
+                leftMeeting.style.display = "none";
+                meetingPreview.style.display = "none";
+                meeting.style.display = "none"
+                cameraSala.style.display = "none";
+                desmutar();
+                verificaTudo();
+            }, 1500);
+
+        } else {
             leftMeeting.style.display = "none";
             meetingPreview.style.display = "none";
             meeting.style.display = "none"
             cameraSala.style.display = "none";
             desmutar();
             verificaTudo();
-        }, 1500);
+        }
+        if (checkParticipante()) {
+            apagarCloneReuniao();
+            removerParticipante();
+            resetCheckboxes();
+        }
 
-    } else {
+    }
+    else {
+
         leftMeeting.style.display = "none";
         meetingPreview.style.display = "none";
         meeting.style.display = "none"
         cameraSala.style.display = "none";
         desmutar();
         verificaTudo();
+        if (checkParticipante()) {
+            apagarCloneReuniao();
+            removerParticipante();
+            resetCheckboxes();
+        }
     }
-    if (checkParticipante()) {
-        apagarCloneReuniao();
-        removerParticipante();
-        resetCheckboxes();
-    }
-
     desabilitarCheckBox("sala-falar");
     desabilitarCheckBox("add-participante");
     desabilitarCheckBox("participante-falar");
     naoFalando();
     pararAnimarFala();
-    document.getElementById("sala-falar").setAttribute("checked", "unchecked");
+    document.getElementById("sala-falar").checked = false;
     stopLoop2();
     naoFalandoRemoto();
-    document.getElementById("participante-falar").setAttribute("checked", "unchecked");
+    document.getElementById("participante-falar").checked = false;
     resetCamera();
 }
 
@@ -608,22 +701,25 @@ function camera(opcao) {
     selecionarImagemTV('nenhum');
     switch (opcao) {
         case 'desligar':
-            if (checkTV() && checkHdmiTv()) {
-                document.getElementById("circulo-camera").style.fill = "rgb(192,0,0)";
-                document.getElementById("camera-on-off").setAttribute("href", "img/camera-branca.png");
+            document.getElementById("circulo-camera").style.fill = "rgb(192,0,0)";
+            document.getElementById("camera-on-off").setAttribute("href", "img/camera-branca.png");
+            if (checkChromebox() && checkTV() && checkHdmiTv()) {
                 document.getElementById("reuniao-solo").style.display = "block";
-                document.getElementById("camera-normal").style.display = "none";
                 document.getElementById("camera-off").style.display = "block";
+            } else {
+                document.getElementById("reuniao-solo").style.display = "none";
+                document.getElementById("camera-off").style.display = "none";
             }
-            else {
-                document.getElementById("circulo-camera").style.fill = "rgb(192,0,0)";
-                document.getElementById("camera-on-off").setAttribute("href", "img/camera-branca.png");
-                document.getElementById("reuniao-solo").style.display = "block";
-                document.getElementById("camera-normal").style.display = "none";
-                document.getElementById("camera-off").style.display = "block";
-            }
+            document.getElementById("camera-normal").style.display = "none";
             break;
         case 'ligar':
+            if (!checkMeetupLigada()) {
+                document.getElementById("reuniao-solo").style.display = "none";
+                return;
+            }
+            document.getElementById("camera-on-off").style.pointerEvents = "auto";
+            document.getElementById("camera-on-off").style.opacity = "1";
+            document.getElementById("camera-on-off").style.cursor = "pointer";
             if (checkTV() && checkHdmiTv()) {
                 document.getElementById("circulo-camera").style.fill = "none";
                 document.getElementById("camera-on-off").setAttribute("href", "img/camera.png");
@@ -665,16 +761,16 @@ function desmutar() {
 }
 
 function OnOffCamera() {
-    if (!checkUsbCamera()) {
+    if (!checkUsbCamera() || !checkMeetupLigada()) {
+        camera('desligar');
+        return;
+    }
+
+    if (checkEstadoCamera()) {
         camera('desligar');
     }
     else {
-        if (checkEstadoCamera()) {
-            camera('desligar');
-        }
-        else {
-            camera('ligar');
-        }
+        camera('ligar');
     }
 }
 
@@ -722,16 +818,44 @@ function clonarSvg() {
     }
 }
 
+// Debounce helper
+function debounce(func, wait) {
+    let timeout;
+    return function () {
+        const later = () => {
+            timeout = null;
+            func();
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Reposition clone on resize with debounce
+window.addEventListener('resize', debounce(clonarSvg, 150));
+
 function criarClone() {
     const originalSVG = document.querySelector('#preview-tap');
-    const tap = document.getElementById("tela-tap");
+    const tapRectElement = document.getElementById("tela-tap");
+    const rect = tapRectElement.getBoundingClientRect();
     const cloneSVG = originalSVG.cloneNode(true);
-    const posicaoX = parseInt(tap.getAttribute("x")) + 98;
-    const posicaoY = parseInt(tap.getAttribute("y")) + 5;
     cloneSVG.id = "clone-tap";
-    cloneSVG.style.top = posicaoY;
-    cloneSVG.style.left = posicaoX;
+    cloneSVG.style.position = "absolute";
+    // Offsets finos configuráveis (px)
+    const offX = parseInt(sessionStorage.getItem('cloneTapOffsetX') || '0', 10);
+    const offY = parseInt(sessionStorage.getItem('cloneTapOffsetY') || '0', 10);
+    cloneSVG.style.top = (rect.top + offY) + "px";
+    cloneSVG.style.left = (rect.left + offX) + "px";
+    cloneSVG.style.width = rect.width + "px";
+    cloneSVG.style.height = rect.height + "px";
     document.body.appendChild(cloneSVG);
+}
+
+// Utilitário para ajuste fino via console/UI
+function setCloneTapOffset(x, y) {
+    sessionStorage.setItem('cloneTapOffsetX', String(x || 0));
+    sessionStorage.setItem('cloneTapOffsetY', String(y || 0));
+    clonarSvg();
 }
 
 function apagarClone() {
@@ -840,7 +964,7 @@ function volumeSpeaker(volume) {
     let somEsquerda = document.getElementById("som-esquerda");
     let somDireita = document.getElementById("som-direita");
 
-    if (checkUsbCamera()) {
+    if (checkUsbCamera() && checkMeetupLigada()) {
         if (volume <= 50 && volume > 0) {
             somEsquerda.setAttribute("href", "img/som-normal.png");
             somDireita.setAttribute("href", "img/som-normal.png");
@@ -875,7 +999,7 @@ function volumeSpeaker(volume) {
 
 function mutarMicrofone() {
     const fundoMicrofonePreview = document.getElementById("fundo-microfone-preview");
-    if (!checkUsbCamera()) {
+    if (!checkUsbCamera() || !checkMeetupLigada()) {
         mutar();
     }
     else {
@@ -920,33 +1044,29 @@ function naoFalando() {
 
 function ligarFalar() {
     const chkFalar = document.getElementById("sala-falar");
-    if (checkEstadoMicrofone()) { // se microfone aberto
-        if (chkFalar.getAttribute("checked") == "checked") {
-
-            naoFalando();
-            pararAnimarFala();
-            chkFalar.setAttribute("checked", "unchecked");
-        }
-        else {
-            falando();
-            animarFala();
-            chkFalar.setAttribute("checked", "checked");
-        }
+    // Verifica se o checkbox está habilitado
+    if (chkFalar.disabled) {
+        return;
     }
-
-    else {
-        if (chkFalar.getAttribute("checked") == "checked") {
-            naoFalando();
-            pararAnimarFala();
-            mutar();
-            chkFalar.setAttribute("checked", "unchecked");
-        }
-        else {
+    
+    // O estado do checkbox já mudou quando o evento onclick dispara
+    if (chkFalar.checked) {
+        // Checkbox foi marcado - ativar fala
+        if (checkEstadoMicrofone()) {
+            // Microfone já está aberto
             falando();
             animarFala();
-            mutar();
-            chkFalar.setAttribute("checked", "checked");
+        } else {
+            // Microfone está mutado - desmutar e falar
+            desmutar();
+            falando();
+            animarFala();
         }
+    } else {
+        // Checkbox foi desmarcado - parar fala
+        naoFalando();
+        pararAnimarFala();
+        // Não mutar automaticamente quando desmarcar
     }
 }
 
@@ -978,20 +1098,61 @@ function mudarImagemRemoto() {
 }
 
 function mudarPalavras() {
-    const palavras = ["bla bla bla", "graficos", "etc", "com isso", "telas", "enquanto", "blah", "planilhas", "sem"];
+    const palavras = [
+        "Alinhando os próximos passos",
+        "Status do projeto atualizado",
+        "Dependências entre equipes",
+        "Prazo e riscos mapeados",
+        "Priorização do backlog",
+        "Aprovação de orçamento",
+        "Indicadores e resultados",
+        "Ações e responsáveis",
+        "Bloqueios e alternativas",
+        "Planejamento da semana",
+        "Feedback do cliente",
+        "Escopo e mudanças",
+        "Cronograma revisado",
+        "Roadmap e entregas",
+        "Ajustes de qualidade"
+    ];
     let index = 0;
     const texto = document.getElementById("texto-cc");
+    const bg = document.getElementById("cc-bg");
     texto.style.display = "block";
-    index = getRandomInt(0, 8);
+    bg.style.display = "block";
+    index = getRandomInt(0, palavras.length - 1);
     index = (index + 1) % palavras.length;
     texto.textContent = palavras[index];
+    // Centralizar horizontalmente na tela da TV
+    // Tela TV: x=615, width=420, centro = 615 + 420/2 = 825
+    const tvCenterX = 825;
+    try {
+        const bbox = texto.getBBox();
+        const padX = 8; // horizontal padding
+        const padY = 4; // vertical padding
+        
+        // Texto já está com text-anchor: middle, então x é o centro
+        texto.setAttribute('x', String(tvCenterX));
+        
+        // Centralizar fundo baseado no texto centralizado
+        bg.setAttribute('x', String(tvCenterX - (bbox.width / 2) - padX));
+        bg.setAttribute('y', String(bbox.y - padY));
+        bg.setAttribute('width', String(bbox.width + padX * 2));
+        bg.setAttribute('height', String(bbox.height + padY * 2));
+    } catch (e) {
+        // fallback: centralizar com valores padrão
+        texto.setAttribute('x', String(tvCenterX));
+        bg.setAttribute('x', String(tvCenterX - 90));
+    }
 }
 function startLoop2() {
     intervaloPalavras = setInterval(mudarPalavras, 2000);
 }
 function stopLoop2() {
     const texto = document.getElementById("texto-cc");
+    const bg = document.getElementById("cc-bg");
     texto.style.display = "none";
+    bg.style.display = "none";
     clearInterval(intervaloPalavras);
 }
 
@@ -1024,9 +1185,11 @@ function stopLoop() {
 function pararAnimarFala() {
     const imagem = document.getElementById("fala01");
     const texto = document.getElementById("texto-cc");
+    const bg = document.getElementById("cc-bg");
     stopLoop();
     stopLoop2();
     texto.style.display = "none";
+    bg.style.display = "none";
     imagem.style.display = "none";
 }
 
@@ -1175,11 +1338,11 @@ function apresentar() {
     }
 }
 
-function checkApresentando(){
-    if(document.getElementById("botao-apresentar").style.display == "block"){
+function checkApresentando() {
+    if (document.getElementById("botao-apresentar").style.display == "block") {
         return true;
     }
-    else{
+    else {
         return false;
     }
 }
@@ -1353,13 +1516,13 @@ function ligarParticipante() {
     const check = document.getElementById("add-participante");
     if (checkTV() && checkHdmiTv()) {
         if (!checkParticipante()) {
-            check.setAttribute("checked", "unchecked");
+            check.checked = false;
             removerParticipante();
             resetCheckboxes();
             desabilitarCheckBox("participante-falar");
         }
         else {
-            check.setAttribute("checked", "checked");
+            check.checked = true;
             adicionarParticipante();
             habilitarCheckBox("participante-falar");
         }
@@ -1437,7 +1600,7 @@ function checkMeeting() {
 
 function checkLigarFalarParticipante() {
     const checkLigarFalar = document.getElementById("participante-falar");
-    return checkLigarFalar.check;
+    return checkLigarFalar.checked;
 }
 function falandoRemoto() {
     const audioAtivo = document.getElementById("audio-remoto");
@@ -1469,20 +1632,21 @@ function ligarFalarParticipante() {
     const chkFalar = document.getElementById("participante-falar");
     const cc = document.getElementById("ligar-cc");
 
-    if (checkParticipante()) {
+    // Não faz nada se desabilitado ou sem participante remoto
+    if (chkFalar.disabled || !checkParticipante()) {
+        return;
+    }
 
-        if (chkFalar.getAttribute("checked") == "checked") {
-            stopLoop2();
-            naoFalandoRemoto();
-            chkFalar.setAttribute("checked", "unchecked");
+    if (chkFalar.checked) {
+        // Marcado: participante falando
+        if (cc.getAttribute("href") == "img/ligar-azul.png") {
+            startLoop2();
         }
-        else {
-            if (cc.getAttribute("href") == "img/ligar-azul.png") {
-                startLoop2();
-            }
-            falandoRemoto();
-            chkFalar.setAttribute("checked", "checked");
-        }
+        falandoRemoto();
+    } else {
+        // Desmarcado: participante para de falar
+        naoFalandoRemoto();
+        stopLoop2();
     }
 }
 
@@ -1600,6 +1764,9 @@ function fecharControleCamera() {
 }
 function checkCamera() {
     const fundoCameraPreview = document.getElementById("circulo-camera");
+    if (!checkMeetupLigada()) {
+        return false;
+    }
     if (fundoCameraPreview.style.fill == "none") {
         return true;
     }
