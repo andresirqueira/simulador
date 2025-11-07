@@ -2303,6 +2303,98 @@ function refreshRoomDisplay() {
 }
 
 
+function inicializarControleRemoto() {
+    const controle = document.getElementById("controle-remoto");
+    const handle = document.getElementById("controle-remote-handle");
+
+    if (!controle || !handle) {
+        return;
+    }
+
+    controle.dataset.arrastando = "false";
+
+    requestAnimationFrame(() => {
+        const rect = controle.getBoundingClientRect();
+        controle.style.left = `${rect.left}px`;
+        controle.style.top = `${rect.top}px`;
+        controle.style.right = "auto";
+        controle.style.bottom = "auto";
+        limitarControleDentroDaTela(controle);
+    });
+
+    let pointerId = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    const iniciarArraste = (event) => {
+        if (event.button !== undefined && event.pointerType === "mouse" && event.button !== 0) {
+            return;
+        }
+
+        pointerId = event.pointerId;
+        offsetX = event.clientX - (parseFloat(controle.style.left) || 0);
+        offsetY = event.clientY - (parseFloat(controle.style.top) || 0);
+
+        controle.dataset.arrastando = "true";
+        handle.classList.add("arrastando");
+        handle.setPointerCapture(pointerId);
+    };
+
+    const moverArraste = (event) => {
+        if (controle.dataset.arrastando !== "true") {
+            return;
+        }
+
+        const maxLeft = window.innerWidth - controle.offsetWidth - 16;
+        const maxTop = window.innerHeight - controle.offsetHeight - 16;
+
+        const novoLeft = event.clientX - offsetX;
+        const novoTop = event.clientY - offsetY;
+
+        controle.style.left = `${Math.min(Math.max(16, novoLeft), Math.max(16, maxLeft))}px`;
+        controle.style.top = `${Math.min(Math.max(16, novoTop), Math.max(16, maxTop))}px`;
+    };
+
+    const finalizarArraste = () => {
+        if (controle.dataset.arrastando !== "true") {
+            return;
+        }
+
+        controle.dataset.arrastando = "false";
+        handle.classList.remove("arrastando");
+
+        if (pointerId !== null) {
+            handle.releasePointerCapture(pointerId);
+            pointerId = null;
+        }
+
+        limitarControleDentroDaTela(controle);
+    };
+
+    handle.addEventListener("pointerdown", iniciarArraste);
+    handle.addEventListener("pointermove", moverArraste);
+    handle.addEventListener("pointerup", finalizarArraste);
+    handle.addEventListener("pointercancel", finalizarArraste);
+
+    window.addEventListener("resize", () => {
+        requestAnimationFrame(() => limitarControleDentroDaTela(controle));
+    });
+}
+
+function limitarControleDentroDaTela(controle) {
+    const maxLeft = window.innerWidth - controle.offsetWidth - 16;
+    const maxTop = window.innerHeight - controle.offsetHeight - 16;
+
+    const leftAtual = parseFloat(controle.style.left) || 16;
+    const topAtual = parseFloat(controle.style.top) || 16;
+
+    controle.style.left = `${Math.min(Math.max(16, leftAtual), Math.max(16, maxLeft))}px`;
+    controle.style.top = `${Math.min(Math.max(16, topAtual), Math.max(16, maxTop))}px`;
+}
+
+window.addEventListener('load', inicializarControleRemoto);
+
+
 
 
 

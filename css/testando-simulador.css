@@ -12,6 +12,19 @@ body {
   flex-wrap: nowrap;
 }
 
+@media (max-width: 1200px) {
+  body {
+    flex-direction: column;
+    align-items: center;
+    padding: 24px;
+    gap: 24px;
+  }
+
+  #elemento-pai {
+    width: min(100%, 1100px);
+  }
+}
+
 div {
   color: white;
 }
@@ -23,6 +36,58 @@ div {
   overflow: visible;
   width: 1100px;
   max-width: 1100px;
+}
+
+#controle-remoto {
+  position: fixed;
+  top: 48px;
+  right: 48px;
+  width: min(360px, calc(100vw - 64px));
+  max-height: calc(100vh - 96px);
+  background: rgba(10, 18, 32, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 1000;
+  color: #f5f5f5;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+#controle-remoto[data-arrastando="true"] {
+  transform: scale(1.02);
+  box-shadow: 0 26px 55px rgba(0, 0, 0, 0.55);
+}
+
+#controle-remote-handle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: grab;
+  user-select: none;
+  font-family: "Roboto Mono", monospace;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #edc77d;
+}
+
+#controle-remote-handle.arrastando {
+  cursor: grabbing;
+}
+
+.controle-remote-titulo {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+}
+
+.controle-remote-grip {
+  font-size: 18px;
+  letter-spacing: 6px;
+  color: rgba(255, 255, 255, 0.45);
 }
 
 #area {
@@ -208,27 +273,24 @@ label {
 }
 
 #geral {
-  padding-top: 0;
-  width: 360px;
-  max-width: 360px;
-  height: auto;
+  padding: 18px 24px 24px;
+  width: 100%;
+  box-sizing: border-box;
+  max-height: calc(100vh - 170px);
+  overflow-y: auto;
 }
 
-@media (max-width: 1500px) {
-  body {
-    flex-direction: column;
-    align-items: center;
-  }
+#geral::-webkit-scrollbar {
+  width: 6px;
+}
 
-  #elemento-pai,
-  #geral {
-    width: 100%;
-    max-width: 1100px;
-  }
+#geral::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
 
-  #geral {
-    max-width: 600px;
-  }
+#geral::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* Checkbox UX: disabled, hover e focus */
@@ -247,13 +309,6 @@ label {
 .container input[type="checkbox"][disabled] + .checkmark {
   opacity: 0.7;
   cursor: default;
-}
-
-/* Responsividade básica */
-@media (max-width: 1200px) {
-  #elemento-pai, #geral {
-    width: 100%;
-  }
 }
 
 #codigo-reuniao-tap {
