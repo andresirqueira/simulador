@@ -2185,6 +2185,7 @@ function refreshRoomDisplay() {
 
     const statusRefresh = document.getElementById("status-refresh-display");
     const refreshButton = document.getElementById("btn-refresh-display");
+    const previousDisplays = [];
 
     if (refreshDisplayInProgress) {
         return;
@@ -2213,12 +2214,35 @@ function refreshRoomDisplay() {
 
     tvStates.forEach(el => {
         if (el) {
-            el.setAttribute("data-prev-display", el.style.display || "");
+            previousDisplays.push(el.style.display || "");
             el.style.display = "none";
         }
     });
 
+    const blackScreen = document.getElementById("tela-tv");
+    if (blackScreen) {
+        blackScreen.style.display = "block";
+        blackScreen.style.opacity = "1";
+    }
+
     const turnOnTimeout = setTimeout(() => {
+        tvStates.forEach((el, index) => {
+            if (!el) {
+                return;
+            }
+
+            if (el.id === "tela-tv") {
+                el.style.display = "none";
+                el.style.opacity = "1";
+                return;
+            }
+
+            const prev = previousDisplays[index];
+            if (typeof prev !== "undefined") {
+                el.style.display = prev;
+            }
+        });
+
         if (statusRefresh) {
             statusRefresh.textContent = "Tela reativada.";
             statusRefresh.style.fill = "#1790f3";
