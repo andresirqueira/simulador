@@ -2393,6 +2393,13 @@ function limitarControleDentroDaTela(controle) {
 }
 
 window.addEventListener('load', inicializarControleRemoto);
+window.addEventListener('resize', () => {
+    const controle = document.getElementById("controle-remoto");
+    if (!controle) {
+        return;
+    }
+    requestAnimationFrame(() => limitarControleDentroDaTela(controle));
+});
 
 
 
