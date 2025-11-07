@@ -359,13 +359,19 @@ function conectarDesconectarHdmiNotebook() {
 function ligarDesligarNotebook() {
     const notebook = document.getElementById("notebook");
     const iconNotebook = document.getElementById("energia-notebook");
+    const notebookScreenOn = document.getElementById("notebook-screen-on");
+    const notebookScreenOff = document.getElementById("notebook-screen-off");
     if (checkNotebook()) {
         notebook.style.display = "block";
         iconNotebook.style.display = "block";
+        if (notebookScreenOn) notebookScreenOn.style.display = "block";
+        if (notebookScreenOff) notebookScreenOff.style.display = "none";
     }
     else {
-        notebook.style.display = "none";
+        notebook.style.display = "block";
         iconNotebook.style.display = "none";
+        if (notebookScreenOn) notebookScreenOn.style.display = "none";
+        if (notebookScreenOff) notebookScreenOff.style.display = "block";
     }
     desligarApresentacao();
     verificaTudo();
@@ -1358,6 +1364,12 @@ function ligarApresentacao() {
     document.getElementById("botao-apresentar").style.display = "block";
     document.getElementById("apresentar").setAttribute("href", "img/hdmi-branco.png");
     document.getElementById("menu-apresentar").style.fill = "white";
+    const notebookScreenOn = document.getElementById("notebook-screen-on");
+    const notebookScreenOff = document.getElementById("notebook-screen-off");
+    if (checkNotebook()) {
+        if (notebookScreenOn) notebookScreenOn.style.display = "block";
+        if (notebookScreenOff) notebookScreenOff.style.display = "none";
+    }
     selecionarImagemTV('apresentacao sala');
     sessionStorage.setItem('ultimo-tv', 'apresentacao sala');
 }
@@ -1733,6 +1745,8 @@ function apresentarNaMeet() {
     const txtApresentar = document.getElementById("txt-apresentar");
     const telaApresentar = document.getElementById("tela-apresentar");
     const telaPreviewMeeting = document.getElementById("meeting");
+    const notebookScreenOn = document.getElementById("notebook-screen-on");
+    const notebookScreenOff = document.getElementById("notebook-screen-off");
 
     telaPreviewMeeting.setAttribute("filter", "url(#blurFilter)");
 
@@ -1741,6 +1755,8 @@ function apresentarNaMeet() {
             iconeApresentar.setAttribute("href", "img/apresentar-azul.png");
             txtApresentar.style.fill = "#1790f3";
             telaApresentar.style.display = "block"
+            if (notebookScreenOn) notebookScreenOn.style.display = "block";
+            if (notebookScreenOff) notebookScreenOff.style.display = "none";
         }
     }
 }
