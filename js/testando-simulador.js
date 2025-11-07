@@ -2164,6 +2164,90 @@ function reiniciarChromebox() {
     restartChromeboxTimers.push(ligarTimeout);
 }
 
+let refreshDisplayTimeouts = [];
+let refreshDisplayMessageTimeout;
+let refreshDisplayInProgress = false;
+
+function refreshRoomDisplay() {
+    const tvStates = [
+        document.getElementById("inicial"),
+        document.getElementById("inicial-chromeos"),
+        document.getElementById("imagem-inicial"),
+        document.getElementById("sinal-TV"),
+        document.getElementById("img-tv-sem-imagem"),
+        document.getElementById("reuniao-solo"),
+        document.getElementById("reuniao-remoto"),
+        document.getElementById("apresentando"),
+        document.getElementById("joining"),
+        document.getElementById("left-meeting"),
+        document.getElementById("tela-tv")
+    ];
+
+    const statusRefresh = document.getElementById("status-refresh-display");
+    const refreshButton = document.getElementById("btn-refresh-display");
+
+    if (refreshDisplayInProgress) {
+        return;
+    }
+
+    refreshDisplayInProgress = true;
+
+    refreshDisplayTimeouts.forEach(clearTimeout);
+    refreshDisplayTimeouts = [];
+    clearTimeout(refreshDisplayMessageTimeout);
+
+    if (refreshButton) {
+        refreshButton.style.fill = "gray";
+        refreshButton.style.cursor = "default";
+        refreshButton.style.opacity = "0.6";
+        refreshButton.style.pointerEvents = "none";
+    }
+
+    if (statusRefresh) {
+        statusRefresh.style.display = "block";
+        statusRefresh.style.fill = "#1790f3";
+        statusRefresh.textContent = "Reiniciando tela da sala...";
+    }
+
+    const previousSessionState = sessionStorage.getItem('ultimo-tv');
+
+    tvStates.forEach(el => {
+        if (el) {
+            el.setAttribute("data-prev-display", el.style.display || "");
+            el.style.display = "none";
+        }
+    });
+
+    const turnOnTimeout = setTimeout(() => {
+        if (statusRefresh) {
+            statusRefresh.textContent = "Tela reativada.";
+            statusRefresh.style.fill = "#1790f3";
+            statusRefresh.style.display = "block";
+            refreshDisplayMessageTimeout = setTimeout(() => {
+                statusRefresh.style.display = "none";
+            }, 2000);
+        }
+
+        if (refreshButton) {
+            refreshButton.style.fill = "#1790f3";
+            refreshButton.style.cursor = "pointer";
+            refreshButton.style.opacity = "1";
+            refreshButton.style.pointerEvents = "auto";
+        }
+
+        refreshDisplayInProgress = false;
+
+        if (previousSessionState) {
+            selecionarImagemTV(previousSessionState);
+        }
+        else {
+            selecionarImagemTV('inicio');
+        }
+    }, 2000);
+
+    refreshDisplayTimeouts.push(turnOnTimeout);
+}
+
 
 
 

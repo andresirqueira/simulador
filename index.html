@@ -746,8 +746,8 @@
                         <text x="120" y="135" style="font-size: x-small;" class="meet-sala">Refresh room display</text>
                         <rect width="70" height="20" x="300" y="120"
                             style="fill:none; stroke:gray;stroke-opacity: 10%; stroke-width: 1;"></rect>
-                        <text x="320" y="133" style="font-size: 8px; fill:#1790f3; font-weight: bold;"
-                            class="meet-sala">Refresh</text>
+                        <text x="320" y="133" style="font-size: 8px; fill:#1790f3; font-weight: bold;cursor:pointer"
+                            class="meet-sala" id="btn-refresh-display" onclick="refreshRoomDisplay()">Refresh</text>
 
                         <text x="120" y="160" style="font-size: x-small;" class="meet-sala">Restart this device</text>
                         <rect width="70" height="20" x="300" y="145"
@@ -763,6 +763,9 @@
 
                         <text x="120" y="205" style="font-size: 7px; fill:#1790f3; display:none;"
                             class="meet-sala" id="status-restart-device"></text>
+
+                        <text x="120" y="195" style="font-size: 7px; fill:#1790f3; display:none;"
+                            class="meet-sala" id="status-refresh-display"></text>
 
                     </g>
 
