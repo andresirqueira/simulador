@@ -446,6 +446,10 @@ function checkEstadoMicrofone() {
 }
 
 function selecionarImagemTV(opcao) {
+    const apresentacaoAnimada = document.getElementById("apresentacao-animada");
+    if (apresentacaoAnimada) {
+        apresentacaoAnimada.style.display = "none";
+    }
     switch (opcao) {
         case 'inicio':
             document.getElementById("imagem-inicial").style.display = "block";
@@ -515,8 +519,11 @@ function selecionarImagemTV(opcao) {
             document.getElementById("sinal-TV").style.display = "none";
             document.getElementById("img-tv-sem-imagem").style.display = "none";
             document.getElementById("reuniao-solo").style.display = "none";
-            document.getElementById("apresentando").style.display = "block";
+            document.getElementById("apresentando").style.display = "none";
             document.getElementById("reuniao-remoto").style.display = "none";
+            if (apresentacaoAnimada) {
+                apresentacaoAnimada.style.display = "block";
+            }
             break;
         default:
             break;
@@ -2178,6 +2185,7 @@ function refreshRoomDisplay() {
         document.getElementById("reuniao-solo"),
         document.getElementById("reuniao-remoto"),
         document.getElementById("apresentando"),
+        document.getElementById("apresentacao-animada"),
         document.getElementById("joining"),
         document.getElementById("left-meeting"),
         document.getElementById("tela-tv")
