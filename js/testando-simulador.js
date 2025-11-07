@@ -530,6 +530,12 @@ function selecionarImagemTV(opcao) {
             if (apresentacaoAnimada) {
                 apresentacaoAnimada.style.display = "block";
             }
+            const notebookScreenOn = document.getElementById("notebook-screen-on");
+            const notebookScreenOff = document.getElementById("notebook-screen-off");
+            if (checkNotebook()) {
+                if (notebookScreenOn) notebookScreenOn.style.display = "block";
+                if (notebookScreenOff) notebookScreenOff.style.display = "none";
+            }
             break;
         default:
             break;
