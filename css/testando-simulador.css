@@ -80,7 +80,8 @@ div {
 #controle-remoto {
   position: fixed;
   top: 48px;
-  right: 48px;
+  left: 48px;
+  right: auto;
   width: min(420px, calc(100vw - 64px));
   max-height: calc(100vh - 96px);
   background: rgba(10, 18, 32, 0.94);
@@ -92,6 +93,34 @@ div {
   z-index: 1000;
   color: #f5f5f5;
   transition: transform .2s ease, box-shadow .2s ease;
+}
+
+#preview-panel {
+  position: fixed;
+  top: 48px;
+  right: 48px;
+  left: auto;
+  width: min(420px, calc(100vw - 64px));
+  background: rgba(10, 18, 32, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #f5f5f5;
+  padding: 18px 24px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 950;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+}
+
+#preview-panel[data-arrastando="true"] {
+  transform: scale(1.02);
+  box-shadow: 0 26px 55px rgba(0, 0, 0, 0.55);
 }
 
 #controle-remoto[data-arrastando="true"] {
@@ -111,6 +140,26 @@ div {
   font-weight: 600;
   letter-spacing: 0.4px;
   color: #edc77d;
+}
+
+#preview-panel-handle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: grab;
+  user-select: none;
+  font-family: "Roboto Mono", monospace;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: #edc77d;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#preview-panel-handle.arrastando {
+  cursor: grabbing;
 }
 
 #controle {
@@ -166,7 +215,9 @@ div {
 }
 
 #preview {
-  padding: 18px 0 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

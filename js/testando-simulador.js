@@ -99,16 +99,26 @@ function verificaTudo() {
             if (checkTV()) {
                 console.log(">>> TV ON");
                 if (checkHdmiTv()) {
-                    console.log(">>>> HDMI ON - TV ON - TELA APAGADA");
-                    selecionarImagemTV('apagada');
+                    if (checkChromebox()) {
+                        console.log(">>>> HDMI ON - TV ON - SEM INTERNET");
+                        selecionarImagemTV('sem internet');
+                        selecionarImagemTAP('sem internet');
+                    }
+                    else {
+                        console.log(">>>> HDMI ON - TV ON - TELA APAGADA");
+                        selecionarImagemTV('apagada');
+                        selecionarImagemTAP('apagada');
+                    }
                 }
                 else {
                     console.log(">>>> HDMI OFF - TV ON - SEM SINAL");
                     selecionarImagemTV('sem sinal');
+                    selecionarImagemTAP('apagada');
                 }
             } else {
                 console.log(">>> TV OFF");
                 selecionarImagemTV('apagada');
+                selecionarImagemTAP('apagada');
             }
             if (checkTAP()) {
                 console.log(">>> TAP ON");
@@ -138,48 +148,31 @@ function verificaTudo() {
                 console.log(">>> TV OFF");//TV DESLIGADA
                 selecionarImagemTV('apagada');
             }
-            if (checkTAP()) {
-                console.log(">>> TAP ON");//TAP LIGADO
-                if (checkUsbTap()) {
-                    console.log(">>>> USB TAP ON");// CABO USB TAP LIGADO
-                    selecionarImagemTAP('apagada');
-                }
-                else {
-                    console.log(">>>> USB TAP OFF");//CABO USB TAP DESLIGADO
-                    selecionarImagemTAP('apagada');
-                }
-            }
-            else {
-                console.log(">>> TAP OFF");//TAP DESLIGADO
-                selecionarImagemTAP('apagada');
-            }
+            selecionarImagemTAP('apagada');
         }
         else {
             console.log(">> REDE OFF");
             if (checkTV()) {
                 console.log(">>> TV ON");
-                selecionarImagemTV('sem sinal');
+                if (checkHdmiTv() && checkChromebox()) {
+                    selecionarImagemTV('sem internet');
+                    selecionarImagemTAP('sem internet');
+                }
+                else if (checkHdmiTv()) {
+                    selecionarImagemTV('apagada');
+                    selecionarImagemTAP('apagada');
+                }
+                else {
+                    selecionarImagemTV('sem sinal');
+                    selecionarImagemTAP('apagada');
+                }
 
             } else {
                 console.log(">>> TV OFF");
                 selecionarImagemTV('apagada');
-            }
-            if (checkTAP()) {
-                console.log(">>> TAP ON");
-                if (checkUsbTap()) {
-                    console.log(">>>> USB TAP ON");
-                    selecionarImagemTAP('apagada');
-
-                }
-                else {
-                    console.log(">>>> USB TAP OFF");
-                    selecionarImagemTAP('apagada');
-                }
-            }
-            else {
-                console.log(">>> TAP OFF");
                 selecionarImagemTAP('apagada');
             }
+            selecionarImagemTAP('apagada');
         }
     }
     atualizarEstadoBotoesControle();
@@ -197,7 +190,11 @@ function ligarDesligarChromebox() {
             selecionarImagemTV('inicio load');
         }
         if (checkTAP() && checkUsbTap()) {
-            selecionarImagemTAP('inicio load');
+            if (checkInternet()) {
+                selecionarImagemTAP('inicio load');
+            } else {
+                selecionarImagemTAP('sem internet');
+            }
         }
     }
     else {
@@ -465,6 +462,7 @@ function selecionarImagemTV(opcao) {
             document.getElementById("reuniao-solo").style.display = "none";
             document.getElementById("apresentando").style.display = "none";
             document.getElementById("left-meeting").style.display = "none";
+            document.getElementById("sem-internet-tv").style.display = "none";
             break;
         case 'inicio load':
             document.getElementById("inicial-chromeos").style.display = "block";
@@ -488,6 +486,7 @@ function selecionarImagemTV(opcao) {
             document.getElementById("sem-internet-preview").style.display = "none";
             document.getElementById("entrar-meeting-preview").style.display = "none";
             document.getElementById("meeting").style.display = "none";
+            document.getElementById("sem-internet-tv").style.display = "none";
             break;
         case 'sem sinal':
             document.getElementById("imagem-inicial").style.display = "none";
@@ -496,6 +495,7 @@ function selecionarImagemTV(opcao) {
             document.getElementById("reuniao-solo").style.display = "none";
             document.getElementById("apresentando").style.display = "none";
             document.getElementById("reuniao-remoto").style.display = "none";
+            document.getElementById("sem-internet-tv").style.display = "none";
             break;
         case 'apagada':
             document.getElementById("imagem-inicial").style.display = "none";
@@ -504,6 +504,7 @@ function selecionarImagemTV(opcao) {
             document.getElementById("reuniao-solo").style.display = "none";
             document.getElementById("apresentando").style.display = "none";
             document.getElementById("reuniao-remoto").style.display = "none";
+            document.getElementById("sem-internet-tv").style.display = "none";
             break;
         case 'meeting solo':
             document.getElementById("imagem-inicial").style.display = "none";
@@ -512,6 +513,7 @@ function selecionarImagemTV(opcao) {
             document.getElementById("reuniao-solo").style.display = "block";
             document.getElementById("apresentando").style.display = "none";
             document.getElementById("reuniao-remoto").style.display = "none";
+            document.getElementById("sem-internet-tv").style.display = "none";
             break;
         case 'meeting remoto':
             document.getElementById("imagem-inicial").style.display = "none";
@@ -520,6 +522,7 @@ function selecionarImagemTV(opcao) {
             document.getElementById("reuniao-solo").style.display = "none";
             document.getElementById("apresentando").style.display = "none";
             document.getElementById("reuniao-remoto").style.display = "block";
+            document.getElementById("sem-internet-tv").style.display = "none";
             break;
         case 'apresentacao sala':
             document.getElementById("imagem-inicial").style.display = "none";
@@ -528,6 +531,7 @@ function selecionarImagemTV(opcao) {
             document.getElementById("reuniao-solo").style.display = "none";
             document.getElementById("apresentando").style.display = "none";
             document.getElementById("reuniao-remoto").style.display = "none";
+            document.getElementById("sem-internet-tv").style.display = "none";
             if (apresentacaoAnimada) {
                 apresentacaoAnimada.style.display = "block";
             }
@@ -537,6 +541,15 @@ function selecionarImagemTV(opcao) {
                 if (notebookScreenOn) notebookScreenOn.style.display = "block";
                 if (notebookScreenOff) notebookScreenOff.style.display = "none";
             }
+            break;
+        case 'sem internet':
+            document.getElementById("imagem-inicial").style.display = "none";
+            document.getElementById("sinal-TV").style.display = "none";
+            document.getElementById("img-tv-sem-imagem").style.display = "none";
+            document.getElementById("reuniao-solo").style.display = "none";
+            document.getElementById("apresentando").style.display = "none";
+            document.getElementById("reuniao-remoto").style.display = "none";
+            document.getElementById("sem-internet-tv").style.display = "block";
             break;
         default:
             break;
@@ -2321,65 +2334,73 @@ document.addEventListener('change', (event) => {
     }
 });
 
+function inicializarPainelArrastavel(painelId, handleId, obterPosicaoInicial) {
+    const painel = document.getElementById(painelId);
+    const handle = document.getElementById(handleId);
 
-function inicializarControleRemoto() {
-    const controle = document.getElementById("controle-remoto");
-    const handle = document.getElementById("controle-remote-handle");
-
-    if (!controle || !handle) {
+    if (!painel || !handle) {
         return;
     }
 
-    controle.dataset.arrastando = "false";
+    painel.dataset.arrastando = "false";
 
     requestAnimationFrame(() => {
-        const rect = controle.getBoundingClientRect();
-        controle.style.left = `${rect.left}px`;
-        controle.style.top = `${rect.top}px`;
-        controle.style.right = "auto";
-        controle.style.bottom = "auto";
-        limitarControleDentroDaTela(controle);
+        const rect = painel.getBoundingClientRect();
+        const posInicial = typeof obterPosicaoInicial === "function" ? obterPosicaoInicial(painel) : null;
+        const leftInicial = posInicial && typeof posInicial.left === "number" ? posInicial.left : rect.left;
+        const topInicial = posInicial && typeof posInicial.top === "number" ? posInicial.top : rect.top;
+
+        painel.style.left = `${leftInicial}px`;
+        painel.style.top = `${topInicial}px`;
+        painel.style.right = "auto";
+        painel.style.bottom = "auto";
+        limitarPainelDentroDaTela(painel);
     });
 
     let pointerId = null;
+    let arrastando = false;
     let offsetX = 0;
     let offsetY = 0;
 
     const iniciarArraste = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
         if (event.button !== undefined && event.pointerType === "mouse" && event.button !== 0) {
             return;
         }
 
         pointerId = event.pointerId;
-        offsetX = event.clientX - (parseFloat(controle.style.left) || 0);
-        offsetY = event.clientY - (parseFloat(controle.style.top) || 0);
+        offsetX = event.clientX - (parseFloat(painel.style.left) || 0);
+        offsetY = event.clientY - (parseFloat(painel.style.top) || 0);
 
-        controle.dataset.arrastando = "true";
+        arrastando = true;
+        painel.dataset.arrastando = "true";
         handle.classList.add("arrastando");
         handle.setPointerCapture(pointerId);
     };
 
     const moverArraste = (event) => {
-        if (controle.dataset.arrastando !== "true") {
+        if (!arrastando || painel.dataset.arrastando !== "true" || event.pointerId !== pointerId) {
             return;
         }
 
-        const maxLeft = window.innerWidth - controle.offsetWidth - 16;
-        const maxTop = window.innerHeight - controle.offsetHeight - 16;
+        const maxLeft = window.innerWidth - painel.offsetWidth - 16;
+        const maxTop = window.innerHeight - painel.offsetHeight - 16;
 
         const novoLeft = event.clientX - offsetX;
         const novoTop = event.clientY - offsetY;
 
-        controle.style.left = `${Math.min(Math.max(16, novoLeft), Math.max(16, maxLeft))}px`;
-        controle.style.top = `${Math.min(Math.max(16, novoTop), Math.max(16, maxTop))}px`;
+        painel.style.left = `${Math.min(Math.max(16, novoLeft), Math.max(16, maxLeft))}px`;
+        painel.style.top = `${Math.min(Math.max(16, novoTop), Math.max(16, maxTop))}px`;
     };
 
     const finalizarArraste = () => {
-        if (controle.dataset.arrastando !== "true") {
+        if (!arrastando) {
             return;
         }
 
-        controle.dataset.arrastando = "false";
+        painel.dataset.arrastando = "false";
+        arrastando = false;
         handle.classList.remove("arrastando");
 
         if (pointerId !== null) {
@@ -2387,7 +2408,7 @@ function inicializarControleRemoto() {
             pointerId = null;
         }
 
-        limitarControleDentroDaTela(controle);
+        limitarPainelDentroDaTela(painel);
     };
 
     handle.addEventListener("pointerdown", iniciarArraste);
@@ -2396,29 +2417,44 @@ function inicializarControleRemoto() {
     handle.addEventListener("pointercancel", finalizarArraste);
 
     window.addEventListener("resize", () => {
-        requestAnimationFrame(() => limitarControleDentroDaTela(controle));
+        requestAnimationFrame(() => limitarPainelDentroDaTela(painel));
     });
 }
 
-function limitarControleDentroDaTela(controle) {
-    const maxLeft = window.innerWidth - controle.offsetWidth - 16;
-    const maxTop = window.innerHeight - controle.offsetHeight - 16;
+function limitarPainelDentroDaTela(painel) {
+    const maxLeft = window.innerWidth - painel.offsetWidth - 16;
+    const maxTop = window.innerHeight - painel.offsetHeight - 16;
 
-    const leftAtual = parseFloat(controle.style.left) || 16;
-    const topAtual = parseFloat(controle.style.top) || 16;
+    const leftAtual = parseFloat(painel.style.left) || 16;
+    const topAtual = parseFloat(painel.style.top) || 16;
 
-    controle.style.left = `${Math.min(Math.max(16, leftAtual), Math.max(16, maxLeft))}px`;
-    controle.style.top = `${Math.min(Math.max(16, topAtual), Math.max(16, maxTop))}px`;
+    painel.style.left = `${Math.min(Math.max(16, leftAtual), Math.max(16, maxLeft))}px`;
+    painel.style.top = `${Math.min(Math.max(16, topAtual), Math.max(16, maxTop))}px`;
 }
 
-window.addEventListener('load', inicializarControleRemoto);
+window.addEventListener('load', () => {
+    inicializarPainelArrastavel("controle-remoto", "controle-remote-handle", () => ({
+        left: 48,
+        top: 48
+    }));
+    inicializarPainelArrastavel("preview-panel", "preview-panel-handle", (painel) => ({
+        left: Math.max(16, window.innerWidth - painel.offsetWidth - 48),
+        top: 48
+    }));
+});
 window.addEventListener('load', atualizarEstadoBotoesControle);
 window.addEventListener('resize', () => {
     const controle = document.getElementById("controle-remoto");
-    if (!controle) {
-        return;
-    }
-    requestAnimationFrame(() => limitarControleDentroDaTela(controle));
+    const preview = document.getElementById("preview-panel");
+
+    requestAnimationFrame(() => {
+        if (controle) {
+            limitarPainelDentroDaTela(controle);
+        }
+        if (preview) {
+            limitarPainelDentroDaTela(preview);
+        }
+    });
 });
 
 
