@@ -625,6 +625,7 @@ function entrarMeeting() {
     gerarCodigoReuniao();
     if (checkHdmiTv() && checkTV()) {
         joining.style.display = "block";
+        tocarSomEntradaMeeting();
         setTimeout(() => {
             joining.style.display = "none";
             meeting.style.display = "block";
@@ -641,10 +642,53 @@ function entrarMeeting() {
     } else {
         meeting.style.display = "block";
         meetingPreview.style.display = "none";
+        tocarSomEntradaMeeting();
     }
 
     habilitarCheckBox("sala-falar");
     habilitarCheckBox("add-participante");
+}
+
+function tocarSomEntradaMeeting() {
+    const audio = document.getElementById("join-sound");
+    if (!audio) {
+        return;
+    }
+    audio.currentTime = 0;
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+            console.warn("Não foi possível reproduzir o áudio de entrada:", error);
+        });
+    }
+}
+
+function tocarSomSaidaMeeting() {
+    const audio = document.getElementById("leave-sound");
+    if (!audio) {
+        return;
+    }
+    audio.currentTime = 0;
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+            console.warn("Não foi possível reproduzir o áudio de saída:", error);
+        });
+    }
+}
+
+function tocarSomLevantarMao() {
+    const audio = document.getElementById("raise-hand-sound");
+    if (!audio) {
+        return;
+    }
+    audio.currentTime = 0;
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+            console.warn("Não foi possível reproduzir o áudio de levantar a mão:", error);
+        });
+    }
 }
 
 function sairMeeting() {
@@ -654,6 +698,7 @@ function sairMeeting() {
     const leftMeeting = document.getElementById("left-meeting");
     sessionStorage.setItem('ultimo', 'inicio');
     sessionStorage.setItem('ultimo-tv', 'inicio');
+    tocarSomSaidaMeeting();
     cameraSala.style.display = "none";
     leftMeeting.style.display = "block";
 
@@ -1433,6 +1478,9 @@ function levantarMao() {
         txtMao.textContent = "Low Hand";
         txtMao.style.fill = "#1790f3";
         txtMaoTV.style.fill = "black";
+        if (checkMeeting()) {
+            tocarSomLevantarMao();
+        }
     }
     else if (fundoLevantarMao.style.fill == "gray") {
         fundoLevantarMao.style.fill = "none";
