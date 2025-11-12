@@ -620,6 +620,7 @@ function entrarMeeting() {
     const meeting = document.getElementById("meeting");
     const meetingPreview = document.getElementById("entrar-meeting-preview");
     const joining = document.getElementById("joining");
+    resetarVolumePadraoTap();
     sessionStorage.setItem('ultimo', 'meeting');
     sessionStorage.setItem('ultimo-tv', 'meeting solo');
     gerarCodigoReuniao();
@@ -650,9 +651,23 @@ function entrarMeeting() {
 }
 
 function tocarSomEntradaMeeting() {
+    if (!checkMeetupLigada() || !checkUsbCamera()) {
+        return;
+    }
     const audio = document.getElementById("join-sound");
     if (!audio) {
         return;
+    }
+    const volumeTap = volumeAtual();
+    if (typeof volumeTap === "number" && !Number.isNaN(volumeTap)) {
+        const volumeNormalizado = Math.min(Math.max(volumeTap / 100, 0), 1);
+        audio.volume = volumeNormalizado;
+        if (volumeNormalizado === 0) {
+            audio.pause();
+            audio.currentTime = 0;
+            return;
+        }
+        animarSpeakers();
     }
     audio.currentTime = 0;
     const playPromise = audio.play();
@@ -664,9 +679,23 @@ function tocarSomEntradaMeeting() {
 }
 
 function tocarSomSaidaMeeting() {
+    if (!checkMeetupLigada() || !checkUsbCamera()) {
+        return;
+    }
     const audio = document.getElementById("leave-sound");
     if (!audio) {
         return;
+    }
+    const volumeTap = volumeAtual();
+    if (typeof volumeTap === "number" && !Number.isNaN(volumeTap)) {
+        const volumeNormalizado = Math.min(Math.max(volumeTap / 100, 0), 1);
+        audio.volume = volumeNormalizado;
+        if (volumeNormalizado === 0) {
+            audio.pause();
+            audio.currentTime = 0;
+            return;
+        }
+        animarSpeakers();
     }
     audio.currentTime = 0;
     const playPromise = audio.play();
@@ -677,16 +706,81 @@ function tocarSomSaidaMeeting() {
     }
 }
 
+function resetarVolumePadraoTap() {
+    const linhaVolumeAzul = document.getElementById("linha-volume-azul");
+    const circuloVolumeAzul = document.getElementById("circulo-volume-azul");
+    const linhaVolumeTv = document.getElementById("linha-volume-tv");
+    const circuloVolumeTv = document.getElementById("circulo-volume-tv");
+    const volumeNaTv = document.getElementById("volume-na-tv");
+
+    if (!linhaVolumeAzul || !circuloVolumeAzul || !linhaVolumeTv || !circuloVolumeTv || !volumeNaTv) {
+        return;
+    }
+
+    const MIN_TAP = 365;
+    const MIN_TV = 805;
+    const DEFAULT_VOLUME = 50;
+    const offset = DEFAULT_VOLUME / 2; // cada 5px representa 10 pontos de volume
+
+    const novoValorTap = MIN_TAP + offset; // 390
+    const novoValorTv = MIN_TV + offset;   // 830
+
+    linhaVolumeAzul.setAttribute("x2", novoValorTap);
+    circuloVolumeAzul.setAttribute("cx", novoValorTap);
+    linhaVolumeTv.setAttribute("x2", novoValorTv);
+    circuloVolumeTv.setAttribute("cx", novoValorTv);
+    volumeNaTv.textContent = DEFAULT_VOLUME.toString();
+}
+
 function tocarSomLevantarMao() {
+    if (!checkMeetupLigada() || !checkUsbCamera()) {
+        return;
+    }
     const audio = document.getElementById("raise-hand-sound");
     if (!audio) {
         return;
+    }
+    const volumeTap = volumeAtual();
+    if (typeof volumeTap === "number" && !Number.isNaN(volumeTap)) {
+        const volumeNormalizado = Math.min(Math.max(volumeTap / 100, 0), 1);
+        audio.volume = volumeNormalizado;
+        if (volumeNormalizado === 0) {
+            audio.pause();
+            audio.currentTime = 0;
+            return;
+        }
+        animarSpeakers();
     }
     audio.currentTime = 0;
     const playPromise = audio.play();
     if (playPromise !== undefined) {
         playPromise.catch((error) => {
             console.warn("Não foi possível reproduzir o áudio de levantar a mão:", error);
+        });
+    }
+}
+
+function tocarSomVolume(volumeAtualTap) {
+    if (!checkMeetupLigada() || !checkUsbCamera()) {
+        return;
+    }
+    const audio = document.getElementById("volume-change-sound");
+    if (!audio) {
+        return;
+    }
+    const volumeNormalizado = Math.min(Math.max((volumeAtualTap || 0) / 100, 0), 1);
+    if (volumeNormalizado === 0) {
+        audio.pause();
+        audio.currentTime = 0;
+        return;
+    }
+    audio.volume = volumeNormalizado;
+    animarSpeakers();
+    audio.currentTime = 0;
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+            console.warn("Não foi possível reproduzir o áudio de volume:", error);
         });
     }
 }
@@ -984,6 +1078,7 @@ function aumentarVolume() {
     volumeNaTv.textContent = volume;
 
     volumeSpeaker(volume);
+    tocarSomVolume(volume);
 
     if (checkTV() && checkHdmiTv()) {
         volumeNaTela.style.display = "block";
@@ -1029,6 +1124,7 @@ function diminuirVolume() {
     let volume = (posicaoCirculoAtual - MIN) * 2;
     volumeNaTv.textContent = volume;
     volumeSpeaker(volume);
+    tocarSomVolume(volume);
 
     if (checkTV() && checkHdmiTv()) {
         volumeNaTela.style.display = "block";
