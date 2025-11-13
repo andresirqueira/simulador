@@ -352,12 +352,12 @@
 </div>
     <div id="preview-panel">
         <div id="preview-panel-handle">
-            <span class="controle-remote-titulo">Preview TAP</span>
-            <span class="controle-remote-grip" aria-hidden="true">⠿</span>
+            <!-- <span class="controle-remote-titulo">Preview TAP</span>
+            <span class="controle-remote-grip" aria-hidden="true">⠿</span> -->
         </div>
         <div id="preview">
-            <div class="roboto-mono-normal preview-titulo">Preview</div>
-            <svg id="preview-tap" width="360" height="210" viewBox="0 0 460 270">
+            <!-- <div class="roboto-mono-normal preview-titulo">Preview</div> -->
+            <svg id="preview-tap" width="360" height="210" viewBox="-5 0 460 270" style="transform: scale(1.1); transform-origin: center center;">
 
                 <!-- TELA APAGADA  (TAP PREVIEW) -->
                 <rect width="450" height="253" x="0" y="0" id="tela-preview-tap-off" style="fill:black"></rect>
@@ -852,6 +852,9 @@
                         style="cursor: pointer;" />
                 </g>
             </svg>
+            <div class="preview-footer oculto">
+                <img src="img/logo-logitech-branco.png" alt="Logo Logitech" class="preview-logo">
+            </div>
         </div>
     </div>
     <audio id="join-sound" src="audio/join-meet.mpeg" preload="auto"></audio>

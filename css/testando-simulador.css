@@ -101,7 +101,7 @@ div {
   right: 48px;
   left: auto;
   width: min(420px, calc(100vw - 64px));
-  background: rgba(10, 18, 32, 0.94);
+  background: black;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 24px;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
@@ -222,6 +222,29 @@ div {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.preview-footer {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.preview-logo {
+  width: 40px;
+  height: auto;
+  display: block;
+}
+
+.preview-footer.oculto {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preview-footer.visivel {
+  opacity: 1;
 }
 
 #relogio,

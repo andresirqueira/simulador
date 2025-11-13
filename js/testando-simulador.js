@@ -260,15 +260,24 @@ function conectarDesconectarHDMI() {
 function ligarDesligarTAP() {
     const ledTAP = document.getElementById("led-TAP");
     const iconTap = document.getElementById("energia-tap");
+    const previewLogo = document.querySelector(".preview-footer");
     if (checkTAP()) {
         console.log("TAP LED ON");
         ledTAP.style.display = "none";
         iconTap.style.display = "block";
+        if (previewLogo) {
+            previewLogo.classList.remove("oculto");
+            previewLogo.classList.add("visivel");
+        }
     }
     else {
         console.log("TAP LED OFF");
         ledTAP.style.display = "block";
         iconTap.style.display = "none";
+        if (previewLogo) {
+            previewLogo.classList.remove("visivel");
+            previewLogo.classList.add("oculto");
+        }
     }
     verificaTudo();
 }
@@ -1012,6 +1021,8 @@ function criarClone() {
     const rect = tapRectElement.getBoundingClientRect();
     const cloneSVG = originalSVG.cloneNode(true);
     cloneSVG.id = "clone-tap";
+    cloneSVG.style.transform = "scale(1)";   // volta ao tamanho original
+    cloneSVG.removeAttribute("transform");   // se o atributo vier do SVG
     cloneSVG.style.position = "absolute";
     // Offsets finos configuráveis (px)
     const offX = parseInt(sessionStorage.getItem('cloneTapOffsetX') || '0', 10);
@@ -1222,7 +1233,7 @@ function ligarFalar() {
     if (chkFalar.disabled) {
         return;
     }
-    
+
     // O estado do checkbox já mudou quando o evento onclick dispara
     if (chkFalar.checked) {
         // Checkbox foi marcado - ativar fala
@@ -1304,10 +1315,10 @@ function mudarPalavras() {
         const bbox = texto.getBBox();
         const padX = 8; // horizontal padding
         const padY = 4; // vertical padding
-        
+
         // Texto já está com text-anchor: middle, então x é o centro
         texto.setAttribute('x', String(tvCenterX));
-        
+
         // Centralizar fundo baseado no texto centralizado
         bg.setAttribute('x', String(tvCenterX - (bbox.width / 2) - padX));
         bg.setAttribute('y', String(bbox.y - padY));
