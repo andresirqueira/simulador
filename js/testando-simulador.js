@@ -783,13 +783,30 @@ function tocarSomVolume(volumeAtualTap) {
         audio.currentTime = 0;
         return;
     }
+    
+    // Garantir que o áudio está carregado
+    if (audio.readyState === 0) {
+        audio.load();
+    }
+    
     audio.volume = volumeNormalizado;
     animarSpeakers();
     audio.currentTime = 0;
+    
+    // Tentar reproduzir o áudio
     const playPromise = audio.play();
     if (playPromise !== undefined) {
         playPromise.catch((error) => {
             console.warn("Não foi possível reproduzir o áudio de volume:", error);
+            // Tentar novamente após um pequeno delay se for erro de autoplay
+            if (error.name === 'NotAllowedError' || error.name === 'NotSupportedError') {
+                // Aguardar um pouco e tentar novamente
+                setTimeout(() => {
+                    audio.play().catch(err => {
+                        console.warn("Segunda tentativa de reprodução falhou:", err);
+                    });
+                }, 100);
+            }
         });
     }
 }
